@@ -176,7 +176,7 @@
         <div id="trueVictoryScreen" class="absolute inset-0 bg-yellow-500/90 backdrop-blur-md flex flex-col items-center justify-center z-40 hidden">
             <h2 class="text-6xl font-bold text-white top-ui mb-2">TRUE VICTORY!</h2>
             <p class="text-2xl font-bold text-black top-ui mb-8">You beat level 500! You are a legend!</p>
-            <button onclick="location.reload()" class="px-8 py-4 bg-blue-600 hover:bg-blue-400 text-white font-bold rounded-xl border-b-4 border-blue-800 text-2xl transition hover:-translate-y-1">Play Again</button>
+            <button onclick="location.reload()" class="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl border-b-4 border-blue-700 text-2xl transition hover:-translate-y-1">Play Again</button>
         </div>
 
         <!-- Right UI Panel -->
@@ -632,12 +632,12 @@ function isCollidingWithPath(cx, cy, radius) {
         if (trackExtensions < 2) { checkLine(tCenter(13), tCenter(8), tCenter(15), tCenter(8)); checkLine(tCenter(15), tCenter(8), tCenter(15), tCenter(-1)); }
         if (trackExtensions < 3) { checkLine(tCenter(15), tCenter(2), tCenter(18), tCenter(2)); checkLine(tCenter(18), tCenter(2), tCenter(18), tCenter(7)); checkLine(tCenter(18), tCenter(7), tCenter(16), tCenter(7)); checkLine(tCenter(16), tCenter(7), tCenter(16), tCenter(10)); }
         if (trackExtensions >= 3) {
-            if (trackExtensions < 4) { checkLine(tCenter(16), tCenter(7), tCenter(16), tCenter(12)); checkLine(tCenter(16), tCenter(12), tCenter(12), tCenter(12)); checkLine(tCenter(12), tCenter(12), tCenter(12), tCenter(14)); }
-            if (trackExtensions < 5) { checkLine(tCenter(12), tCenter(12), tCenter(12), tCenter(15)); checkLine(tCenter(12), tCenter(15), tCenter(8), tCenter(15)); checkLine(tCenter(8), tCenter(15), tCenter(8), tCenter(17)); }
-            if (trackExtensions < 6) { checkLine(tCenter(8), tCenter(15), tCenter(8), tCenter(18)); checkLine(tCenter(8), tCenter(18), tCenter(4), tCenter(18)); checkLine(tCenter(4), tCenter(18), tCenter(4), tCenter(20)); }
-            if (trackExtensions < 7) { checkLine(tCenter(4), tCenter(18), tCenter(4), tCenter(19)); checkLine(tCenter(4), tCenter(19), tCenter(1), tCenter(19)); checkLine(tCenter(1), tCenter(19), tCenter(1), tCenter(20)); }
-            if (trackExtensions < 8) { checkLine(tCenter(1), tCenter(19), tCenter(1), tCenter(13)); checkLine(tCenter(1), tCenter(13), tCenter(-1), tCenter(13)); }
-            if (trackExtensions < 9) { checkLine(tCenter(1), tCenter(13), tCenter(1), tCenter(8)); checkLine(tCenter(1), tCenter(8), tCenter(4), tCenter(8)); checkLine(tCenter(4), tCenter(8), tCenter(4), tCenter(12)); checkLine(tCenter(4), tCenter(12), tCenter(7), tCenter(12)); checkLine(tCenter(7), tCenter(12), tCenter(7), tCenter(10)); checkLine(tCenter(7), tCenter(10), tCenter(-1), tCenter(10)); }
+            if (trackExtensions < 4) { checkLine(tCenter(16), tCenter(7)); checkLine(tCenter(16), tCenter(12)); checkLine(tCenter(12), tCenter(12)); checkLine(tCenter(12), tCenter(14)); }
+            if (trackExtensions < 5) { checkLine(tCenter(12), tCenter(12)); checkLine(tCenter(12), tCenter(15)); checkLine(tCenter(8), tCenter(15)); checkLine(tCenter(8), tCenter(17)); }
+            if (trackExtensions < 6) { checkLine(tCenter(8), tCenter(15)); checkLine(tCenter(8), tCenter(18)); checkLine(tCenter(4), tCenter(18)); checkLine(tCenter(4), tCenter(20)); }
+            if (trackExtensions < 7) { checkLine(tCenter(4), tCenter(18)); checkLine(tCenter(4), tCenter(19)); checkLine(tCenter(1), tCenter(19)); checkLine(tCenter(1), tCenter(20)); }
+            if (trackExtensions < 8) { checkLine(tCenter(1), tCenter(19)); checkLine(tCenter(1), tCenter(13)); checkLine(tCenter(-1), tCenter(13)); }
+            if (trackExtensions < 9) { checkLine(tCenter(1), tCenter(13)); checkLine(tCenter(1), tCenter(8)); checkLine(tCenter(4), tCenter(8)); checkLine(tCenter(4), tCenter(12)); checkLine(tCenter(4), tCenter(12)); checkLine(tCenter(7), tCenter(12)); checkLine(tCenter(7), tCenter(10)); checkLine(tCenter(7), tCenter(10)); checkLine(tCenter(-1), tCenter(10)); }
         }
     }
     return colliding;
@@ -835,13 +835,15 @@ class Enemy {
 
     getColor() {
         if (this.isBoss) return { bg: '#1e3a8a', outline: '#ffffff', detail: '#3b82f6' }; 
-        if (this.hp >= 19) return { bg: '#a855f7', outline: '#7e22ce' }; 
-        if (this.hp >= 16) return { bg: '#000000', outline: '#333333' }; 
-        if (this.hp >= 13) return { bg: '#ec4899', outline: '#be185d' }; 
-        if (this.hp >= 10) return { bg: '#eab308', outline: '#a16207' }; 
-        if (this.hp >= 7) return { bg: '#22c55e', outline: '#15803d' }; 
-        if (this.hp >= 4) return { bg: '#3b82f6', outline: '#1d4ed8' }; 
-        return { bg: '#ef4444', outline: '#b91c1c' }; 
+        if (this.hp >= 43) return { bg: 'rainbow', outline: '#ffffff', isRainbow: true }; // NEW RAINBOW BALLOON! Double Purple HP! (43-84 HP)
+        if (this.hp >= 22) return { bg: '#4c1d95', outline: '#f472b6', isSuperPurple: true }; // Super Purple (22-42 HP)
+        if (this.hp >= 19) return { bg: '#a855f7', outline: '#7e22ce' }; // Regular Purple (19-21 HP)
+        if (this.hp >= 16) return { bg: '#000000', outline: '#333333' }; // Black (16-18 HP)
+        if (this.hp >= 13) return { bg: '#ec4899', outline: '#be185d' }; // Pink (13-15 HP)
+        if (this.hp >= 10) return { bg: '#eab308', outline: '#a16207' }; // Yellow (10-12 HP)
+        if (this.hp >= 7) return { bg: '#22c55e', outline: '#15803d' }; // Green (7-9 HP)
+        if (this.hp >= 4) return { bg: '#3b82f6', outline: '#1d4ed8' }; // Blue (4-6 HP)
+        return { bg: '#ef4444', outline: '#b91c1c' }; // Red (1-3 HP)
     }
 
     draw(ctx) {
@@ -864,14 +866,49 @@ class Enemy {
             ctx.fillStyle = '#ef4444'; ctx.fillRect(-barW/2, -this.radius - 15, barW, barH);
             ctx.fillStyle = '#22c55e'; ctx.fillRect(-barW/2, -this.radius - 15, barW * (this.hp / this.maxHp), barH);
         } else {
-            ctx.fillStyle = colors.bg; ctx.strokeStyle = colors.outline; ctx.lineWidth = 2;
+            // Draw energy shield for Super Purple
+            if (colors.isSuperPurple) {
+                ctx.strokeStyle = '#f472b6'; 
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.ellipse(0, -2, this.radius * 1.1, this.radius * 1.3, 0, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            // Draw glowing outer outline if Rainbow
+            if (colors.isRainbow) {
+                ctx.strokeStyle = '#38bdf8'; // Glowing light blue outline
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.ellipse(0, -2, this.radius * 1.1, this.radius * 1.3, 0, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Build a gorgeous multi-stop linear gradient for the rainbow balloon
+                let grad = ctx.createLinearGradient(-this.radius, -this.radius, this.radius, this.radius);
+                grad.addColorStop(0, '#ef4444');   // Red
+                grad.addColorStop(0.2, '#f97316'); // Orange
+                grad.addColorStop(0.4, '#eab308'); // Yellow
+                grad.addColorStop(0.6, '#22c55e'); // Green
+                grad.addColorStop(0.8, '#3b82f6'); // Blue
+                grad.addColorStop(1, '#a855f7');   // Purple
+                ctx.fillStyle = grad;
+            } else {
+                ctx.fillStyle = colors.bg;
+            }
+
+            ctx.strokeStyle = colors.outline; ctx.lineWidth = 2;
             
             ctx.beginPath(); ctx.ellipse(0, -2, this.radius * 0.9, this.radius * 1.1, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
             
             ctx.fillStyle = 'rgba(255,255,255,0.4)';
             ctx.beginPath(); ctx.ellipse(-this.radius*0.3, -this.radius*0.4, this.radius*0.2, this.radius*0.4, Math.PI/6, 0, Math.PI*2); ctx.fill();
 
-            ctx.fillStyle = colors.bg;
+            if (colors.isRainbow) {
+                ctx.fillStyle = '#a855f7'; // bottom part of rainbow is purple
+            } else {
+                ctx.fillStyle = colors.bg;
+            }
+            
             ctx.beginPath(); ctx.moveTo(0, this.radius * 1.1 - 2); ctx.lineTo(-4, this.radius * 1.1 + 4); ctx.lineTo(4, this.radius * 1.1 + 4); ctx.closePath(); ctx.fill(); ctx.stroke();
 
             if (this.slowTimer > 0) {
@@ -1284,7 +1321,10 @@ function spawnWave() {
 
 function spawnEnemy() {
     let isBoss = (level % 10 === 0);
-    let hpNormal = Math.min(21, Math.floor(3 + level * 0.6)); 
+    
+    // Normal balloon HP maxes out at 21 before level 100, but can scale up to 84 in Endless Mode to introduce the Rainbow Balloon (double purple HP!)
+    let maxHpLimit = endlessModeActive ? 84 : 21;
+    let hpNormal = Math.min(maxHpLimit, Math.floor(3 + level * 0.6)); 
     let hpBoss = Math.floor(400 * Math.pow(1.2, level / 10)); 
     let hp = isBoss ? hpBoss : hpNormal;
     let baseSpeed = isBoss ? 0.8 : (1.8 + Math.min(2.0, level * 0.03)); 
