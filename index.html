@@ -65,7 +65,7 @@
             left: 0;
         }
         .sidebar {
-            width: 260px; 
+            width: 270px; 
             background-color: #d2a679; 
             border-left: 6px solid #8b5a2b;
             display: flex;
@@ -78,8 +78,8 @@
             background-color: #deb887;
             border: 3px solid #a0522d;
             border-radius: 8px;
-            padding: 8px;
-            margin-bottom: 12px;
+            padding: 6px;
+            margin-bottom: 8px;
             cursor: pointer;
             transition: all 0.1s;
             display: flex;
@@ -132,7 +132,7 @@
             <div class="flex items-center gap-2"><span class="text-red-500 text-3xl drop-shadow-md">❤️</span> <span id="livesDisplay">500</span></div>
             <div class="flex items-center gap-2"><span class="text-yellow-400 text-3xl drop-shadow-md">💰</span> $<span id="moneyDisplay">170</span></div>
         </div>
-        <div id="round-indicator" class="absolute top-3 text-white font-bold text-xl top-ui bg-blue-600/90 px-4 py-1 rounded-xl border-2 border-white shadow-lg transition-all duration-300 z-30 pointer-events-none flex flex-col items-center" style="right: calc(260px + 1rem);">
+        <div id="round-indicator" class="absolute top-3 text-white font-bold text-xl top-ui bg-blue-600/90 px-4 py-1 rounded-xl border-2 border-white shadow-lg transition-all duration-300 z-30 pointer-events-none flex flex-col items-center" style="right: calc(270px + 1rem);">
             <div>ROUND <span id="levelDisplay" class="text-2xl">1</span><span id="maxLevelDisplay" class="text-sm text-blue-200">/100</span></div>
             <div id="bossText" class="text-xs text-yellow-300 hidden uppercase tracking-wider">Boss Incoming!</div>
         </div>
@@ -187,108 +187,150 @@
             </div>
             
             <!-- Towers Panel -->
-            <div id="towers-panel" class="flex-1 overflow-y-auto pr-1 space-y-3">
+            <div id="towers-panel" class="flex-1 overflow-y-auto pr-1 space-y-2">
                 <button class="tower-btn w-full relative" data-type="DART">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[1]</span>
-                    <div class="w-12 h-12 rounded-full bg-[#8b5a2b] border-2 border-[#5c4033] flex items-center justify-center mb-1">
-                        <div class="w-8 h-8 rounded-full bg-[#d2b48c] relative">
-                            <div class="absolute top-1 left-1 w-2 h-2 bg-black rounded-full"></div>
-                            <div class="absolute top-1 right-1 w-2 h-2 bg-black rounded-full"></div>
+                    <div class="w-10 h-10 rounded-full bg-[#8b5a2b] border-2 border-[#5c4033] flex items-center justify-center mb-1">
+                        <div class="w-6 h-6 rounded-full bg-[#d2b48c] relative">
+                            <div class="absolute top-1 left-1 w-1.5 h-1.5 bg-black rounded-full"></div>
+                            <div class="absolute top-1 right-1 w-1.5 h-1.5 bg-black rounded-full"></div>
                         </div>
                     </div>
-                    <p class="font-bold text-[#5c4033] text-sm leading-tight">Dart Monkey</p>
-                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-1 shadow-sm border border-green-400 cost-display">$170</p>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Dart Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$170</p>
+                </button>
+
+                <button class="tower-btn w-full relative" data-type="BOOMERANG">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[2]</span>
+                    <div class="w-10 h-10 rounded-full bg-[#b45309] border-2 border-[#78350f] flex items-center justify-center mb-1 relative">
+                        <div class="w-6 h-6 rounded-full bg-[#d2b48c] relative">
+                            <div class="absolute top-0.5 right-0.5 w-3 h-3 border-r-2 border-t-2 border-amber-800 rounded-tr"></div>
+                        </div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Boomerang Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$320</p>
                 </button>
 
                 <button class="tower-btn w-full relative" data-type="TACK">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[2]</span>
-                    <div class="w-12 h-12 bg-pink-500 rounded border-2 border-pink-700 flex flex-wrap p-1 items-center justify-center gap-1 mb-1 relative">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[3]</span>
+                    <div class="w-10 h-10 bg-pink-500 rounded border-2 border-pink-700 flex flex-wrap p-1 items-center justify-center gap-1 mb-1 relative">
                         <div class="w-full h-full rounded-full bg-black/20 absolute"></div>
                         <div class="w-2 h-2 bg-black rounded-full z-10"></div>
                     </div>
-                    <p class="font-bold text-[#5c4033] text-sm leading-tight">Tack Shooter</p>
-                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-1 shadow-sm border border-green-400 cost-display">$280</p>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Tack Shooter</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$280</p>
                 </button>
 
                 <button class="tower-btn w-full relative" data-type="SNIPER">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[3]</span>
-                    <div class="w-12 h-12 rounded-full bg-[#8b5a2b] border-2 border-[#5c4033] flex items-center justify-center mb-1 relative">
-                        <div class="absolute top-0 w-10 h-6 bg-green-700 rounded-t-full border-b-4 border-green-900 z-10"></div>
-                        <div class="w-8 h-8 rounded-full bg-[#d2b48c] absolute bottom-1"></div>
-                    </div>
-                    <p class="font-bold text-[#5c4033] text-sm leading-tight">Sniper Monkey</p>
-                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-1 shadow-sm border border-green-400 cost-display">$350</p>
-                </button>
-                
-                <button class="tower-btn w-full relative" data-type="BOMB">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[4]</span>
-                    <div class="w-12 h-12 bg-gray-800 rounded-full border-4 border-gray-900 flex items-center justify-center mb-1 relative">
-                         <div class="w-6 h-6 bg-black rounded-full border-2 border-gray-600"></div>
+                    <div class="w-10 h-10 rounded-full bg-[#8b5a2b] border-2 border-[#5c4033] flex items-center justify-center mb-1 relative">
+                        <div class="absolute top-0 w-8 h-5 bg-green-700 rounded-t-full border-b-2 border-green-900 z-10"></div>
+                        <div class="w-6 h-6 rounded-full bg-[#d2b48c] absolute bottom-1"></div>
                     </div>
-                    <p class="font-bold text-[#5c4033] text-sm leading-tight">Bomb Cannon</p>
-                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-1 shadow-sm border border-green-400 cost-display">$450</p>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Sniper Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$350</p>
+                </button>
+
+                <button class="tower-btn w-full relative" data-type="GLUE">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[5]</span>
+                    <div class="w-10 h-10 rounded-full bg-yellow-600 border-2 border-yellow-800 flex items-center justify-center mb-1 relative">
+                        <div class="w-6 h-6 rounded-full bg-[#d2b48c] relative">
+                            <div class="w-3 h-3 bg-lime-500 rounded-full absolute top-1 left-1 shadow-inner"></div>
+                        </div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Glue Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$400</p>
+                </button>
+
+                <button class="tower-btn w-full relative" data-type="BOMB">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[6]</span>
+                    <div class="w-10 h-10 bg-gray-800 rounded-full border-2 border-gray-900 flex items-center justify-center mb-1 relative">
+                         <div class="w-5 h-5 bg-black rounded-full border border-gray-600"></div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Bomb Cannon</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$450</p>
                 </button>
 
                 <button class="tower-btn w-full relative" data-type="ICE">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[5]</span>
-                    <div class="w-12 h-12 rounded-full bg-blue-300 border-2 border-blue-500 flex items-center justify-center mb-1 relative overflow-hidden">
-                        <div class="w-8 h-8 rounded-full bg-[#d2b48c] relative">
-                            <div class="absolute top-1 left-1 w-2 h-2 bg-blue-700 rounded-full"></div>
-                            <div class="absolute top-1 right-1 w-2 h-2 bg-blue-700 rounded-full"></div>
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[7]</span>
+                    <div class="w-10 h-10 rounded-full bg-blue-300 border-2 border-blue-500 flex items-center justify-center mb-1 relative overflow-hidden">
+                        <div class="w-6 h-6 rounded-full bg-[#d2b48c] relative">
+                            <div class="absolute top-1 left-1 w-1.5 h-1.5 bg-blue-700 rounded-full"></div>
+                            <div class="absolute top-1 right-1 w-1.5 h-1.5 bg-blue-700 rounded-full"></div>
                         </div>
                     </div>
-                    <p class="font-bold text-[#5c4033] text-sm leading-tight">Ice Monkey</p>
-                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-1 shadow-sm border border-green-400 cost-display">$500</p>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Ice Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$500</p>
                 </button>
 
                 <button class="tower-btn w-full relative" data-type="NINJA">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[6]</span>
-                    <div class="w-12 h-12 rounded-full bg-gray-800 border-2 border-black flex items-center justify-center mb-1 relative">
-                        <div class="absolute top-2 w-10 h-3 bg-red-600 z-10"></div>
-                        <div class="w-8 h-8 rounded-full bg-[#d2b48c] absolute bottom-1"></div>
-                    </div>
-                    <p class="font-bold text-[#5c4033] text-sm leading-tight">Ninja Monkey</p>
-                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-1 shadow-sm border border-green-400 cost-display">$600</p>
-                </button>
-
-                <!-- Spike Factory -->
-                <button class="tower-btn w-full relative" data-type="SPIKE">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[7]</span>
-                    <div class="w-12 h-12 bg-gray-300 rounded border-2 border-gray-500 flex items-center justify-center mb-1 relative">
-                        <div class="w-8 h-8 bg-gray-800 rounded"></div>
-                        <div class="absolute w-1 h-3 bg-yellow-400 -top-1"></div>
-                        <div class="absolute w-1 h-3 bg-yellow-400 -bottom-1"></div>
-                        <div class="absolute w-3 h-1 bg-yellow-400 -left-1"></div>
-                        <div class="absolute w-3 h-1 bg-yellow-400 -right-1"></div>
-                    </div>
-                    <p class="font-bold text-[#5c4033] text-sm leading-tight">Spike Factory</p>
-                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-1 shadow-sm border border-green-400 cost-display">$700</p>
-                </button>
-
-                <!-- Banana Farm -->
-                <button class="tower-btn w-full relative" data-type="FARM">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[8]</span>
-                    <div class="w-12 h-12 bg-green-600 rounded border-2 border-green-800 flex flex-col items-center justify-center mb-1 relative">
-                        <div class="w-8 h-8 bg-green-400 rounded-full absolute -top-1"></div>
-                        <div class="w-2 h-6 bg-yellow-900 absolute bottom-1"></div>
-                        <div class="w-2 h-2 bg-yellow-400 rounded-full absolute top-2 left-2 shadow"></div>
-                        <div class="w-2 h-2 bg-yellow-400 rounded-full absolute top-3 right-2 shadow"></div>
-                        <div class="w-2 h-2 bg-yellow-400 rounded-full absolute top-4 left-4 shadow"></div>
+                    <div class="w-10 h-10 rounded-full bg-gray-800 border-2 border-black flex items-center justify-center mb-1 relative">
+                        <div class="absolute top-1.5 w-8 h-2.5 bg-red-600 z-10"></div>
+                        <div class="w-6 h-6 rounded-full bg-[#d2b48c] absolute bottom-1"></div>
                     </div>
-                    <p class="font-bold text-[#5c4033] text-sm leading-tight">Banana Farm</p>
-                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-1 shadow-sm border border-green-400 cost-display">$800</p>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Ninja Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$600</p>
+                </button>
+
+                <button class="tower-btn w-full relative" data-type="SPIKE">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[9]</span>
+                    <div class="w-10 h-10 bg-gray-300 rounded border-2 border-gray-500 flex items-center justify-center mb-1 relative">
+                        <div class="w-6 h-6 bg-gray-800 rounded"></div>
+                        <div class="absolute w-1 h-2 bg-yellow-400 -top-1"></div>
+                        <div class="absolute w-1 h-2 bg-yellow-400 -bottom-1"></div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Spike Factory</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$700</p>
+                </button>
+
+                <button class="tower-btn w-full relative" data-type="FARM">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[0]</span>
+                    <div class="w-10 h-10 bg-green-600 rounded border-2 border-green-800 flex flex-col items-center justify-center mb-1 relative">
+                        <div class="w-6 h-6 bg-green-400 rounded-full absolute -top-1"></div>
+                        <div class="w-2 h-4 bg-yellow-900 absolute bottom-1"></div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Banana Farm</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$800</p>
+                </button>
+
+                <button class="tower-btn w-full relative" data-type="WIZARD">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[W]</span>
+                    <div class="w-10 h-10 rounded-full bg-purple-900 border-2 border-purple-950 flex items-center justify-center mb-1 relative">
+                        <div class="w-0 h-0 border-l-4 border-r-4 border-b-8 border-b-yellow-400 absolute -top-1 z-20"></div>
+                        <div class="w-6 h-6 rounded-full bg-[#d2b48c] absolute bottom-1"></div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Wizard Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$1,100</p>
+                </button>
+
+                <button class="tower-btn w-full relative" data-type="VILLAGE">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[V]</span>
+                    <div class="w-10 h-10 bg-amber-700 rounded border-2 border-amber-900 flex items-center justify-center mb-1 relative">
+                        <div class="w-6 h-4 bg-red-600 rounded-t-md absolute top-1"></div>
+                        <div class="w-3 h-3 bg-yellow-300 rounded-full absolute bottom-1"></div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Monkey Village</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$1,400</p>
                 </button>
 
                 <button class="tower-btn w-full relative" data-type="SUPER">
-                    <div class="w-12 h-12 rounded-full bg-blue-600 border-2 border-blue-800 flex items-center justify-center mb-1 relative">
-                        <div class="absolute -right-1 w-6 h-10 bg-red-600 rounded-r-full z-0"></div> <!-- Cape -->
-                        <div class="w-8 h-8 rounded-full bg-[#d2b48c] relative z-10">
-                            <div class="absolute top-1 left-1 w-2 h-2 bg-yellow-300 rounded-full"></div>
-                            <div class="absolute top-1 right-1 w-2 h-2 bg-yellow-300 rounded-full"></div>
-                        </div>
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[S]</span>
+                    <div class="w-10 h-10 rounded-full bg-blue-600 border-2 border-blue-800 flex items-center justify-center mb-1 relative">
+                        <div class="absolute -right-1 w-5 h-8 bg-red-600 rounded-r-full z-0"></div>
+                        <div class="w-6 h-6 rounded-full bg-[#d2b48c] relative z-10"></div>
                     </div>
-                    <p class="font-bold text-[#5c4033] text-sm leading-tight">Super Monkey</p>
-                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-1 shadow-sm border border-green-400 cost-display">$2,500</p>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Super Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$2,500</p>
+                </button>
+
+                <button class="tower-btn w-full relative" data-type="PLASMA">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[P]</span>
+                    <div class="w-10 h-10 bg-cyan-900 rounded-full border-2 border-cyan-400 flex items-center justify-center mb-1 relative shadow-lg">
+                        <div class="w-5 h-5 bg-cyan-300 rounded-full animate-pulse border border-white"></div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Plasma Cannon</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$3,500</p>
                 </button>
             </div>
 
@@ -351,7 +393,7 @@
             </div>
 
             <!-- Deluxe Action Panel (Upgrading, Stats, Selling) -->
-            <div id="selection-panel" class="hidden shrink-0 mt-3 p-3 bg-blue-900 border-2 border-blue-700 rounded-lg shadow-inner text-center">
+            <div id="selection-panel" class="hidden shrink-0 mt-2 p-3 bg-blue-900 border-2 border-blue-700 rounded-lg shadow-inner text-center">
                 <p class="text-white font-bold text-sm mb-1"><span id="sel-tower-name" class="text-yellow-300">Tower</span> <span id="sel-tower-level" class="text-blue-300 text-xs font-normal ml-1">Lvl 1</span></p>
                 
                 <!-- STATS DISPLAY -->
@@ -376,7 +418,7 @@
             </div>
 
             <!-- Deluxe Play Controls -->
-            <div class="shrink-0 mt-3 border-t-2 border-[#5c4033] pt-3">
+            <div class="shrink-0 mt-2 border-t-2 border-[#5c4033] pt-2">
                 <div class="flex gap-2 mb-2">
                     <button id="speedBtn" class="flex-1 py-1.5 bg-gray-600 hover:bg-gray-500 text-white font-bold text-xs rounded shadow transition">▶ 1x Speed</button>
                     <button id="muteBtn" class="py-1.5 px-3 bg-blue-800 hover:bg-blue-700 text-white font-bold text-xs rounded shadow transition">🔊 Sound</button>
@@ -384,7 +426,7 @@
                         <input type="checkbox" id="autoStartToggle"> Auto
                     </label>
                 </div>
-                <button id="nextWaveBtn" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg border-b-4 border-blue-800 shadow transition active:translate-y-1 active:border-b-0 disabled:bg-gray-400 disabled:border-gray-500 disabled:cursor-not-allowed">
+                <button id="nextWaveBtn" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg border-b-4 border-blue-800 shadow transition active:translate-y-1 active:border-b-0 disabled:bg-gray-400 disabled:border-gray-500 disabled:cursor-not-allowed text-sm">
                     START ROUND [Space]
                 </button>
             </div>
@@ -453,7 +495,6 @@ let decorationsGenerated = false;
 
 /**
  * Arcade Audio Synthesizer (Web Audio API)
- * - Single, persistent AudioContext to prevent play failures or browser blocks!
  */
 let audioCtx = null;
 
@@ -471,7 +512,7 @@ function initAudio() {
 
 function playSound(type) {
     if (soundMuted) return;
-    initAudio(); // Keep context active on interaction
+    initAudio(); 
     if (!audioCtx) return;
     
     try {
@@ -514,6 +555,27 @@ function playSound(type) {
             gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
             duration = 0.15;
+        } else if (type === 'glue') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(90, audioCtx.currentTime + 0.15);
+            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+            duration = 0.15;
+        } else if (type === 'magic') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.12);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+            duration = 0.12;
+        } else if (type === 'plasma') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.08);
+            duration = 0.08;
         } else if (type === 'upgrade') {
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(400, audioCtx.currentTime);
@@ -536,13 +598,6 @@ function playSound(type) {
             gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.1);
             duration = 0.1;
-        } else if (type === 'rustle') {
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(100, audioCtx.currentTime);
-            osc.frequency.linearRampToValueAtTime(30, audioCtx.currentTime + 0.08);
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.08);
-            duration = 0.08;
         }
 
         osc.start();
@@ -645,21 +700,23 @@ function isCollidingWithPath(cx, cy, radius) {
 
 const BASE_TOWER_TYPES = {
     DART: { cost: 170, range: 220, damage: 1, fireRate: 35, projSpeed: 12, type: 'monkey', radius: 20, name: 'Dart Monkey' },
+    BOOMERANG: { cost: 320, range: 200, damage: 2, fireRate: 40, projSpeed: 11, type: 'boomerang', radius: 20, name: 'Boomerang Monkey' },
     TACK: { cost: 280, range: 130, damage: 1, fireRate: 45, projSpeed: 8, type: 'tack', radius: 22, name: 'Tack Shooter' },
     SNIPER: { cost: 350, range: 1000, damage: 4, fireRate: 90, projSpeed: 30, type: 'sniper', radius: 20, name: 'Sniper Monkey' },
+    GLUE: { cost: 400, range: 180, damage: 1, fireRate: 45, projSpeed: 14, type: 'glue', radius: 20, name: 'Glue Monkey' },
     BOMB: { cost: 450, range: 180, damage: 2, splash: 60, fireRate: 60, projSpeed: 8, type: 'bomb', radius: 24, name: 'Bomb Cannon' },
     ICE: { cost: 500, range: 120, damage: 1, fireRate: 30, projSpeed: 10, type: 'ice', radius: 20, name: 'Ice Monkey' },
     NINJA: { cost: 600, range: 160, damage: 2, fireRate: 15, projSpeed: 20, type: 'ninja', radius: 20, name: 'Ninja Monkey' },
     SPIKE: { cost: 700, range: 120, damage: 5, fireRate: 80, projSpeed: 0, type: 'spike', radius: 24, name: 'Spike Factory' }, 
     FARM: { cost: 800, range: 0, damage: 0, fireRate: 0, projSpeed: 0, type: 'farm', radius: 24, name: 'Banana Farm', baseIncome: 50 }, 
-    SUPER: { cost: 2500, range: 250, damage: 1, fireRate: 3, projSpeed: 25, type: 'super', radius: 22, name: 'Super Monkey' }
+    WIZARD: { cost: 1100, range: 220, damage: 3, fireRate: 25, projSpeed: 16, type: 'wizard', radius: 20, name: 'Wizard Monkey' },
+    VILLAGE: { cost: 1400, range: 180, damage: 0, fireRate: 0, projSpeed: 0, type: 'village', radius: 26, name: 'Monkey Village', baseIncome: 0 },
+    SUPER: { cost: 2500, range: 250, damage: 1, fireRate: 3, projSpeed: 25, type: 'super', radius: 22, name: 'Super Monkey' },
+    PLASMA: { cost: 3500, range: 280, damage: 5, splash: 40, fireRate: 6, projSpeed: 28, type: 'plasma', radius: 24, name: 'Plasma Cannon' }
 };
 
 let TOWER_TYPES = JSON.parse(JSON.stringify(BASE_TOWER_TYPES));
 
-/**
- * Classes
- */
 class FloatingText {
     constructor(x, y, text, color) {
         this.x = x;
@@ -782,6 +839,7 @@ class Enemy {
         this.angle = 0;
         this.reward = isBoss ? 100 : 5;
         this.slowTimer = 0;
+        this.glueTimer = 0;
         this.bossSpawnTimer = 180; 
     }
 
@@ -814,6 +872,14 @@ class Enemy {
             currentSpeed *= 0.5; 
             this.slowTimer--;
         }
+        if (this.glueTimer > 0) {
+            currentSpeed *= 0.4; 
+            this.glueTimer--;
+            if (this.glueTimer % 30 === 0 && this.hp > 0) {
+                this.hp--;
+                createParticles(this.x, this.y, '#84cc16', 3);
+            }
+        }
 
         if (dist < currentSpeed) {
             this.x = target.x;
@@ -835,15 +901,15 @@ class Enemy {
 
     getColor() {
         if (this.isBoss) return { bg: '#1e3a8a', outline: '#ffffff', detail: '#3b82f6' }; 
-        if (this.hp >= 43) return { bg: 'rainbow', outline: '#ffffff', isRainbow: true }; // NEW RAINBOW BALLOON! Double Purple HP! (43-84 HP)
-        if (this.hp >= 22) return { bg: '#4c1d95', outline: '#f472b6', isSuperPurple: true }; // Super Purple (22-42 HP)
-        if (this.hp >= 19) return { bg: '#a855f7', outline: '#7e22ce' }; // Regular Purple (19-21 HP)
-        if (this.hp >= 16) return { bg: '#000000', outline: '#333333' }; // Black (16-18 HP)
-        if (this.hp >= 13) return { bg: '#ec4899', outline: '#be185d' }; // Pink (13-15 HP)
-        if (this.hp >= 10) return { bg: '#eab308', outline: '#a16207' }; // Yellow (10-12 HP)
-        if (this.hp >= 7) return { bg: '#22c55e', outline: '#15803d' }; // Green (7-9 HP)
-        if (this.hp >= 4) return { bg: '#3b82f6', outline: '#1d4ed8' }; // Blue (4-6 HP)
-        return { bg: '#ef4444', outline: '#b91c1c' }; // Red (1-3 HP)
+        if (this.hp >= 43) return { bg: 'rainbow', outline: '#ffffff', isRainbow: true }; 
+        if (this.hp >= 22) return { bg: '#4c1d95', outline: '#f472b6', isSuperPurple: true }; 
+        if (this.hp >= 19) return { bg: '#a855f7', outline: '#7e22ce' }; 
+        if (this.hp >= 16) return { bg: '#000000', outline: '#333333' }; 
+        if (this.hp >= 13) return { bg: '#ec4899', outline: '#be185d' }; 
+        if (this.hp >= 10) return { bg: '#eab308', outline: '#a16207' }; 
+        if (this.hp >= 7) return { bg: '#22c55e', outline: '#15803d' }; 
+        if (this.hp >= 4) return { bg: '#3b82f6', outline: '#1d4ed8' }; 
+        return { bg: '#ef4444', outline: '#b91c1c' }; 
     }
 
     draw(ctx) {
@@ -866,7 +932,6 @@ class Enemy {
             ctx.fillStyle = '#ef4444'; ctx.fillRect(-barW/2, -this.radius - 15, barW, barH);
             ctx.fillStyle = '#22c55e'; ctx.fillRect(-barW/2, -this.radius - 15, barW * (this.hp / this.maxHp), barH);
         } else {
-            // Draw energy shield for Super Purple
             if (colors.isSuperPurple) {
                 ctx.strokeStyle = '#f472b6'; 
                 ctx.lineWidth = 4;
@@ -875,22 +940,20 @@ class Enemy {
                 ctx.stroke();
             }
 
-            // Draw glowing outer outline if Rainbow
             if (colors.isRainbow) {
-                ctx.strokeStyle = '#38bdf8'; // Glowing light blue outline
+                ctx.strokeStyle = '#38bdf8'; 
                 ctx.lineWidth = 4;
                 ctx.beginPath();
                 ctx.ellipse(0, -2, this.radius * 1.1, this.radius * 1.3, 0, 0, Math.PI * 2);
                 ctx.stroke();
 
-                // Build a gorgeous multi-stop linear gradient for the rainbow balloon
                 let grad = ctx.createLinearGradient(-this.radius, -this.radius, this.radius, this.radius);
-                grad.addColorStop(0, '#ef4444');   // Red
-                grad.addColorStop(0.2, '#f97316'); // Orange
-                grad.addColorStop(0.4, '#eab308'); // Yellow
-                grad.addColorStop(0.6, '#22c55e'); // Green
-                grad.addColorStop(0.8, '#3b82f6'); // Blue
-                grad.addColorStop(1, '#a855f7');   // Purple
+                grad.addColorStop(0, '#ef4444');   
+                grad.addColorStop(0.2, '#f97316'); 
+                grad.addColorStop(0.4, '#eab308'); 
+                grad.addColorStop(0.6, '#22c55e'); 
+                grad.addColorStop(0.8, '#3b82f6'); 
+                grad.addColorStop(1, '#a855f7');   
                 ctx.fillStyle = grad;
             } else {
                 ctx.fillStyle = colors.bg;
@@ -904,7 +967,7 @@ class Enemy {
             ctx.beginPath(); ctx.ellipse(-this.radius*0.3, -this.radius*0.4, this.radius*0.2, this.radius*0.4, Math.PI/6, 0, Math.PI*2); ctx.fill();
 
             if (colors.isRainbow) {
-                ctx.fillStyle = '#a855f7'; // bottom part of rainbow is purple
+                ctx.fillStyle = '#a855f7'; 
             } else {
                 ctx.fillStyle = colors.bg;
             }
@@ -914,6 +977,10 @@ class Enemy {
             if (this.slowTimer > 0) {
                 ctx.fillStyle = 'rgba(191, 219, 254, 0.6)'; 
                 ctx.beginPath(); ctx.ellipse(0, -2, this.radius * 0.9 + 2, this.radius * 1.1 + 2, 0, 0, Math.PI * 2); ctx.fill();
+            }
+            if (this.glueTimer > 0) {
+                ctx.fillStyle = 'rgba(132, 204, 22, 0.7)'; 
+                ctx.beginPath(); ctx.ellipse(0, -2, this.radius * 0.9 + 3, this.radius * 1.1 + 3, 0, 0, Math.PI * 2); ctx.fill();
             }
         }
         ctx.restore();
@@ -929,7 +996,7 @@ class Tower {
         
         this.level = 1;
         this.invested = typeInfo.cost;
-        this.pops = 0; // POP TRACKING
+        this.pops = 0; 
         
         this.cooldown = 0;
         this.target = null;
@@ -937,9 +1004,34 @@ class Tower {
         this.scaleAnim = 1.0; 
     }
 
-    getDamage() { return this.typeInfo.damage * this.level; } 
+    getDamage() { 
+        let baseDmg = this.typeInfo.damage * this.level;
+        let villageBonus = 0;
+        if (this.typeId !== 'VILLAGE' && this.typeId !== 'FARM') {
+            towers.forEach(t => {
+                if (t.typeId === 'VILLAGE' && Math.hypot(t.x - this.x, t.y - this.y) <= t.getRange()) {
+                    villageBonus += t.level;
+                }
+            });
+        }
+        return baseDmg + villageBonus; 
+    } 
+    
     getRange() { return this.typeInfo.range * (1 + (this.level - 1) * 0.15); } 
-    getFireRate() { return Math.max(1, this.typeInfo.fireRate * Math.pow(0.8, this.level - 1)); } 
+    
+    getFireRate() { 
+        let baseRate = Math.max(1, this.typeInfo.fireRate * Math.pow(0.8, this.level - 1));
+        let speedMult = 1.0;
+        if (this.typeId !== 'VILLAGE' && this.typeId !== 'FARM') {
+            towers.forEach(t => {
+                if (t.typeId === 'VILLAGE' && Math.hypot(t.x - this.x, t.y - this.y) <= t.getRange()) {
+                    speedMult *= Math.pow(0.85, t.level);
+                }
+            });
+        }
+        return Math.max(1, baseRate * speedMult); 
+    } 
+
     getIncome() { return (this.typeInfo.baseIncome || 0) * this.level; }
     
     getUpgradeCost() { return Math.floor(this.typeInfo.cost * this.level * 1.5); }
@@ -948,7 +1040,7 @@ class Tower {
     update() {
         if (this.scaleAnim > 1.0) this.scaleAnim -= 0.05;
 
-        if (this.typeId === 'FARM') return; 
+        if (this.typeId === 'FARM' || this.typeId === 'VILLAGE') return; 
 
         if (this.cooldown > 0) this.cooldown--;
 
@@ -1015,10 +1107,12 @@ class Tower {
                 this.cooldown = this.getFireRate();
                 this.scaleAnim = 1.2; 
                 
-                // Sound Synthesizer triggers based on monkey weapons
                 if (this.typeId === 'SUPER') playSound('laser');
                 else if (this.typeId === 'BOMB') playSound('bomb');
                 else if (this.typeId === 'ICE') playSound('ice');
+                else if (this.typeId === 'GLUE') playSound('glue');
+                else if (this.typeId === 'WIZARD') playSound('magic');
+                else if (this.typeId === 'PLASMA') playSound('plasma');
                 else playSound('pop');
             }
         }
@@ -1051,25 +1145,22 @@ class Tower {
             ctx.beginPath(); ctx.arc(0, 0, this.typeInfo.radius, 0, Math.PI*2); ctx.fill(); ctx.stroke();
             ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(0, 0, this.typeInfo.radius * 0.6, 0, Math.PI*2); ctx.fill();
             
-            // Visual Upgrades: Tack
             if (this.level >= 3) {
-                // Flame decals
                 ctx.fillStyle = '#ef4444';
                 ctx.beginPath(); ctx.moveTo(-6, -10); ctx.lineTo(0, -22); ctx.lineTo(6, -10); ctx.fill();
                 ctx.beginPath(); ctx.moveTo(-6, 10); ctx.lineTo(0, 22); ctx.lineTo(6, 10); ctx.fill();
             }
 
-            ctx.fillStyle = (this.level >= 2) ? '#facc15' : '#333'; // Golden nozzles
+            ctx.fillStyle = (this.level >= 2) ? '#facc15' : '#333'; 
             for(let i=0; i<8; i++) { ctx.rotate(Math.PI/4); ctx.fillRect(this.typeInfo.radius * 0.6, -3, 8, 6); }
         } 
         else if (this.typeId === 'BOMB') {
             ctx.rotate(this.angle);
-            ctx.fillStyle = (this.level >= 3) ? '#fbbf24' : '#1f2937'; // golden bomb turret
+            ctx.fillStyle = (this.level >= 3) ? '#fbbf24' : '#1f2937'; 
             ctx.beginPath(); ctx.arc(0, 0, 15, 0, Math.PI*2); ctx.fill();
             
             ctx.fillStyle = '#111827'; 
             if (this.level >= 2) {
-                // Dual Barrels
                 ctx.fillRect(0, -12, 25, 8);
                 ctx.fillRect(0, 4, 25, 8);
             } else {
@@ -1081,7 +1172,7 @@ class Tower {
             ctx.fillStyle = '#16a34a'; ctx.beginPath(); ctx.arc(0, -5, 18, 0, Math.PI*2); ctx.fill(); 
             ctx.fillStyle = '#713f12'; ctx.fillRect(-4, 0, 8, 14); 
             
-            if (this.level >= 2) { // Golden fence
+            if (this.level >= 2) { 
                 ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3;
                 ctx.strokeRect(-20, 6, 40, 6);
             }
@@ -1093,35 +1184,55 @@ class Tower {
             if (this.level >= 2) { ctx.beginPath(); ctx.arc(-8, -14, 3, 0, Math.PI*2); ctx.fill(); }
             if (this.level >= 3) { ctx.beginPath(); ctx.arc(8, -2, 3, 0, Math.PI*2); ctx.fill(); }
         }
+        else if (this.typeId === 'VILLAGE') {
+            ctx.fillStyle = '#b45309'; ctx.fillRect(-18, -12, 36, 26);
+            ctx.fillStyle = '#dc2626'; ctx.beginPath(); ctx.moveTo(-22, -12); ctx.lineTo(0, -26); ctx.lineTo(22, -12); ctx.fill();
+            ctx.fillStyle = '#fef08a'; ctx.fillRect(-6, 2, 12, 12);
+            if (this.level >= 2) {
+                ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.arc(0, -28, 6, 0, Math.PI*2); ctx.fill();
+            }
+            if (this.level >= 3) {
+                ctx.strokeStyle = '#facc15'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, -28, 12, 0, Math.PI*2); ctx.stroke();
+            }
+        }
+        else if (this.typeId === 'PLASMA') {
+            ctx.rotate(this.angle);
+            ctx.fillStyle = '#083344'; ctx.beginPath(); ctx.arc(0, 0, 18, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#06b6d4'; ctx.fillRect(0, -8, 28, 16);
+            ctx.fillStyle = '#a5f3fc'; ctx.beginPath(); ctx.arc(28, 0, 8, 0, Math.PI*2); ctx.fill();
+            if (this.level >= 2) {
+                ctx.strokeStyle = '#22d3ee'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(0, 0, 22, 0, Math.PI*2); ctx.stroke();
+            }
+        }
         else if (this.typeId === 'SPIKE') {
             ctx.fillStyle = '#9ca3af'; ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = '#374151'; ctx.fillRect(-10, -10, 20, 20);
             
-            if (this.level >= 3) { // Huge blinking warning light
+            if (this.level >= 3) { 
                 ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.arc(0, 0, 6, 0, Math.PI*2); ctx.fill();
             }
 
-            ctx.fillStyle = (this.level >= 2) ? '#ef4444' : '#facc15'; // Red hazard pipes at lvl 2
+            ctx.fillStyle = (this.level >= 2) ? '#ef4444' : '#facc15'; 
             ctx.fillRect(-2, -14, 4, 8); ctx.fillRect(-2, 6, 4, 8);
             ctx.fillRect(-14, -2, 8, 4); ctx.fillRect(6, -2, 8, 4);
         }
         else {
             ctx.rotate(this.angle);
             
-            // Visual Upgrades Base Suit Color
             let monkeyBase = '#8b5a2b';
             if (this.typeId === 'ICE') monkeyBase = '#93c5fd';
             else if (this.typeId === 'NINJA') monkeyBase = '#1f2937';
+            else if (this.typeId === 'BOOMERANG') monkeyBase = '#d97706';
+            else if (this.typeId === 'GLUE') monkeyBase = '#ca8a04';
+            else if (this.typeId === 'WIZARD') monkeyBase = '#581c87';
             else if (this.typeId === 'SUPER') monkeyBase = (this.level >= 3) ? '#1e3a8a' : '#2563eb';
 
             ctx.fillStyle = monkeyBase; ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI*2); ctx.fill();
             
-            // Draw Cape for Super Monkey
             if (this.typeId === 'SUPER') {
                 ctx.fillStyle = '#dc2626';
                 ctx.beginPath(); ctx.arc(-10, 0, 14, Math.PI/2, Math.PI*1.5); ctx.fill();
                 
-                // Lvl 3 Super Monkey Blizzard/Lightning aura
                 if (this.level >= 3) {
                     ctx.strokeStyle = 'rgba(56, 189, 248, 0.6)'; ctx.lineWidth = 4;
                     ctx.beginPath(); ctx.arc(0, 0, 24, 0, Math.PI*2); ctx.stroke();
@@ -1135,30 +1246,22 @@ class Tower {
             ctx.beginPath(); ctx.arc(8, -4, 2, 0, Math.PI*2); ctx.fill();
             ctx.beginPath(); ctx.arc(8, 4, 2, 0, Math.PI*2); ctx.fill();
 
+            if (this.typeId === 'WIZARD') {
+                ctx.fillStyle = '#facc15'; ctx.beginPath(); ctx.moveTo(0, -18); ctx.lineTo(12, 0); ctx.lineTo(-12, 0); ctx.fill();
+            }
+
             // Head Accessories
             if (this.typeId === 'DART' && this.level >= 2) {
-                // Red headband
                 ctx.fillStyle = '#ef4444';
                 ctx.fillRect(2, -15, 4, 30);
             }
-            if (this.typeId === 'DART' && this.level >= 3) {
-                // Cool dark pixel shades
-                ctx.fillStyle = '#111';
-                ctx.fillRect(6, -7, 5, 5);
-                ctx.fillRect(6, 2, 5, 5);
-                ctx.fillRect(8, -2, 3, 4);
+            if (this.typeId === 'BOOMERANG' && this.level >= 2) {
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(2, -15, 4, 30);
             }
-            if (this.typeId === 'NINJA') {
-                ctx.fillStyle = '#dc2626'; ctx.fillRect(0, -12, 6, 24); // red headband
-                if (this.level >= 2) {
-                    // White scarf
-                    ctx.fillStyle = '#fff';
-                    ctx.beginPath(); ctx.arc(-14, 8, 6, 0, Math.PI*2); ctx.fill();
-                }
-            }
-            if (this.typeId === 'SUPER' && this.level >= 2) {
-                // Laser visor
-                ctx.fillStyle = '#facc15'; ctx.fillRect(6, -6, 5, 12);
+            if (this.typeId === 'GLUE' && this.level >= 2) {
+                ctx.fillStyle = '#84cc16';
+                ctx.beginPath(); ctx.arc(0, 0, 18, 0, Math.PI*2); ctx.stroke();
             }
 
             // Weapon drawings
@@ -1166,6 +1269,14 @@ class Tower {
                 ctx.fillStyle = '#d2b48c'; ctx.beginPath(); ctx.arc(14, 10, 4, 0, Math.PI*2); ctx.fill();
                 ctx.fillStyle = '#fff'; ctx.fillRect(14, 8, 12, 2);
                 ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.moveTo(26, 9); ctx.lineTo(30, 9); ctx.lineTo(26, 12); ctx.fill();
+            } else if (this.typeId === 'BOOMERANG') {
+                ctx.strokeStyle = '#b45309'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.arc(18, 8, 8, -Math.PI/2, Math.PI/2); ctx.stroke();
+            } else if (this.typeId === 'GLUE') {
+                ctx.fillStyle = '#84cc16'; ctx.fillRect(10, 6, 14, 6);
+            } else if (this.typeId === 'WIZARD') {
+                ctx.fillStyle = '#a855f7'; ctx.fillRect(10, 6, 18, 4);
+                ctx.fillStyle = '#facc15'; ctx.beginPath(); ctx.arc(28, 8, 4, 0, Math.PI*2); ctx.fill();
             } else if (this.typeId === 'SNIPER') {
                 ctx.fillStyle = '#15803d'; ctx.beginPath(); ctx.arc(0, 0, 16, Math.PI*0.7, Math.PI*1.3); ctx.fill();
                 ctx.fillStyle = '#4b5563'; ctx.fillRect(8, 6, 35, 4);
@@ -1205,7 +1316,8 @@ class Projectile {
         this.active = true;
         this.life = 100; 
         this.rotation = 0; 
-        this.parentTower = parentTower; // Reference to track pops
+        this.parentTower = parentTower; 
+        this.curve = (this.type === 'boomerang') ? 0.08 : 0;
     }
 
     update() {
@@ -1217,6 +1329,7 @@ class Projectile {
         }
 
         this.rotation += 0.3;
+        this.angle += this.curve;
 
         this.x += Math.cos(this.angle) * this.speed;
         this.y += Math.sin(this.angle) * this.speed;
@@ -1225,7 +1338,7 @@ class Projectile {
             if (enemy.hp <= 0) continue;
             if (Math.hypot(enemy.x - this.x, enemy.y - this.y) < this.speed + enemy.radius) {
                 this.hit(enemy);
-                break;
+                if (this.type !== 'boomerang' && this.type !== 'wizard') break;
             }
         }
         
@@ -1233,12 +1346,14 @@ class Projectile {
     }
     
     hit(mainTarget) {
-        this.active = false;
+        if (this.type !== 'boomerang' && this.type !== 'wizard') {
+            this.active = false;
+        }
         
-        if (this.type === 'bomb') {
+        if (this.type === 'bomb' || this.type === 'plasma') {
             createParticles(this.x, this.y, '#111', 15);
-            createParticles(this.x, this.y, '#ef4444', 10);
-            playSound('bomb');
+            createParticles(this.x, this.y, this.type === 'plasma' ? '#22d3ee' : '#ef4444', 10);
+            playSound(this.type === 'plasma' ? 'plasma' : 'bomb');
             for (let e of enemies) {
                 if (Math.hypot(e.x - this.x, e.y - this.y) <= this.splash) {
                     this.damageEnemy(e);
@@ -1247,6 +1362,7 @@ class Projectile {
         } else {
             createParticles(mainTarget.x, mainTarget.y, mainTarget.getColor().bg, 5);
             if (this.type === 'ice') { mainTarget.slowTimer = 90; playSound('ice'); }
+            else if (this.type === 'glue') { mainTarget.glueTimer = 180; playSound('glue'); }
             else { playSound('pop'); }
             this.damageEnemy(mainTarget);
         }
@@ -1254,7 +1370,7 @@ class Projectile {
     
     damageEnemy(enemy) {
         enemy.hp -= this.damage;
-        if (this.parentTower) this.parentTower.pops += this.damage; // Record Pops!
+        if (this.parentTower) this.parentTower.pops += this.damage; 
 
         if (enemy.hp <= 0 && enemy.active !== false) {
             enemy.active = false; 
@@ -1274,6 +1390,18 @@ class Projectile {
         if (this.type === 'monkey') {
             ctx.fillStyle = '#fff'; ctx.fillRect(-6, -1, 12, 2);
             ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.moveTo(6, 0); ctx.lineTo(10, 0); ctx.lineTo(6, 3); ctx.fill();
+        } else if (this.type === 'boomerang') {
+            ctx.rotate(this.rotation);
+            ctx.strokeStyle = '#b45309'; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.arc(0, 0, 8, -Math.PI/2, Math.PI/2); ctx.stroke();
+        } else if (this.type === 'glue') {
+            ctx.fillStyle = '#84cc16'; ctx.beginPath(); ctx.arc(0, 0, 6, 0, Math.PI*2); ctx.fill();
+        } else if (this.type === 'wizard') {
+            ctx.fillStyle = '#c084fc'; ctx.beginPath(); ctx.arc(0, 0, 7, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(0, 0, 3, 0, Math.PI*2); ctx.fill();
+        } else if (this.type === 'plasma') {
+            ctx.fillStyle = '#22d3ee'; ctx.beginPath(); ctx.arc(0, 0, 8, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#a5f3fc'; ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI*2); ctx.fill();
         } else if (this.type === 'tack') {
             ctx.fillStyle = '#eab308'; ctx.fillRect(-2, -1, 4, 2);
         } else if (this.type === 'sniper') {
@@ -1293,9 +1421,6 @@ class Projectile {
     }
 }
 
-/**
- * Game Logic
- */
 function spawnWave() {
     if (level === 101 && !endlessModeActive) {
         gameState = 'VICTORY'; document.getElementById('victoryScreen').classList.remove('hidden'); return;
@@ -1321,8 +1446,6 @@ function spawnWave() {
 
 function spawnEnemy() {
     let isBoss = (level % 10 === 0);
-    
-    // Normal balloon HP maxes out at 21 before level 100, but can scale up to 84 in Endless Mode to introduce the Rainbow Balloon (double purple HP!)
     let maxHpLimit = endlessModeActive ? 84 : 21;
     let hpNormal = Math.min(maxHpLimit, Math.floor(3 + level * 0.6)); 
     let hpBoss = Math.floor(400 * Math.pow(1.2, level / 10)); 
@@ -1452,9 +1575,11 @@ function updateUI() {
 
     document.querySelectorAll('#towers-panel .tower-btn').forEach(btn => {
         const type = btn.getAttribute('data-type');
-        const cost = TOWER_TYPES[type].cost;
-        btn.querySelector('.cost-display').innerText = `$${cost.toLocaleString()}`;
-        if (money < cost) { btn.classList.add('disabled'); } else { btn.classList.remove('disabled'); }
+        if (TOWER_TYPES[type]) {
+            const cost = TOWER_TYPES[type].cost;
+            btn.querySelector('.cost-display').innerText = `$${cost.toLocaleString()}`;
+            if (money < cost) { btn.classList.add('disabled'); } else { btn.classList.remove('disabled'); }
+        }
     });
 
     if (!endlessModeActive) {
@@ -1496,6 +1621,11 @@ function updateUI() {
             document.getElementById('stat-dmg').innerText = '-';
             document.getElementById('stat-rng').innerText = '-';
             document.getElementById('stat-spd').innerText = '-';
+        } else if (selectedPlacedTower.typeId === 'VILLAGE') {
+            specStat.classList.remove('hidden');
+            specStat.innerText = `Buffs Range Towers!`;
+            document.getElementById('stat-dmg').innerText = '-';
+            document.getElementById('stat-spd').innerText = '-';
         } else {
             specStat.classList.add('hidden');
         }
@@ -1517,9 +1647,6 @@ function updateUI() {
     }
 }
 
-/**
- * Rendering
- */
 function drawMap() {
     decorations.forEach(d => {
         ctx.save();
@@ -1602,9 +1729,6 @@ function drawPlacementPreview() {
     ctx.beginPath(); ctx.arc(mouseX, mouseY, typeInfo.radius, 0, Math.PI*2); ctx.fill();
 }
 
-/**
- * Main Loop
- */
 function gameLoop(timestamp) {
     if (gameState === 'PLAYING') {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1618,239 +1742,180 @@ function gameLoop(timestamp) {
                 projectiles[i].update();
                 if (!projectiles[i].active) projectiles.splice(i, 1);
             }
+
             for (let i = enemies.length - 1; i >= 0; i--) {
-                if (enemies[i].update() || enemies[i].hp <= 0) enemies.splice(i, 1);
+                if (enemies[i].hp <= 0 || enemies[i].update()) {
+                    enemies.splice(i, 1);
+                }
             }
+
             for (let i = particles.length - 1; i >= 0; i--) {
                 particles[i].update();
                 if (particles[i].life <= 0) particles.splice(i, 1);
             }
+
             for (let i = floatingTexts.length - 1; i >= 0; i--) {
                 floatingTexts[i].update();
                 if (floatingTexts[i].life <= 0) floatingTexts.splice(i, 1);
             }
-            for (let i = spikes.length - 1; i >= 0; i--) {
-                if (spikes[i].life <= 0) spikes.splice(i, 1);
-            }
         }
 
         drawMap();
-        spikes.forEach(s => s.draw(ctx)); 
+        spikes.forEach(s => s.draw(ctx));
         towers.forEach(t => t.draw(ctx));
         enemies.forEach(e => e.draw(ctx));
         projectiles.forEach(p => p.draw(ctx));
         particles.forEach(p => p.draw(ctx));
-        floatingTexts.forEach(f => f.draw(ctx)); 
+        floatingTexts.forEach(ft => ft.draw(ctx));
+
         drawPlacementPreview();
     }
     requestAnimationFrame(gameLoop);
 }
 
-/**
- * Interactions & Controls
- */
+// UI & Control Handlers
+document.getElementById('startBtn').addEventListener('click', () => {
+    initAudio();
+    document.getElementById('startScreen').classList.add('hidden');
+    gameState = 'PLAYING';
+    updateUI();
+});
+
+document.getElementById('nextWaveBtn').addEventListener('click', () => {
+    if (!waveActive && gameState === 'PLAYING') spawnWave();
+});
+
 document.getElementById('speedBtn').addEventListener('click', (e) => {
-    if (gameSpeed === 1) {
-        gameSpeed = 2; e.target.innerText = '▶▶ 2x Speed'; e.target.classList.replace('bg-gray-600', 'bg-green-600'); e.target.classList.replace('hover:bg-gray-500', 'hover:bg-green-500');
-    } else {
-        gameSpeed = 1; e.target.innerText = '▶ 1x Speed'; e.target.classList.replace('bg-green-600', 'bg-gray-600'); e.target.classList.replace('hover:bg-green-500', 'hover:bg-gray-500');
-    }
+    if (gameSpeed === 1) { gameSpeed = 2; e.target.innerText = '⏩ 2x Speed'; e.target.classList.replace('bg-gray-600', 'bg-yellow-600'); }
+    else if (gameSpeed === 2) { gameSpeed = 3; e.target.innerText = '⚡ 3x Speed'; e.target.classList.replace('bg-yellow-600', 'bg-red-600'); }
+    else { gameSpeed = 1; e.target.innerText = '▶ 1x Speed'; e.target.classList.replace('bg-red-600', 'bg-gray-600'); }
 });
 
 document.getElementById('muteBtn').addEventListener('click', (e) => {
     soundMuted = !soundMuted;
-    if (soundMuted) {
-        e.target.innerText = '🔇 Muted';
-        e.target.classList.replace('bg-blue-800', 'bg-gray-600');
-    } else {
-        e.target.innerText = '🔊 Sound';
-        e.target.classList.replace('bg-gray-600', 'bg-blue-800');
-    }
+    e.target.innerText = soundMuted ? '🔇 Muted' : '🔊 Sound';
 });
 
 document.getElementById('autoStartToggle').addEventListener('change', (e) => {
     autoStartEnabled = e.target.checked;
-    if (autoStartEnabled && !waveActive && gameState === 'PLAYING' && level <= MAX_LEVEL) spawnWave();
+    if (autoStartEnabled && !waveActive && gameState === 'PLAYING') spawnWave();
 });
 
-// Keyboard Hotkey Handler
-window.addEventListener('keydown', (e) => {
-    if (gameState !== 'PLAYING') return;
-    initAudio(); // Wake up audio context on key press
-    
-    // Space starts round
-    if (e.code === 'Space') {
-        e.preventDefault();
-        if (!waveActive) spawnWave();
-    }
-    
-    // Esc deselects
-    if (e.code === 'Escape') {
-        selectedTowerType = null;
-        selectedPlacedTower = null;
-        document.querySelectorAll('#towers-panel .tower-btn').forEach(b => b.classList.remove('selected'));
-        updateUI();
-    }
-
-    // Number keys select towers
-    const hotkeys = {
-        'Digit1': 'DART',
-        'Digit2': 'TACK',
-        'Digit3': 'SNIPER',
-        'Digit4': 'BOMB',
-        'Digit5': 'ICE',
-        'Digit6': 'NINJA',
-        'Digit7': 'SPIKE',
-        'Digit8': 'FARM'
-    };
-
-    if (hotkeys[e.code]) {
-        let type = hotkeys[e.code];
-        document.querySelectorAll('#towers-panel .tower-btn').forEach(b => b.classList.remove('selected'));
-        selectedPlacedTower = null;
-        
+// Tower selection buttons
+document.querySelectorAll('#towers-panel .tower-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const type = btn.getAttribute('data-type');
         if (selectedTowerType === type) {
             selectedTowerType = null;
+            btn.classList.remove('selected');
         } else {
+            document.querySelectorAll('#towers-panel .tower-btn').forEach(b => b.classList.remove('selected'));
             selectedTowerType = type;
-            // Add visual selection
-            const targetBtn = document.querySelector(`[data-type="${type}"]`);
-            if (targetBtn) targetBtn.classList.add('selected');
+            selectedPlacedTower = null;
+            btn.classList.add('selected');
         }
         updateUI();
-    }
+    });
 });
 
-// Upgrade Button
+// Upgrades and Sell buttons
 document.getElementById('upgradeBtn').addEventListener('click', () => {
-    if (selectedPlacedTower && selectedPlacedTower.level < 3) {
+    if (selectedPlacedTower) {
         let cost = selectedPlacedTower.getUpgradeCost();
-        if (money >= cost) {
+        if (money >= cost && selectedPlacedTower.level < 3) {
             money -= cost;
             selectedPlacedTower.invested += cost;
             selectedPlacedTower.level++;
-            selectedPlacedTower.scaleAnim = 1.5; 
-            createParticles(selectedPlacedTower.x, selectedPlacedTower.y, '#facc15', 20); 
+            selectedPlacedTower.scaleAnim = 1.4;
             playSound('upgrade');
+            createParticles(selectedPlacedTower.x, selectedPlacedTower.y, '#facc15', 12);
             updateUI();
         }
     }
 });
 
-// Sell Placed Tower
 document.getElementById('sellBtn').addEventListener('click', () => {
     if (selectedPlacedTower) {
-        let refund = selectedPlacedTower.getSellValue();
-        money += refund;
-        towers = towers.filter(t => t !== selectedPlacedTower);
-        createParticles(selectedPlacedTower.x, selectedPlacedTower.y, '#eab308', 15);
-        selectedPlacedTower = null;
+        let sellVal = selectedPlacedTower.getSellValue();
+        money += sellVal;
         playSound('sell');
+        floatingTexts.push(new FloatingText(selectedPlacedTower.x, selectedPlacedTower.y, `+$${sellVal}`, '#4ade80'));
+        towers = towers.filter(t => t !== selectedPlacedTower);
+        selectedPlacedTower = null;
         updateUI();
     }
 });
 
-document.querySelectorAll('#towers-panel .tower-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        initAudio(); // Wake up audio context on clicking buttons
-        document.querySelectorAll('#towers-panel .tower-btn').forEach(b => b.classList.remove('selected'));
-        selectedPlacedTower = null; 
-        
-        if (selectedTowerType === btn.getAttribute('data-type')) { selectedTowerType = null; } 
-        else { btn.classList.add('selected'); selectedTowerType = btn.getAttribute('data-type'); }
-        updateUI();
-    });
+// Sidebar Tab Toggle
+document.getElementById('tab-towers').addEventListener('click', () => {
+    document.getElementById('towers-panel').classList.remove('hidden');
+    document.getElementById('extend-panel').classList.add('hidden');
+    document.getElementById('tab-towers').classList.replace('bg-[#6b4a2b]', 'bg-[#8b5a2b]');
+    document.getElementById('tab-towers').classList.replace('text-gray-300', 'text-white');
+    document.getElementById('tab-extend').classList.replace('bg-[#8b5a2b]', 'bg-[#6b4a2b]');
+    document.getElementById('tab-extend').classList.replace('text-white', 'text-gray-300');
 });
 
+document.getElementById('tab-extend').addEventListener('click', () => {
+    document.getElementById('extend-panel').classList.remove('hidden');
+    document.getElementById('towers-panel').classList.add('hidden');
+    document.getElementById('tab-extend').classList.replace('bg-[#6b4a2b]', 'bg-[#8b5a2b]');
+    document.getElementById('tab-extend').classList.replace('text-gray-300', 'text-white');
+    document.getElementById('tab-towers').classList.replace('bg-[#8b5a2b]', 'bg-[#6b4a2b]');
+    document.getElementById('tab-towers').classList.replace('text-white', 'text-gray-300');
+});
+
+// Mouse & Canvas interactions
 canvas.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    mouseX = (e.clientX - rect.left) * scaleX;
-    mouseY = (e.clientY - rect.top) * scaleY;
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
 });
 
-canvas.addEventListener('mouseleave', () => { mouseX = -100; mouseY = -100; });
-
-canvas.addEventListener('click', (e) => {
+canvas.addEventListener('click', () => {
     if (gameState !== 'PLAYING') return;
-    initAudio(); // Wake up audio context on clicking map
-
-    // Check click on map decorations
-    for (let d of decorations) {
-        if (Math.hypot(d.x - mouseX, d.y - mouseY) < d.size + 10) {
-            d.wiggleTimer = 30; // 30 frames of springy rotation
-            if (d.type === 'bush') {
-                createParticles(d.x, d.y, '#22c55e', 8);
-                playSound('rustle');
-            } else {
-                createParticles(d.x, d.y, '#facc15', 8);
-                playSound('twinkle');
-            }
-            return; // Exit click handler to avoid placing tower
-        }
-    }
 
     if (selectedTowerType) {
         const typeInfo = TOWER_TYPES[selectedTowerType];
         const isPath = isCollidingWithPath(mouseX, mouseY, typeInfo.radius);
         const isOccupied = towers.some(t => Math.hypot(t.x - mouseX, t.y - mouseY) < t.typeInfo.radius * 2);
-        
+
         if (!isPath && !isOccupied && money >= typeInfo.cost) {
             money -= typeInfo.cost;
             let newTower = new Tower(mouseX, mouseY, selectedTowerType, typeInfo);
-            newTower.scaleAnim = 1.3; 
             towers.push(newTower);
-            createParticles(mouseX, mouseY, '#fff', 10);
-            playSound('upgrade');
+            playSound('pop');
+            createParticles(mouseX, mouseY, '#fff', 8);
+
+            selectedTowerType = null;
+            document.querySelectorAll('#towers-panel .tower-btn').forEach(b => b.classList.remove('selected'));
             updateUI();
-            
-            if (money < typeInfo.cost) {
-                selectedTowerType = null;
-                document.querySelectorAll('#towers-panel .tower-btn').forEach(b => b.classList.remove('selected'));
-            }
         }
-        return;
+    } else {
+        selectedPlacedTower = towers.find(t => Math.hypot(t.x - mouseX, t.y - mouseY) <= t.typeInfo.radius + 6) || null;
+        updateUI();
     }
+});
 
-    let clickedTower = null;
-    for (let t of towers) {
-        if (Math.hypot(t.x - mouseX, t.y - mouseY) < t.typeInfo.radius) { clickedTower = t; break; }
+// Keyboard Hotkeys
+window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+        e.preventDefault();
+        if (!waveActive && gameState === 'PLAYING') spawnWave();
     }
-    
-    if (clickedTower) { selectedPlacedTower = clickedTower; } else { selectedPlacedTower = null; }
-    updateUI();
+    const keyMap = {
+        'Digit1': 'DART', 'Digit2': 'BOOMERANG', 'Digit3': 'TACK', 'Digit4': 'SNIPER', 'Digit5': 'GLUE',
+        'Digit6': 'BOMB', 'Digit7': 'ICE', 'Digit8': 'NINJA', 'Digit9': 'SPIKE', 'Digit0': 'FARM',
+        'KeyW': 'WIZARD', 'KeyV': 'VILLAGE', 'KeyS': 'SUPER', 'KeyP': 'PLASMA'
+    };
+    if (keyMap[e.code] && gameState === 'PLAYING') {
+        const btn = document.querySelector(`.tower-btn[data-type="${keyMap[e.code]}"]`);
+        if (btn) btn.click();
+    }
 });
 
-document.getElementById('startBtn').addEventListener('click', () => { 
-    initAudio(); // Initialize and unlock audio on click
-    document.getElementById('startScreen').classList.add('hidden'); 
-    gameState = 'PLAYING'; 
-    updateUI(); 
-});
-document.getElementById('nextWaveBtn').addEventListener('click', () => { if (!waveActive) spawnWave(); });
-
-const tabTowers = document.getElementById('tab-towers');
-const tabExtend = document.getElementById('tab-extend');
-const panelTowers = document.getElementById('towers-panel');
-const panelExtend = document.getElementById('extend-panel');
-
-tabTowers.addEventListener('click', () => {
-    tabTowers.classList.replace('bg-[#6b4a2b]', 'bg-[#8b5a2b]'); tabTowers.classList.replace('text-gray-300', 'text-white'); tabTowers.classList.remove('border-b-2');
-    tabExtend.classList.replace('bg-[#8b5a2b]', 'bg-[#6b4a2b]'); tabExtend.classList.replace('text-white', 'text-gray-300'); tabExtend.classList.add('border-b-2');
-    panelTowers.classList.remove('hidden'); panelExtend.classList.add('hidden');
-});
-
-tabExtend.addEventListener('click', () => {
-    if (endlessModeActive) return;
-    tabExtend.classList.replace('bg-[#6b4a2b]', 'bg-[#8b5a2b]'); tabExtend.classList.replace('text-gray-300', 'text-white'); tabExtend.classList.remove('border-b-2');
-    tabTowers.classList.replace('bg-[#8b5a2b]', 'bg-[#6b4a2b]'); tabTowers.classList.replace('text-white', 'text-gray-300'); tabTowers.classList.add('border-b-2');
-    panelExtend.classList.remove('hidden'); panelTowers.classList.add('hidden');
-});
-
-updateUI();
+// Start loop
 requestAnimationFrame(gameLoop);
-
 </script>
 </body>
 </html>
