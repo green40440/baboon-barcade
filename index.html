@@ -6,7 +6,6 @@
     <title>Baboon Barricade: Deluxe Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Portal-friendly Fullscreen Setup */
         html, body {
             width: 100%;
             height: 100%;
@@ -53,7 +52,7 @@
             height: 600px; 
             overflow: hidden;
             position: relative;
-            transition: width 1s ease-in-out, height 1s ease-in-out;
+            transition: width 0.8s ease-in-out, height 0.8s ease-in-out;
             flex-shrink: 0;
             background-color: #52c222;
         }
@@ -65,7 +64,7 @@
             left: 0;
         }
         .sidebar {
-            width: 270px; 
+            width: 280px; 
             background-color: #d2a679; 
             border-left: 6px solid #8b5a2b;
             display: flex;
@@ -87,9 +86,12 @@
             align-items: center;
             box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 4px 0 rgba(0,0,0,0.2);
         }
-        .tower-btn:active {
-            transform: translateY(4px);
-            box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 0px 0 rgba(0,0,0,0.2);
+        .tower-btn:hover:not(.disabled) {
+            background-color: #f4a460;
+        }
+        .tower-btn:active:not(.disabled) {
+            transform: translateY(2px);
+            box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 1px 0 rgba(0,0,0,0.2);
         }
         .tower-btn.selected {
             border-color: #fff;
@@ -103,38 +105,25 @@
             text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
 
-        /* Checkbox styling */
         input[type="checkbox"] {
             accent-color: #22c55e;
             width: 1.25rem;
             height: 1.25rem;
             cursor: pointer;
         }
-        
-        /* Boss Warning Animation */
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-        .boss-warning {
-            animation: pulse-red 1.5s infinite;
-            background-color: #b91c1c !important;
-            border-color: #fca5a5 !important;
-        }
     </style>
 </head>
 <body>
 
     <div id="game-wrapper">
-        <!-- Fixed Top UI -->
+        <!-- Fixed Top UI Header -->
         <div class="absolute top-3 left-4 flex gap-6 text-white font-bold text-2xl top-ui tracking-wide z-30 pointer-events-none">
             <div class="flex items-center gap-2"><span class="text-red-500 text-3xl drop-shadow-md">❤️</span> <span id="livesDisplay">500</span></div>
-            <div class="flex items-center gap-2"><span class="text-yellow-400 text-3xl drop-shadow-md">💰</span> $<span id="moneyDisplay">170</span></div>
+            <div class="flex items-center gap-2"><span class="text-yellow-400 text-3xl drop-shadow-md">💰</span> $<span id="moneyDisplay">200</span></div>
         </div>
-        <div id="round-indicator" class="absolute top-3 text-white font-bold text-xl top-ui bg-blue-600/90 px-4 py-1 rounded-xl border-2 border-white shadow-lg transition-all duration-300 z-30 pointer-events-none flex flex-col items-center" style="right: calc(270px + 1rem);">
+        <div id="round-indicator" class="absolute top-3 text-white font-bold text-xl top-ui bg-blue-600/90 px-4 py-1 rounded-xl border-2 border-white shadow-lg transition-all duration-300 z-30 pointer-events-none flex flex-col items-center" style="right: calc(280px + 1rem);">
             <div>ROUND <span id="levelDisplay" class="text-2xl">1</span><span id="maxLevelDisplay" class="text-sm text-blue-200">/100</span></div>
-            <div id="bossText" class="text-xs text-yellow-300 hidden uppercase tracking-wider">Boss Incoming!</div>
+            <div id="bossText" class="text-xs text-yellow-300 hidden uppercase tracking-wider font-extrabold">Boss Incoming!</div>
         </div>
 
         <!-- Scrolling Map Viewport -->
@@ -144,11 +133,10 @@
             </div>
         </div>
 
-        <!-- Overlays -->
         <div id="startScreen" class="absolute inset-0 bg-black/60 backdrop-blur-md flex flex-col items-center justify-center z-40">
-            <div class="bg-yellow-400 text-yellow-900 px-4 py-1 rounded-full font-bold text-sm mb-4 border-2 border-yellow-600 shadow-lg">DELUXE WEB EDITION</div>
+            <div class="bg-yellow-400 text-yellow-900 px-4 py-1 rounded-full font-bold text-sm mb-4 border-2 border-yellow-600 shadow-lg">DELUXE WEB EDITION - 24 TOWERS</div>
             <h2 class="text-6xl font-bold text-yellow-400 top-ui mb-2 text-center">Baboon<br>Barricade</h2>
-            <p class="text-white font-bold top-ui mb-8 text-xl">Pop all 100 waves! Bosses every 10 rounds.</p>
+            <p class="text-white font-bold top-ui mb-8 text-xl">Pop all 100 waves! Full privileges remain active in endless mode.</p>
             <button id="startBtn" class="px-8 py-4 bg-green-500 hover:bg-green-400 text-white font-bold rounded-xl border-b-4 border-green-700 text-2xl transition hover:-translate-y-1">PLAY NOW</button>
         </div>
         
@@ -159,12 +147,12 @@
         </div>
 
         <div id="victoryScreen" class="absolute inset-0 bg-blue-900/90 backdrop-blur-md flex flex-col items-center justify-center z-40 hidden">
-            <h2 id="victoryTitle" class="text-6xl font-bold text-yellow-300 top-ui mb-2">Level 100 Cleared!</h2>
-            <p class="text-2xl font-bold text-white top-ui mb-8">Choose your fate:</p>
+            <h2 id="victoryTitle" class="text-5xl font-bold text-yellow-300 top-ui mb-2">Level 100 Cleared!</h2>
+            <p class="text-xl font-bold text-white top-ui mb-6">Choose your fate:</p>
             <div class="flex flex-col gap-4 w-[500px]">
                 <button onclick="startEndless()" class="w-full px-6 py-4 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl border-b-4 border-purple-800 text-xl transition hover:-translate-y-1 flex flex-col items-center">
                     <span>Keep Going to Level 500</span>
-                    <span class="text-sm font-normal text-purple-200">Warning: Upgrades disappear, 10x Prices!</span>
+                    <span class="text-sm font-normal text-purple-200">Keep all your towers, full upgrades, standard prices & privileges!</span>
                 </button>
                 <button onclick="rebirth()" class="w-full px-6 py-4 bg-orange-500 hover:bg-orange-400 text-white font-bold rounded-xl border-b-4 border-orange-700 text-xl transition hover:-translate-y-1 flex flex-col items-center">
                     <span>Rebirth</span>
@@ -175,19 +163,20 @@
 
         <div id="trueVictoryScreen" class="absolute inset-0 bg-yellow-500/90 backdrop-blur-md flex flex-col items-center justify-center z-40 hidden">
             <h2 class="text-6xl font-bold text-white top-ui mb-2">TRUE VICTORY!</h2>
-            <p class="text-2xl font-bold text-black top-ui mb-8">You beat level 500! You are a legend!</p>
+            <p class="text-2xl font-bold text-black top-ui mb-8">You beat level 500! You are an absolute tower defense legend!</p>
             <button onclick="location.reload()" class="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl border-b-4 border-blue-700 text-2xl transition hover:-translate-y-1">Play Again</button>
         </div>
 
-        <!-- Right UI Panel -->
+        <!-- Sidebar Navigation -->
         <div class="sidebar shrink-0 relative z-20 flex flex-col">
             <div id="tab-container" class="flex mb-3 shrink-0">
-                <button id="tab-towers" class="flex-1 bg-[#8b5a2b] text-white text-[11px] font-bold py-2 rounded-tl-lg border-2 border-b-0 border-[#5c4033] shadow-inner">TOWERS</button>
+                <button id="tab-towers" class="flex-1 bg-[#8b5a2b] text-white text-[11px] font-bold py-2 rounded-tl-lg border-2 border-b-0 border-[#5c4033] shadow-inner">TOWERS (24)</button>
                 <button id="tab-extend" class="flex-1 bg-[#6b4a2b] text-gray-300 text-[11px] font-bold py-2 rounded-tr-lg border-2 border-b-2 border-l-0 border-[#5c4033] shadow-inner transition hover:bg-[#7b5a3b]">EXTEND</button>
             </div>
             
-            <!-- Towers Panel -->
             <div id="towers-panel" class="flex-1 overflow-y-auto pr-1 space-y-2">
+                
+                <!-- 1. DART MONKEY ($170) -->
                 <button class="tower-btn w-full relative" data-type="DART">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[1]</span>
                     <div class="w-10 h-10 rounded-full bg-[#8b5a2b] border-2 border-[#5c4033] flex items-center justify-center mb-1">
@@ -200,17 +189,17 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$170</p>
                 </button>
 
-                <button class="tower-btn w-full relative" data-type="BOOMERANG">
+                <!-- 2. SLINGSHOT MONKEY ($220) [NEW 1] -->
+                <button class="tower-btn w-full relative" data-type="SLINGSHOT">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[2]</span>
-                    <div class="w-10 h-10 rounded-full bg-[#b45309] border-2 border-[#78350f] flex items-center justify-center mb-1 relative">
-                        <div class="w-6 h-6 rounded-full bg-[#d2b48c] relative">
-                            <div class="absolute top-0.5 right-0.5 w-3 h-3 border-r-2 border-t-2 border-amber-800 rounded-tr"></div>
-                        </div>
+                    <div class="w-10 h-10 rounded-full bg-[#a16207] border-2 border-[#713f12] flex items-center justify-center mb-1">
+                        <div class="text-xl">🪵</div>
                     </div>
-                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Boomerang Monkey</p>
-                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$320</p>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Slingshot Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$220</p>
                 </button>
 
+                <!-- 3. TACK SHOOTER ($280) -->
                 <button class="tower-btn w-full relative" data-type="TACK">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[3]</span>
                     <div class="w-10 h-10 bg-pink-500 rounded border-2 border-pink-700 flex flex-wrap p-1 items-center justify-center gap-1 mb-1 relative">
@@ -221,8 +210,21 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$280</p>
                 </button>
 
-                <button class="tower-btn w-full relative" data-type="SNIPER">
+                <!-- 4. BOOMERANG MONKEY ($320) -->
+                <button class="tower-btn w-full relative" data-type="BOOMERANG">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[4]</span>
+                    <div class="w-10 h-10 rounded-full bg-[#b45309] border-2 border-[#78350f] flex items-center justify-center mb-1 relative">
+                        <div class="w-6 h-6 rounded-full bg-[#d2b48c] relative">
+                            <div class="absolute top-0.5 right-0.5 w-3 h-3 border-r-2 border-t-2 border-amber-800 rounded-tr"></div>
+                        </div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Boomerang Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$320</p>
+                </button>
+
+                <!-- 5. SNIPER MONKEY ($350) -->
+                <button class="tower-btn w-full relative" data-type="SNIPER">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[5]</span>
                     <div class="w-10 h-10 rounded-full bg-[#8b5a2b] border-2 border-[#5c4033] flex items-center justify-center mb-1 relative">
                         <div class="absolute top-0 w-8 h-5 bg-green-700 rounded-t-full border-b-2 border-green-900 z-10"></div>
                         <div class="w-6 h-6 rounded-full bg-[#d2b48c] absolute bottom-1"></div>
@@ -231,8 +233,9 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$350</p>
                 </button>
 
+                <!-- 6. GLUE MONKEY ($400) -->
                 <button class="tower-btn w-full relative" data-type="GLUE">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[5]</span>
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[6]</span>
                     <div class="w-10 h-10 rounded-full bg-yellow-600 border-2 border-yellow-800 flex items-center justify-center mb-1 relative">
                         <div class="w-6 h-6 rounded-full bg-[#d2b48c] relative">
                             <div class="w-3 h-3 bg-lime-500 rounded-full absolute top-1 left-1 shadow-inner"></div>
@@ -242,8 +245,9 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$400</p>
                 </button>
 
+                <!-- 7. BOMB CANNON ($450) -->
                 <button class="tower-btn w-full relative" data-type="BOMB">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[6]</span>
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[7]</span>
                     <div class="w-10 h-10 bg-gray-800 rounded-full border-2 border-gray-900 flex items-center justify-center mb-1 relative">
                          <div class="w-5 h-5 bg-black rounded-full border border-gray-600"></div>
                     </div>
@@ -251,8 +255,9 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$450</p>
                 </button>
 
+                <!-- 8. ICE MONKEY ($500) -->
                 <button class="tower-btn w-full relative" data-type="ICE">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[7]</span>
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[8]</span>
                     <div class="w-10 h-10 rounded-full bg-blue-300 border-2 border-blue-500 flex items-center justify-center mb-1 relative overflow-hidden">
                         <div class="w-6 h-6 rounded-full bg-[#d2b48c] relative">
                             <div class="absolute top-1 left-1 w-1.5 h-1.5 bg-blue-700 rounded-full"></div>
@@ -263,8 +268,19 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$500</p>
                 </button>
 
+                <!-- 9. DARTLING GUNNER ($550) [NEW 2] -->
+                <button class="tower-btn w-full relative" data-type="DARTLING">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[9]</span>
+                    <div class="w-10 h-10 rounded bg-green-800 border-2 border-green-950 flex items-center justify-center mb-1 relative">
+                        <div class="text-xl">🔫</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Dartling Gunner</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$550</p>
+                </button>
+
+                <!-- 10. NINJA MONKEY ($600) -->
                 <button class="tower-btn w-full relative" data-type="NINJA">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[8]</span>
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[0]</span>
                     <div class="w-10 h-10 rounded-full bg-gray-800 border-2 border-black flex items-center justify-center mb-1 relative">
                         <div class="absolute top-1.5 w-8 h-2.5 bg-red-600 z-10"></div>
                         <div class="w-6 h-6 rounded-full bg-[#d2b48c] absolute bottom-1"></div>
@@ -273,8 +289,19 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$600</p>
                 </button>
 
+                <!-- 11. MORTAR MONKEY ($650) [NEW 3] -->
+                <button class="tower-btn w-full relative" data-type="MORTAR">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[Q]</span>
+                    <div class="w-10 h-10 rounded-full bg-stone-700 border-2 border-stone-900 flex items-center justify-center mb-1">
+                        <div class="text-xl">💥</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Mortar Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$650</p>
+                </button>
+
+                <!-- 12. SPIKE FACTORY ($700) -->
                 <button class="tower-btn w-full relative" data-type="SPIKE">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[9]</span>
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[W]</span>
                     <div class="w-10 h-10 bg-gray-300 rounded border-2 border-gray-500 flex items-center justify-center mb-1 relative">
                         <div class="w-6 h-6 bg-gray-800 rounded"></div>
                         <div class="absolute w-1 h-2 bg-yellow-400 -top-1"></div>
@@ -284,8 +311,9 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$700</p>
                 </button>
 
+                <!-- 13. BANANA FARM ($800) -->
                 <button class="tower-btn w-full relative" data-type="FARM">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[0]</span>
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[E]</span>
                     <div class="w-10 h-10 bg-green-600 rounded border-2 border-green-800 flex flex-col items-center justify-center mb-1 relative">
                         <div class="w-6 h-6 bg-green-400 rounded-full absolute -top-1"></div>
                         <div class="w-2 h-4 bg-yellow-900 absolute bottom-1"></div>
@@ -294,8 +322,19 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$800</p>
                 </button>
 
+                <!-- 14. ALCHEMIST MONKEY ($900) [NEW 4] -->
+                <button class="tower-btn w-full relative" data-type="ALCHEMIST">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[R]</span>
+                    <div class="w-10 h-10 rounded-full bg-emerald-900 border-2 border-emerald-950 flex items-center justify-center mb-1">
+                        <div class="text-xl">🧪</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Alchemist Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$900</p>
+                </button>
+
+                <!-- 15. WIZARD MONKEY ($1,100) -->
                 <button class="tower-btn w-full relative" data-type="WIZARD">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[W]</span>
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[T]</span>
                     <div class="w-10 h-10 rounded-full bg-purple-900 border-2 border-purple-950 flex items-center justify-center mb-1 relative">
                         <div class="w-0 h-0 border-l-4 border-r-4 border-b-8 border-b-yellow-400 absolute -top-1 z-20"></div>
                         <div class="w-6 h-6 rounded-full bg-[#d2b48c] absolute bottom-1"></div>
@@ -304,8 +343,19 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$1,100</p>
                 </button>
 
+                <!-- 16. DRUID MONKEY ($1,250) [NEW 5] -->
+                <button class="tower-btn w-full relative" data-type="DRUID">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[Y]</span>
+                    <div class="w-10 h-10 rounded-full bg-emerald-700 border-2 border-emerald-900 flex items-center justify-center mb-1">
+                        <div class="text-xl">🍃</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Druid Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$1,250</p>
+                </button>
+
+                <!-- 17. MONKEY VILLAGE ($1,400) -->
                 <button class="tower-btn w-full relative" data-type="VILLAGE">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[V]</span>
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[U]</span>
                     <div class="w-10 h-10 bg-amber-700 rounded border-2 border-amber-900 flex items-center justify-center mb-1 relative">
                         <div class="w-6 h-4 bg-red-600 rounded-t-md absolute top-1"></div>
                         <div class="w-3 h-3 bg-yellow-300 rounded-full absolute bottom-1"></div>
@@ -314,8 +364,29 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$1,400</p>
                 </button>
 
+                <!-- 18. APACHE CHOPPER ($1,800) [NEW 6] -->
+                <button class="tower-btn w-full relative" data-type="CHOPPER">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[I]</span>
+                    <div class="w-10 h-10 rounded bg-slate-800 border-2 border-slate-950 flex items-center justify-center mb-1">
+                        <div class="text-xl">🚁</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Apache Chopper</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$1,800</p>
+                </button>
+
+                <!-- 19. LASER CANNON ($2,100) [NEW 7] -->
+                <button class="tower-btn w-full relative" data-type="LASER">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[O]</span>
+                    <div class="w-10 h-10 rounded bg-fuchsia-900 border-2 border-fuchsia-950 flex items-center justify-center mb-1">
+                        <div class="text-xl">⚡</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Laser Cannon</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$2,100</p>
+                </button>
+
+                <!-- 20. SUPER MONKEY ($2,500) -->
                 <button class="tower-btn w-full relative" data-type="SUPER">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[S]</span>
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[P]</span>
                     <div class="w-10 h-10 rounded-full bg-blue-600 border-2 border-blue-800 flex items-center justify-center mb-1 relative">
                         <div class="absolute -right-1 w-5 h-8 bg-red-600 rounded-r-full z-0"></div>
                         <div class="w-6 h-6 rounded-full bg-[#d2b48c] relative z-10"></div>
@@ -324,17 +395,49 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$2,500</p>
                 </button>
 
+                <!-- 21. TESLA TOWER ($3,000) [NEW 8] -->
+                <button class="tower-btn w-full relative" data-type="TESLA">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[A]</span>
+                    <div class="w-10 h-10 rounded bg-indigo-900 border-2 border-indigo-400 flex items-center justify-center mb-1">
+                        <div class="text-xl">🌩️</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Tesla Tower</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$3,000</p>
+                </button>
+
+                <!-- 22. PLASMA CANNON ($3,500) -->
                 <button class="tower-btn w-full relative" data-type="PLASMA">
-                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[P]</span>
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[S]</span>
                     <div class="w-10 h-10 bg-cyan-900 rounded-full border-2 border-cyan-400 flex items-center justify-center mb-1 relative shadow-lg">
                         <div class="w-5 h-5 bg-cyan-300 rounded-full animate-pulse border border-white"></div>
                     </div>
                     <p class="font-bold text-[#5c4033] text-xs leading-tight">Plasma Cannon</p>
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$3,500</p>
                 </button>
+
+                <!-- 23. SUN TEMPLE ($5,000) [NEW 9] -->
+                <button class="tower-btn w-full relative" data-type="SUN">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[D]</span>
+                    <div class="w-10 h-10 rounded-full bg-amber-500 border-2 border-yellow-300 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">☀️</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Sun Temple</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$5,000</p>
+                </button>
+
+                <!-- 24. ORBITAL DEATH RAY ($8,500) [NEW 10] -->
+                <button class="tower-btn w-full relative" data-type="ORBITAL">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[F]</span>
+                    <div class="w-10 h-10 rounded-full bg-violet-950 border-2 border-violet-400 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">📡</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Orbital Death Ray</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$8,500</p>
+                </button>
+
             </div>
 
-            <!-- Extendable Panel -->
+            <!-- Extend Map Panel -->
             <div id="extend-panel" class="hidden flex-1 overflow-y-auto pr-1 space-y-3">
                 <p class="text-[11px] text-[#5c4033] font-bold text-center bg-[#deb887] p-1 rounded border border-[#a0522d] mb-2 leading-tight">Unlock & expand the map!</p>
                 
@@ -392,11 +495,10 @@
                 </div>
             </div>
 
-            <!-- Deluxe Action Panel (Upgrading, Stats, Selling) -->
+            <!-- Selection / Upgrade Panel -->
             <div id="selection-panel" class="hidden shrink-0 mt-2 p-3 bg-blue-900 border-2 border-blue-700 rounded-lg shadow-inner text-center">
                 <p class="text-white font-bold text-sm mb-1"><span id="sel-tower-name" class="text-yellow-300">Tower</span> <span id="sel-tower-level" class="text-blue-300 text-xs font-normal ml-1">Lvl 1</span></p>
                 
-                <!-- STATS DISPLAY -->
                 <div id="stats-container" class="grid grid-cols-2 gap-1 mb-2 bg-blue-950 p-2 rounded border border-blue-800 text-[10px] text-gray-300">
                     <div class="text-left">Damage: <span id="stat-dmg" class="text-white font-bold">1</span></div>
                     <div class="text-right">Range: <span id="stat-rng" class="text-white font-bold">120</span></div>
@@ -409,10 +511,10 @@
 
                 <div class="flex flex-col gap-2">
                     <button id="upgradeBtn" class="w-full py-1.5 bg-green-600 hover:bg-green-500 disabled:bg-gray-600 text-white font-bold rounded shadow transition text-sm border border-green-800 disabled:border-gray-700 disabled:text-gray-400">
-                        Upgrade ($<span id="sel-tower-upg">0</span>)
+                        Upgrade ($<span id="sel-tower-upg">0</span>) [U]
                     </button>
                     <button id="sellBtn" class="w-full py-1.5 bg-red-600 hover:bg-red-500 text-white font-bold rounded shadow transition text-sm border border-red-800">
-                        Sell ($<span id="sel-tower-value">0</span>)
+                        Sell ($<span id="sel-tower-value">0</span>) [X]
                     </button>
                 </div>
             </div>
@@ -435,9 +537,6 @@
     </div>
 
 <script>
-/**
- * Game Configuration & Constants
- */
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -445,7 +544,7 @@ const TILE_SIZE = 60;
 const COLS = Math.floor(canvas.width / TILE_SIZE); 
 const ROWS = Math.floor(canvas.height / TILE_SIZE); 
 
-// Game State
+// Game State Variables
 let gameState = 'START'; 
 let money = 200; 
 let lives = 500;
@@ -454,7 +553,6 @@ let MAX_LEVEL = 100;
 let speedMultiplier = 1.0;
 let endlessModeActive = false;
 
-// DELUXE QoL STATES
 let gameSpeed = 1; 
 let autoStartEnabled = false;
 let selectedPlacedTower = null; 
@@ -493,9 +591,6 @@ let waypoints = pathGridCoords.map(p => ({
 const mapGrid = Array.from({length: ROWS + 2}, () => Array(COLS + 2).fill(0));
 let decorationsGenerated = false;
 
-/**
- * Arcade Audio Synthesizer (Web Audio API)
- */
 let audioCtx = null;
 
 function initAudio() {
@@ -534,6 +629,13 @@ function playSound(type) {
             gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
             duration = 0.08;
+        } else if (type === 'slingshot') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(450, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.05);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+            duration = 0.05;
         } else if (type === 'laser') {
             osc.type = 'sawtooth';
             osc.frequency.setValueAtTime(850, audioCtx.currentTime);
@@ -541,7 +643,7 @@ function playSound(type) {
             gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.04);
             duration = 0.04;
-        } else if (type === 'bomb') {
+        } else if (type === 'bomb' || type === 'mortar') {
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(140, audioCtx.currentTime);
             osc.frequency.linearRampToValueAtTime(10, audioCtx.currentTime + 0.3);
@@ -555,13 +657,34 @@ function playSound(type) {
             gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
             duration = 0.15;
-        } else if (type === 'glue') {
+        } else if (type === 'glue' || type === 'alchemist') {
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(300, audioCtx.currentTime);
             osc.frequency.linearRampToValueAtTime(90, audioCtx.currentTime + 0.15);
             gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
             duration = 0.15;
+        } else if (type === 'druid') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(520, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(260, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.09, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            duration = 0.1;
+        } else if (type === 'chopper') {
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.05);
+            gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.05);
+            duration = 0.05;
+        } else if (type === 'tesla') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(1400, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.09);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.09);
+            duration = 0.09;
         } else if (type === 'magic') {
             osc.type = 'sine';
             osc.frequency.setValueAtTime(400, audioCtx.currentTime);
@@ -569,13 +692,20 @@ function playSound(type) {
             gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
             duration = 0.12;
-        } else if (type === 'plasma') {
+        } else if (type === 'plasma' || type === 'sun') {
             osc.type = 'sawtooth';
             osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.08);
             gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.08);
             duration = 0.08;
+        } else if (type === 'orbital') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(2000, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.25);
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+            duration = 0.25;
         } else if (type === 'upgrade') {
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(400, audioCtx.currentTime);
@@ -630,18 +760,16 @@ function buildPathMap() {
 
     markGrid(pathGridCoords, 1);
     
-    if (!endlessModeActive) {
-        if (trackExtensions < 1) markGrid([{x:11, y:8}, {x:11, y:2}, {x:13, y:2}, {x:13, y:10}], 2);
-        if (trackExtensions < 2) markGrid([{x:13, y:8}, {x:15, y:8}, {x:15, y:-1}], 2);
-        if (trackExtensions < 3) markGrid([{x:15, y:2}, {x:18, y:2}, {x:18, y:7}, {x:16, y:7}, {x:16, y:10}], 2);
-        if (trackExtensions >= 3) {
-            if (trackExtensions < 4) markGrid([{x:16, y:7}, {x:16, y:12}, {x:12, y:12}, {x:12, y:14}], 2);
-            if (trackExtensions < 5) markGrid([{x:12, y:12}, {x:12, y:15}, {x:8, y:15}, {x:8, y:17}], 2);
-            if (trackExtensions < 6) markGrid([{x:8, y:15}, {x:8, y:18}, {x:4, y:18}, {x:4, y:20}], 2);
-            if (trackExtensions < 7) markGrid([{x:4, y:18}, {x:4, y:19}, {x:1, y:19}, {x:1, y:20}], 2);
-            if (trackExtensions < 8) markGrid([{x:1, y:19}, {x:1, y:13}, {x:-1, y:13}], 2);
-            if (trackExtensions < 9) markGrid([{x:1, y:13}, {x:1, y:8}, {x:4, y:8}, {x:4, y:12}, {x:7, y:12}, {x:7, y:10}, {x:-1, y:10}], 2);
-        }
+    if (trackExtensions < 1) markGrid([{x:11, y:8}, {x:11, y:2}, {x:13, y:2}, {x:13, y:10}], 2);
+    if (trackExtensions < 2) markGrid([{x:13, y:8}, {x:15, y:8}, {x:15, y:-1}], 2);
+    if (trackExtensions < 3) markGrid([{x:15, y:2}, {x:18, y:2}, {x:18, y:7}, {x:16, y:7}, {x:16, y:10}], 2);
+    if (trackExtensions >= 3) {
+        if (trackExtensions < 4) markGrid([{x:16, y:7}, {x:16, y:12}, {x:12, y:12}, {x:12, y:14}], 2);
+        if (trackExtensions < 5) markGrid([{x:12, y:12}, {x:12, y:15}, {x:8, y:15}, {x:8, y:17}], 2);
+        if (trackExtensions < 6) markGrid([{x:8, y:15}, {x:8, y:18}, {x:4, y:18}, {x:4, y:20}], 2);
+        if (trackExtensions < 7) markGrid([{x:4, y:18}, {x:4, y:19}, {x:1, y:19}, {x:1, y:20}], 2);
+        if (trackExtensions < 8) markGrid([{x:1, y:19}, {x:1, y:13}, {x:-1, y:13}], 2);
+        if (trackExtensions < 9) markGrid([{x:1, y:13}, {x:1, y:8}, {x:4, y:8}, {x:4, y:12}, {x:7, y:12}, {x:7, y:10}, {x:-1, y:10}], 2);
     }
     
     if (!decorationsGenerated) {
@@ -680,39 +808,34 @@ function isCollidingWithPath(cx, cy, radius) {
     };
 
     for(let i=0; i<waypoints.length-1; i++) checkLine(waypoints[i].x, waypoints[i].y, waypoints[i+1].x, waypoints[i+1].y);
-    
-    if (!endlessModeActive) {
-        const tCenter = (gridV) => gridV * TILE_SIZE + TILE_SIZE / 2;
-        if (trackExtensions < 1) { checkLine(tCenter(11), tCenter(8), tCenter(11), tCenter(2)); checkLine(tCenter(11), tCenter(2), tCenter(13), tCenter(2)); checkLine(tCenter(13), tCenter(2), tCenter(13), tCenter(10)); }
-        if (trackExtensions < 2) { checkLine(tCenter(13), tCenter(8), tCenter(15), tCenter(8)); checkLine(tCenter(15), tCenter(8), tCenter(15), tCenter(-1)); }
-        if (trackExtensions < 3) { checkLine(tCenter(15), tCenter(2), tCenter(18), tCenter(2)); checkLine(tCenter(18), tCenter(2), tCenter(18), tCenter(7)); checkLine(tCenter(18), tCenter(7), tCenter(16), tCenter(7)); checkLine(tCenter(16), tCenter(7), tCenter(16), tCenter(10)); }
-        if (trackExtensions >= 3) {
-            if (trackExtensions < 4) { checkLine(tCenter(16), tCenter(7)); checkLine(tCenter(16), tCenter(12)); checkLine(tCenter(12), tCenter(12)); checkLine(tCenter(12), tCenter(14)); }
-            if (trackExtensions < 5) { checkLine(tCenter(12), tCenter(12)); checkLine(tCenter(12), tCenter(15)); checkLine(tCenter(8), tCenter(15)); checkLine(tCenter(8), tCenter(17)); }
-            if (trackExtensions < 6) { checkLine(tCenter(8), tCenter(15)); checkLine(tCenter(8), tCenter(18)); checkLine(tCenter(4), tCenter(18)); checkLine(tCenter(4), tCenter(20)); }
-            if (trackExtensions < 7) { checkLine(tCenter(4), tCenter(18)); checkLine(tCenter(4), tCenter(19)); checkLine(tCenter(1), tCenter(19)); checkLine(tCenter(1), tCenter(20)); }
-            if (trackExtensions < 8) { checkLine(tCenter(1), tCenter(19)); checkLine(tCenter(1), tCenter(13)); checkLine(tCenter(-1), tCenter(13)); }
-            if (trackExtensions < 9) { checkLine(tCenter(1), tCenter(13)); checkLine(tCenter(1), tCenter(8)); checkLine(tCenter(4), tCenter(8)); checkLine(tCenter(4), tCenter(12)); checkLine(tCenter(4), tCenter(12)); checkLine(tCenter(7), tCenter(12)); checkLine(tCenter(7), tCenter(10)); checkLine(tCenter(7), tCenter(10)); checkLine(tCenter(-1), tCenter(10)); }
-        }
-    }
     return colliding;
 }
 
 const BASE_TOWER_TYPES = {
     DART: { cost: 170, range: 220, damage: 1, fireRate: 35, projSpeed: 12, type: 'monkey', radius: 20, name: 'Dart Monkey' },
-    BOOMERANG: { cost: 320, range: 200, damage: 2, fireRate: 40, projSpeed: 11, type: 'boomerang', radius: 20, name: 'Boomerang Monkey' },
+    SLINGSHOT: { cost: 220, range: 190, damage: 1, fireRate: 20, projSpeed: 14, type: 'slingshot', radius: 20, name: 'Slingshot Monkey' },
     TACK: { cost: 280, range: 130, damage: 1, fireRate: 45, projSpeed: 8, type: 'tack', radius: 22, name: 'Tack Shooter' },
+    BOOMERANG: { cost: 320, range: 200, damage: 2, fireRate: 40, projSpeed: 11, type: 'boomerang', radius: 20, name: 'Boomerang Monkey' },
     SNIPER: { cost: 350, range: 1000, damage: 4, fireRate: 90, projSpeed: 30, type: 'sniper', radius: 20, name: 'Sniper Monkey' },
     GLUE: { cost: 400, range: 180, damage: 1, fireRate: 45, projSpeed: 14, type: 'glue', radius: 20, name: 'Glue Monkey' },
     BOMB: { cost: 450, range: 180, damage: 2, splash: 60, fireRate: 60, projSpeed: 8, type: 'bomb', radius: 24, name: 'Bomb Cannon' },
     ICE: { cost: 500, range: 120, damage: 1, fireRate: 30, projSpeed: 10, type: 'ice', radius: 20, name: 'Ice Monkey' },
+    DARTLING: { cost: 550, range: 260, damage: 1, fireRate: 8, projSpeed: 18, type: 'dartling', radius: 22, name: 'Dartling Gunner' },
     NINJA: { cost: 600, range: 160, damage: 2, fireRate: 15, projSpeed: 20, type: 'ninja', radius: 20, name: 'Ninja Monkey' },
+    MORTAR: { cost: 650, range: 350, damage: 3, splash: 70, fireRate: 75, projSpeed: 10, type: 'mortar', radius: 24, name: 'Mortar Monkey' },
     SPIKE: { cost: 700, range: 120, damage: 5, fireRate: 80, projSpeed: 0, type: 'spike', radius: 24, name: 'Spike Factory' }, 
     FARM: { cost: 800, range: 0, damage: 0, fireRate: 0, projSpeed: 0, type: 'farm', radius: 24, name: 'Banana Farm', baseIncome: 50 }, 
+    ALCHEMIST: { cost: 900, range: 190, damage: 2, splash: 40, fireRate: 50, projSpeed: 12, type: 'alchemist', radius: 20, name: 'Alchemist Monkey' },
     WIZARD: { cost: 1100, range: 220, damage: 3, fireRate: 25, projSpeed: 16, type: 'wizard', radius: 20, name: 'Wizard Monkey' },
+    DRUID: { cost: 1250, range: 210, damage: 2, fireRate: 30, projSpeed: 15, type: 'druid', radius: 20, name: 'Druid Monkey' },
     VILLAGE: { cost: 1400, range: 180, damage: 0, fireRate: 0, projSpeed: 0, type: 'village', radius: 26, name: 'Monkey Village', baseIncome: 0 },
+    CHOPPER: { cost: 1800, range: 300, damage: 2, splash: 30, fireRate: 10, projSpeed: 22, type: 'chopper', radius: 26, name: 'Apache Chopper' },
+    LASER: { cost: 2100, range: 270, damage: 3, fireRate: 12, projSpeed: 26, type: 'laser', radius: 22, name: 'Laser Cannon' },
     SUPER: { cost: 2500, range: 250, damage: 1, fireRate: 3, projSpeed: 25, type: 'super', radius: 22, name: 'Super Monkey' },
-    PLASMA: { cost: 3500, range: 280, damage: 5, splash: 40, fireRate: 6, projSpeed: 28, type: 'plasma', radius: 24, name: 'Plasma Cannon' }
+    TESLA: { cost: 3000, range: 220, damage: 4, fireRate: 35, projSpeed: 30, type: 'tesla', radius: 24, name: 'Tesla Tower' },
+    PLASMA: { cost: 3500, range: 280, damage: 5, splash: 40, fireRate: 6, projSpeed: 28, type: 'plasma', radius: 24, name: 'Plasma Cannon' },
+    SUN: { cost: 5000, range: 320, damage: 8, splash: 50, fireRate: 8, projSpeed: 30, type: 'sun', radius: 28, name: 'Sun Temple' },
+    ORBITAL: { cost: 8500, range: 400, damage: 15, splash: 90, fireRate: 45, projSpeed: 35, type: 'orbital', radius: 30, name: 'Orbital Death Ray' }
 };
 
 let TOWER_TYPES = JSON.parse(JSON.stringify(BASE_TOWER_TYPES));
@@ -1085,6 +1208,23 @@ class Tower {
             return;
         }
 
+        if (this.typeId === 'TESLA') {
+            if (this.cooldown <= 0) {
+                let inRangeEnemies = enemies.filter(e => Math.hypot(e.x - this.x, e.y - this.y) <= this.getRange());
+                if (inRangeEnemies.length > 0) {
+                    for (let i = 0; i < Math.min(3, inRangeEnemies.length); i++) {
+                        let targetE = inRangeEnemies[i];
+                        let angle = Math.atan2(targetE.y - this.y, targetE.x - this.x);
+                        projectiles.push(new Projectile(this.x, this.y, targetE, this.typeInfo, angle, this.getDamage(), this));
+                    }
+                    this.cooldown = this.getFireRate();
+                    this.scaleAnim = 1.25;
+                    playSound('tesla');
+                }
+            }
+            return;
+        }
+
         this.target = null;
         let bestTarget = null;
         let bestVal = -1;
@@ -1103,16 +1243,34 @@ class Tower {
             this.target = bestTarget;
             this.angle = Math.atan2(bestTarget.y - this.y, bestTarget.x - this.x);
             if (this.cooldown <= 0) {
-                projectiles.push(new Projectile(this.x, this.y, this.target, this.typeInfo, this.angle, this.getDamage(), this));
+                if (this.typeId === 'DRUID') {
+                    for(let spread = -0.2; spread <= 0.2; spread += 0.2) {
+                        projectiles.push(new Projectile(this.x, this.y, this.target, this.typeInfo, this.angle + spread, this.getDamage(), this));
+                    }
+                } else if (this.typeId === 'CHOPPER') {
+                    projectiles.push(new Projectile(this.x - 8, this.y, this.target, this.typeInfo, this.angle, this.getDamage(), this));
+                    projectiles.push(new Projectile(this.x + 8, this.y, this.target, this.typeInfo, this.angle, this.getDamage(), this));
+                } else {
+                    projectiles.push(new Projectile(this.x, this.y, this.target, this.typeInfo, this.angle, this.getDamage(), this));
+                }
+
                 this.cooldown = this.getFireRate();
                 this.scaleAnim = 1.2; 
                 
                 if (this.typeId === 'SUPER') playSound('laser');
+                else if (this.typeId === 'SLINGSHOT') playSound('slingshot');
                 else if (this.typeId === 'BOMB') playSound('bomb');
                 else if (this.typeId === 'ICE') playSound('ice');
                 else if (this.typeId === 'GLUE') playSound('glue');
                 else if (this.typeId === 'WIZARD') playSound('magic');
                 else if (this.typeId === 'PLASMA') playSound('plasma');
+                else if (this.typeId === 'MORTAR') playSound('mortar');
+                else if (this.typeId === 'ALCHEMIST') playSound('alchemist');
+                else if (this.typeId === 'DRUID') playSound('druid');
+                else if (this.typeId === 'CHOPPER') playSound('chopper');
+                else if (this.typeId === 'LASER') playSound('laser');
+                else if (this.typeId === 'SUN') playSound('sun');
+                else if (this.typeId === 'ORBITAL') playSound('orbital');
                 else playSound('pop');
             }
         }
@@ -1126,7 +1284,6 @@ class Tower {
         ctx.fillStyle = 'rgba(0,0,0,0.3)';
         ctx.beginPath(); ctx.ellipse(0, 10, this.typeInfo.radius, this.typeInfo.radius*0.7, 0, 0, Math.PI*2); ctx.fill();
 
-        // Sniper Laser Sight
         if (this.typeId === 'SNIPER' && this.target && this.cooldown < this.getFireRate() * 0.8) {
             ctx.save();
             ctx.rotate(this.angle);
@@ -1168,6 +1325,12 @@ class Tower {
             }
             ctx.fillStyle = '#000'; ctx.fillRect(20, -12, 8, 24); 
         }
+        else if (this.typeId === 'MORTAR') {
+            ctx.rotate(this.angle);
+            ctx.fillStyle = '#44403c'; ctx.beginPath(); ctx.arc(0, 0, 18, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#1c1917'; ctx.fillRect(0, -9, 28, 18);
+            ctx.fillStyle = '#000'; ctx.fillRect(24, -10, 6, 20);
+        }
         else if (this.typeId === 'FARM') {
             ctx.fillStyle = '#16a34a'; ctx.beginPath(); ctx.arc(0, -5, 18, 0, Math.PI*2); ctx.fill(); 
             ctx.fillStyle = '#713f12'; ctx.fillRect(-4, 0, 8, 14); 
@@ -1195,6 +1358,11 @@ class Tower {
                 ctx.strokeStyle = '#facc15'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, -28, 12, 0, Math.PI*2); ctx.stroke();
             }
         }
+        else if (this.typeId === 'TESLA') {
+            ctx.fillStyle = '#312e81'; ctx.fillRect(-14, -14, 28, 28);
+            ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI*2); ctx.fill();
+            ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 3; ctx.strokeRect(-16, -16, 32, 32);
+        }
         else if (this.typeId === 'PLASMA') {
             ctx.rotate(this.angle);
             ctx.fillStyle = '#083344'; ctx.beginPath(); ctx.arc(0, 0, 18, 0, Math.PI*2); ctx.fill();
@@ -1203,6 +1371,17 @@ class Tower {
             if (this.level >= 2) {
                 ctx.strokeStyle = '#22d3ee'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(0, 0, 22, 0, Math.PI*2); ctx.stroke();
             }
+        }
+        else if (this.typeId === 'SUN') {
+            ctx.fillStyle = '#f59e0b'; ctx.beginPath(); ctx.arc(0, 0, 22, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#fef08a'; ctx.beginPath(); ctx.arc(0, 0, 14, 0, Math.PI*2); ctx.fill();
+            ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 4;
+            for(let i=0; i<8; i++) { ctx.rotate(Math.PI/4); ctx.strokeRect(20, -2, 8, 4); }
+        }
+        else if (this.typeId === 'ORBITAL') {
+            ctx.fillStyle = '#2e1065'; ctx.beginPath(); ctx.arc(0, 0, 24, 0, Math.PI*2); ctx.fill();
+            ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 4; ctx.strokeRect(-20, -20, 40, 40);
+            ctx.fillStyle = '#c084fc'; ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI*2); ctx.fill();
         }
         else if (this.typeId === 'SPIKE') {
             ctx.fillStyle = '#9ca3af'; ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI*2); ctx.fill();
@@ -1225,6 +1404,11 @@ class Tower {
             else if (this.typeId === 'BOOMERANG') monkeyBase = '#d97706';
             else if (this.typeId === 'GLUE') monkeyBase = '#ca8a04';
             else if (this.typeId === 'WIZARD') monkeyBase = '#581c87';
+            else if (this.typeId === 'ALCHEMIST') monkeyBase = '#065f46';
+            else if (this.typeId === 'DRUID') monkeyBase = '#047857';
+            else if (this.typeId === 'DARTLING') monkeyBase = '#166534';
+            else if (this.typeId === 'CHOPPER') monkeyBase = '#1e293b';
+            else if (this.typeId === 'LASER') monkeyBase = '#701a75';
             else if (this.typeId === 'SUPER') monkeyBase = (this.level >= 3) ? '#1e3a8a' : '#2563eb';
 
             ctx.fillStyle = monkeyBase; ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI*2); ctx.fill();
@@ -1241,7 +1425,6 @@ class Tower {
 
             ctx.fillStyle = '#d2b48c'; ctx.beginPath(); ctx.ellipse(4, 0, 10, 12, 0, 0, Math.PI*2); ctx.fill();
             
-            // Eyes
             ctx.fillStyle = (this.typeId === 'ICE') ? '#1d4ed8' : (this.typeId === 'NINJA' && this.level >= 3) ? '#a855f7' : '#000';
             ctx.beginPath(); ctx.arc(8, -4, 2, 0, Math.PI*2); ctx.fill();
             ctx.beginPath(); ctx.arc(8, 4, 2, 0, Math.PI*2); ctx.fill();
@@ -1250,33 +1433,28 @@ class Tower {
                 ctx.fillStyle = '#facc15'; ctx.beginPath(); ctx.moveTo(0, -18); ctx.lineTo(12, 0); ctx.lineTo(-12, 0); ctx.fill();
             }
 
-            // Head Accessories
             if (this.typeId === 'DART' && this.level >= 2) {
                 ctx.fillStyle = '#ef4444';
                 ctx.fillRect(2, -15, 4, 30);
             }
-            if (this.typeId === 'BOOMERANG' && this.level >= 2) {
-                ctx.fillStyle = '#3b82f6';
-                ctx.fillRect(2, -15, 4, 30);
-            }
-            if (this.typeId === 'GLUE' && this.level >= 2) {
-                ctx.fillStyle = '#84cc16';
-                ctx.beginPath(); ctx.arc(0, 0, 18, 0, Math.PI*2); ctx.stroke();
-            }
-
-            // Weapon drawings
-            if (this.typeId === 'DART') {
-                ctx.fillStyle = '#d2b48c'; ctx.beginPath(); ctx.arc(14, 10, 4, 0, Math.PI*2); ctx.fill();
-                ctx.fillStyle = '#fff'; ctx.fillRect(14, 8, 12, 2);
-                ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.moveTo(26, 9); ctx.lineTo(30, 9); ctx.lineTo(26, 12); ctx.fill();
+            if (this.typeId === 'SLINGSHOT') {
+                ctx.strokeStyle = '#a16207'; ctx.lineWidth = 3;
+                ctx.beginPath(); ctx.moveTo(10, -8); ctx.lineTo(20, -12); ctx.lineTo(10, 0); ctx.lineTo(20, 12); ctx.lineTo(10, 8); ctx.stroke();
+            } else if (this.typeId === 'DARTLING') {
+                ctx.fillStyle = '#111'; ctx.fillRect(10, -6, 22, 12);
+            } else if (this.typeId === 'ALCHEMIST') {
+                ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(18, 6, 6, 0, Math.PI*2); ctx.fill();
+            } else if (this.typeId === 'DRUID') {
+                ctx.fillStyle = '#15803d'; ctx.fillRect(10, -2, 18, 4);
+            } else if (this.typeId === 'CHOPPER') {
+                ctx.fillStyle = '#64748b'; ctx.fillRect(-18, -18, 36, 4); ctx.fillRect(-18, 14, 36, 4);
+            } else if (this.typeId === 'LASER') {
+                ctx.fillStyle = '#d946ef'; ctx.fillRect(10, -4, 20, 8);
             } else if (this.typeId === 'BOOMERANG') {
                 ctx.strokeStyle = '#b45309'; ctx.lineWidth = 4;
                 ctx.beginPath(); ctx.arc(18, 8, 8, -Math.PI/2, Math.PI/2); ctx.stroke();
             } else if (this.typeId === 'GLUE') {
                 ctx.fillStyle = '#84cc16'; ctx.fillRect(10, 6, 14, 6);
-            } else if (this.typeId === 'WIZARD') {
-                ctx.fillStyle = '#a855f7'; ctx.fillRect(10, 6, 18, 4);
-                ctx.fillStyle = '#facc15'; ctx.beginPath(); ctx.arc(28, 8, 4, 0, Math.PI*2); ctx.fill();
             } else if (this.typeId === 'SNIPER') {
                 ctx.fillStyle = '#15803d'; ctx.beginPath(); ctx.arc(0, 0, 16, Math.PI*0.7, Math.PI*1.3); ctx.fill();
                 ctx.fillStyle = '#4b5563'; ctx.fillRect(8, 6, 35, 4);
@@ -1338,7 +1516,7 @@ class Projectile {
             if (enemy.hp <= 0) continue;
             if (Math.hypot(enemy.x - this.x, enemy.y - this.y) < this.speed + enemy.radius) {
                 this.hit(enemy);
-                if (this.type !== 'boomerang' && this.type !== 'wizard') break;
+                if (this.type !== 'boomerang' && this.type !== 'wizard' && this.type !== 'laser' && this.type !== 'tesla' && this.type !== 'sun' && this.type !== 'orbital') break;
             }
         }
         
@@ -1346,14 +1524,14 @@ class Projectile {
     }
     
     hit(mainTarget) {
-        if (this.type !== 'boomerang' && this.type !== 'wizard') {
+        if (this.type !== 'boomerang' && this.type !== 'wizard' && this.type !== 'laser' && this.type !== 'tesla' && this.type !== 'sun' && this.type !== 'orbital') {
             this.active = false;
         }
         
-        if (this.type === 'bomb' || this.type === 'plasma') {
+        if (this.type === 'bomb' || this.type === 'plasma' || this.type === 'mortar' || this.type === 'alchemist' || this.type === 'sun' || this.type === 'orbital') {
             createParticles(this.x, this.y, '#111', 15);
-            createParticles(this.x, this.y, this.type === 'plasma' ? '#22d3ee' : '#ef4444', 10);
-            playSound(this.type === 'plasma' ? 'plasma' : 'bomb');
+            createParticles(this.x, this.y, this.type === 'plasma' ? '#22d3ee' : this.type === 'alchemist' ? '#10b981' : this.type === 'sun' ? '#f59e0b' : this.type === 'orbital' ? '#c084fc' : '#ef4444', 10);
+            playSound(this.type === 'plasma' ? 'plasma' : this.type === 'alchemist' ? 'alchemist' : this.type === 'sun' ? 'sun' : this.type === 'orbital' ? 'orbital' : 'bomb');
             for (let e of enemies) {
                 if (Math.hypot(e.x - this.x, e.y - this.y) <= this.splash) {
                     this.damageEnemy(e);
@@ -1390,6 +1568,8 @@ class Projectile {
         if (this.type === 'monkey') {
             ctx.fillStyle = '#fff'; ctx.fillRect(-6, -1, 12, 2);
             ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.moveTo(6, 0); ctx.lineTo(10, 0); ctx.lineTo(6, 3); ctx.fill();
+        } else if (this.type === 'slingshot') {
+            ctx.fillStyle = '#78350f'; ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI*2); ctx.fill();
         } else if (this.type === 'boomerang') {
             ctx.rotate(this.rotation);
             ctx.strokeStyle = '#b45309'; ctx.lineWidth = 4;
@@ -1399,6 +1579,20 @@ class Projectile {
         } else if (this.type === 'wizard') {
             ctx.fillStyle = '#c084fc'; ctx.beginPath(); ctx.arc(0, 0, 7, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(0, 0, 3, 0, Math.PI*2); ctx.fill();
+        } else if (this.type === 'alchemist') {
+            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(0, 0, 7, 0, Math.PI*2); ctx.fill();
+        } else if (this.type === 'druid') {
+            ctx.fillStyle = '#15803d'; ctx.fillRect(-6, -2, 12, 4);
+        } else if (this.type === 'chopper' || this.type === 'dartling') {
+            ctx.fillStyle = '#eab308'; ctx.fillRect(-6, -1, 12, 2);
+        } else if (this.type === 'laser') {
+            ctx.fillStyle = '#d946ef'; ctx.fillRect(-12, -2, 24, 4);
+        } else if (this.type === 'tesla') {
+            ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.arc(0, 0, 6, 0, Math.PI*2); ctx.fill();
+        } else if (this.type === 'sun') {
+            ctx.fillStyle = '#fef08a'; ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI*2); ctx.fill();
+        } else if (this.type === 'orbital') {
+            ctx.fillStyle = '#c084fc'; ctx.fillRect(-15, -4, 30, 8);
         } else if (this.type === 'plasma') {
             ctx.fillStyle = '#22d3ee'; ctx.beginPath(); ctx.arc(0, 0, 8, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = '#a5f3fc'; ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI*2); ctx.fill();
@@ -1406,7 +1600,7 @@ class Projectile {
             ctx.fillStyle = '#eab308'; ctx.fillRect(-2, -1, 4, 2);
         } else if (this.type === 'sniper') {
             ctx.fillStyle = '#fef08a'; ctx.fillRect(-10, -1, 20, 2);
-        } else if (this.type === 'bomb') {
+        } else if (this.type === 'bomb' || this.type === 'mortar') {
             ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(0, 0, 6, 0, Math.PI*2); ctx.fill();
         } else if (this.type === 'ice') {
             ctx.fillStyle = '#93c5fd'; ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI*2); ctx.fill();
@@ -1511,17 +1705,17 @@ function checkGameOver() {
 }
 
 function startEndless() {
-    endlessModeActive = true; MAX_LEVEL = 500;
-    document.getElementById('tab-extend').classList.add('hidden');
-    document.getElementById('tab-towers').classList.remove('flex-1');
-    document.getElementById('tab-towers').classList.add('w-full', 'rounded-tr-lg');
+    endlessModeActive = true; 
+    MAX_LEVEL = 500;
+    
     document.getElementById('tab-towers').click();
 
-    for (let key in TOWER_TYPES) TOWER_TYPES[key].cost *= 10;
-
-    gameState = 'PLAYING'; document.getElementById('victoryScreen').classList.add('hidden');
-    selectedPlacedTower = null; floatingTexts = [];
-    buildPathMap(); updateUI();
+    gameState = 'PLAYING'; 
+    document.getElementById('victoryScreen').classList.add('hidden');
+    selectedPlacedTower = null; 
+    floatingTexts = [];
+    buildPathMap(); 
+    updateUI();
 }
 
 function rebirth() {
@@ -1540,7 +1734,7 @@ function rebirth() {
 }
 
 function buyExtension(levelToBuy) {
-    if (waveActive || endlessModeActive) return; 
+    if (waveActive) return; 
     const container = document.getElementById('canvas-container');
     
     if (levelToBuy === 1 && trackExtensions === 0 && money >= 300) { money -= 300; trackExtensions = 1; pathGridCoords.pop(); pathGridCoords.push({x:11, y:2}, {x:13, y:2}, {x:13, y:10}); container.style.width = '900px'; } 
@@ -1552,370 +1746,404 @@ function buyExtension(levelToBuy) {
     else if (levelToBuy === 7 && trackExtensions === 6 && money >= 25000) { money -= 25000; trackExtensions = 7; pathGridCoords.pop(); pathGridCoords.push({x:4, y:19}, {x:1, y:19}, {x:1, y:20}); } 
     else if (levelToBuy === 8 && trackExtensions === 7 && money >= 35000) { money -= 35000; trackExtensions = 8; pathGridCoords.pop(); pathGridCoords.push({x:1, y:13}, {x:-1, y:13}); } 
     else if (levelToBuy === 9 && trackExtensions === 8 && money >= 50000) { money -= 50000; trackExtensions = 9; pathGridCoords.pop(); pathGridCoords.push({x:1, y:8}, {x:4, y:8}, {x:4, y:12}, {x:7, y:12}, {x:7, y:10}, {x:-1, y:10}); }
-    
-    waypoints = pathGridCoords.map(p => ({ x: p.x * TILE_SIZE + TILE_SIZE / 2, y: p.y * TILE_SIZE + TILE_SIZE / 2 }));
-    buildPathMap(); selectedPlacedTower = null; updateUI();
+
+    waypoints = pathGridCoords.map(p => ({
+        x: p.x * TILE_SIZE + TILE_SIZE / 2,
+        y: p.y * TILE_SIZE + TILE_SIZE / 2
+    }));
+    buildPathMap();
+    updateUI();
+    playSound('upgrade');
 }
 
 function updateUI() {
+    document.getElementById('moneyDisplay').innerText = money.toLocaleString();
+    document.getElementById('livesDisplay').innerText = lives;
     document.getElementById('levelDisplay').innerText = level;
     document.getElementById('maxLevelDisplay').innerText = `/${MAX_LEVEL}`;
-    document.getElementById('livesDisplay').innerText = Math.max(0, lives);
-    document.getElementById('moneyDisplay').innerText = money;
 
-    const roundIndicator = document.getElementById('round-indicator');
     const bossText = document.getElementById('bossText');
     if (level % 10 === 0) {
-        roundIndicator.classList.add('boss-warning');
         bossText.classList.remove('hidden');
     } else {
-        roundIndicator.classList.remove('boss-warning');
         bossText.classList.add('hidden');
     }
 
-    document.querySelectorAll('#towers-panel .tower-btn').forEach(btn => {
-        const type = btn.getAttribute('data-type');
-        if (TOWER_TYPES[type]) {
-            const cost = TOWER_TYPES[type].cost;
-            btn.querySelector('.cost-display').innerText = `$${cost.toLocaleString()}`;
-            if (money < cost) { btn.classList.add('disabled'); } else { btn.classList.remove('disabled'); }
+    // Update Tower Shop buttons
+    document.querySelectorAll('.tower-btn[data-type]').forEach(btn => {
+        let type = btn.getAttribute('data-type');
+        let info = TOWER_TYPES[type];
+        if (info) {
+            let costDisplay = btn.querySelector('.cost-display');
+            if (costDisplay) costDisplay.innerText = `$${info.cost.toLocaleString()}`;
+            
+            if (money < info.cost) {
+                btn.classList.add('disabled');
+            } else {
+                btn.classList.remove('disabled');
+            }
         }
     });
 
-    if (!endlessModeActive) {
-        if (trackExtensions >= 3) { document.getElementById('extend-phase-1').classList.add('hidden'); document.getElementById('extend-phase-2').classList.remove('hidden'); } 
-        else { document.getElementById('extend-phase-1').classList.remove('hidden'); document.getElementById('extend-phase-2').classList.add('hidden'); }
-
-        const updateBtn = (id, reqLevel, cost) => {
-            const btn = document.getElementById(id);
-            if (!btn) return;
-            btn.disabled = (trackExtensions >= reqLevel || trackExtensions < reqLevel - 1 || money < cost || waveActive);
-            if (trackExtensions >= reqLevel) {
-                btn.innerHTML = `<p class="font-bold text-[#5c4033] mt-2 text-center text-sm">✅ Purchased</p>`; btn.classList.add('opacity-50'); btn.classList.remove('disabled');
-            } else if (btn.disabled) { btn.classList.add('disabled'); } else { btn.classList.remove('disabled'); }
-        };
-        updateBtn('btn-ext-1', 1, 300); updateBtn('btn-ext-2', 2, 600); updateBtn('btn-ext-3', 3, 2000); updateBtn('btn-ext-4', 4, 4000); updateBtn('btn-ext-5', 5, 8000);
-        updateBtn('btn-ext-6', 6, 15000); updateBtn('btn-ext-7', 7, 25000); updateBtn('btn-ext-8', 8, 35000); updateBtn('btn-ext-9', 9, 50000);
+    // Update Extension panel phase visibility
+    if (trackExtensions >= 3) {
+        document.getElementById('extend-phase-1').classList.add('hidden');
+        document.getElementById('extend-phase-2').classList.remove('hidden');
+    } else {
+        document.getElementById('extend-phase-1').classList.remove('hidden');
+        document.getElementById('extend-phase-2').classList.add('hidden');
     }
-    
-    if (selectedPlacedTower) {
-        document.getElementById('selection-panel').classList.remove('hidden');
-        document.getElementById('sel-tower-name').innerText = selectedPlacedTower.typeInfo.name;
-        document.getElementById('sel-tower-level').innerText = `(Lvl ${selectedPlacedTower.level})`;
-        
-        document.getElementById('stat-dmg').innerText = selectedPlacedTower.getDamage();
-        document.getElementById('stat-rng').innerText = Math.floor(selectedPlacedTower.getRange());
-        document.getElementById('stat-pops').innerText = selectedPlacedTower.pops.toLocaleString();
-        
-        let fr = selectedPlacedTower.getFireRate();
-        let speedText = "Normal";
-        if (fr <= 10) speedText = "Insane";
-        else if (fr <= 25) speedText = "Fast";
-        else if (fr > 50) speedText = "Slow";
-        document.getElementById('stat-spd').innerText = speedText;
-        
-        const specStat = document.getElementById('stat-special');
-        if (selectedPlacedTower.typeId === 'FARM') {
-            specStat.classList.remove('hidden');
-            specStat.innerText = `Income: +$${selectedPlacedTower.getIncome()}/rd`;
-            document.getElementById('stat-dmg').innerText = '-';
-            document.getElementById('stat-rng').innerText = '-';
-            document.getElementById('stat-spd').innerText = '-';
-        } else if (selectedPlacedTower.typeId === 'VILLAGE') {
-            specStat.classList.remove('hidden');
-            specStat.innerText = `Buffs Range Towers!`;
-            document.getElementById('stat-dmg').innerText = '-';
-            document.getElementById('stat-spd').innerText = '-';
+
+    const checkExtBtn = (id, cost, reqExt) => {
+        let btn = document.getElementById(`btn-ext-${id}`);
+        if (!btn) return;
+        if (trackExtensions > reqExt) {
+            btn.classList.add('hidden');
         } else {
-            specStat.classList.add('hidden');
+            btn.classList.remove('hidden');
+            if (money < cost || trackExtensions !== reqExt || waveActive) {
+                btn.classList.add('disabled');
+            } else {
+                btn.classList.remove('disabled');
+            }
         }
-        
-        const upgBtn = document.getElementById('upgradeBtn');
-        
-        if (selectedPlacedTower.level >= 3) {
-            upgBtn.disabled = true;
-            document.getElementById('sel-tower-upg').innerText = "MAX";
+    };
+
+    checkExtBtn(1, 300, 0);
+    checkExtBtn(2, 600, 1);
+    checkExtBtn(3, 2000, 2);
+    checkExtBtn(4, 4000, 3);
+    checkExtBtn(5, 8000, 4);
+    checkExtBtn(6, 15000, 5);
+    checkExtBtn(7, 25000, 6);
+    checkExtBtn(8, 35000, 7);
+    checkExtBtn(9, 50000, 8);
+
+    // Update Selected Placed Tower panel
+    const selPanel = document.getElementById('selection-panel');
+    if (selectedPlacedTower) {
+        selPanel.classList.remove('hidden');
+        document.getElementById('sel-tower-name').innerText = selectedPlacedTower.typeInfo.name;
+        document.getElementById('sel-tower-level').innerText = `Lvl ${selectedPlacedTower.level}`;
+        document.getElementById('stat-dmg').innerText = selectedPlacedTower.getDamage();
+        document.getElementById('stat-rng').innerText = Math.round(selectedPlacedTower.getRange());
+        document.getElementById('stat-spd').innerText = Math.round(600 / selectedPlacedTower.getFireRate()) / 10;
+        document.getElementById('stat-pops').innerText = selectedPlacedTower.pops;
+
+        let specialStat = document.getElementById('stat-special');
+        if (selectedPlacedTower.typeId === 'FARM') {
+            specialStat.classList.remove('hidden');
+            specialStat.innerText = `Farm Income: +$${selectedPlacedTower.getIncome()}/round`;
+        } else if (selectedPlacedTower.typeId === 'VILLAGE') {
+            specialStat.classList.remove('hidden');
+            specialStat.innerText = `Buffs Range Towers: +${selectedPlacedTower.level} Dmg`;
         } else {
-            let upgCost = selectedPlacedTower.getUpgradeCost();
-            upgBtn.disabled = (money < upgCost);
-            document.getElementById('sel-tower-upg').innerText = upgCost.toLocaleString();
+            specialStat.classList.add('hidden');
         }
 
+        let upgCost = selectedPlacedTower.getUpgradeCost();
+        let upgBtn = document.getElementById('upgradeBtn');
+        upgBtn.disabled = money < upgCost;
+        document.getElementById('sel-tower-upg').innerText = upgCost.toLocaleString();
         document.getElementById('sel-tower-value').innerText = selectedPlacedTower.getSellValue().toLocaleString();
     } else {
-        document.getElementById('selection-panel').classList.add('hidden');
+        selPanel.classList.add('hidden');
     }
 }
 
-function drawMap() {
-    decorations.forEach(d => {
-        ctx.save();
-        ctx.translate(d.x, d.y);
-        if (d.wiggleTimer > 0) {
-            d.wiggleTimer--;
-            let offset = Math.sin(d.wiggleTimer * 0.5) * 5;
-            ctx.rotate(offset * Math.PI / 180);
-        }
-
-        if(d.type === 'bush') {
-            ctx.fillStyle = '#166534'; ctx.beginPath(); ctx.arc(0, 0, d.size, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle = '#15803d'; ctx.beginPath(); ctx.arc(-2, -2, d.size*0.7, 0, Math.PI*2); ctx.fill();
-        } else {
-            ctx.fillStyle = '#fff';
-            for(let i=0; i<5; i++) { ctx.beginPath(); ctx.arc(Math.cos(i*Math.PI*2/5)*4, Math.sin(i*Math.PI*2/5)*4, 3, 0, Math.PI*2); ctx.fill(); }
-            ctx.fillStyle = '#eab308'; ctx.beginPath(); ctx.arc(0, 0, 3, 0, Math.PI*2); ctx.fill();
-        }
-        ctx.restore();
-    });
-
-    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    
-    ctx.strokeStyle = '#4b5563'; ctx.lineWidth = TILE_SIZE + 6;
-    ctx.beginPath(); ctx.moveTo(waypoints[0].x, waypoints[0].y); for (let i = 1; i < waypoints.length; i++) ctx.lineTo(waypoints[i].x, waypoints[i].y); ctx.stroke();
-
-    ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = TILE_SIZE;
-    ctx.beginPath(); ctx.moveTo(waypoints[0].x, waypoints[0].y); for (let i = 1; i < waypoints.length; i++) ctx.lineTo(waypoints[i].x, waypoints[i].y); ctx.stroke();
-    
-    ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 2;
-    for (let i = 0; i < waypoints.length - 1; i++) {
-        let p1 = waypoints[i], p2 = waypoints[i+1]; let dist = Math.hypot(p2.x - p1.x, p2.y - p1.y); let steps = Math.floor(dist / 30);
-        for(let j=1; j<=steps; j++) {
-            let px = p1.x + (p2.x - p1.x) * (j/steps); let py = p1.y + (p2.y - p1.y) * (j/steps); let angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) + Math.PI/2;
-            ctx.beginPath(); ctx.moveTo(px + Math.cos(angle)*15, py + Math.sin(angle)*15); ctx.lineTo(px - Math.cos(angle)*15, py - Math.sin(angle)*15); ctx.stroke();
-        }
-    }
-
-    if (!endlessModeActive) {
-        ctx.setLineDash([15, 15]); ctx.strokeStyle = 'rgba(156, 163, 175, 0.4)'; ctx.lineWidth = TILE_SIZE - 10; const tCenter = (gridV) => gridV * TILE_SIZE + TILE_SIZE / 2; ctx.beginPath();
-        if (trackExtensions === 0) { ctx.moveTo(tCenter(11), tCenter(8)); ctx.lineTo(tCenter(11), tCenter(2)); ctx.lineTo(tCenter(13), tCenter(2)); ctx.lineTo(tCenter(13), tCenter(10)); } 
-        else if (trackExtensions === 1) { ctx.moveTo(tCenter(13), tCenter(8)); ctx.lineTo(tCenter(15), tCenter(8)); ctx.lineTo(tCenter(15), tCenter(-1)); } 
-        else if (trackExtensions === 2) { ctx.moveTo(tCenter(15), tCenter(2)); ctx.lineTo(tCenter(18), tCenter(2)); ctx.lineTo(tCenter(18), tCenter(7)); ctx.lineTo(tCenter(16), tCenter(7)); ctx.lineTo(tCenter(16), tCenter(10)); }
-        if (trackExtensions >= 3) {
-            if (trackExtensions < 4) { ctx.moveTo(tCenter(16), tCenter(7)); ctx.lineTo(tCenter(16), tCenter(12)); ctx.lineTo(tCenter(12), tCenter(12)); ctx.lineTo(tCenter(12), tCenter(14)); }
-            if (trackExtensions < 5) { ctx.moveTo(tCenter(12), tCenter(12)); ctx.lineTo(tCenter(12), tCenter(15)); ctx.lineTo(tCenter(8), tCenter(15)); ctx.lineTo(tCenter(8), tCenter(17)); }
-            if (trackExtensions < 6) { ctx.moveTo(tCenter(8), tCenter(15)); ctx.lineTo(tCenter(8), tCenter(18)); ctx.lineTo(tCenter(4), tCenter(18)); ctx.lineTo(tCenter(4), tCenter(20)); }
-            if (trackExtensions < 7) { ctx.moveTo(tCenter(4), tCenter(18)); ctx.lineTo(tCenter(4), tCenter(19)); ctx.lineTo(tCenter(1), tCenter(19)); ctx.lineTo(tCenter(1), tCenter(20)); }
-            if (trackExtensions < 8) { ctx.moveTo(tCenter(1), tCenter(19)); ctx.lineTo(tCenter(1), tCenter(13)); ctx.lineTo(tCenter(-1), tCenter(13)); }
-            if (trackExtensions < 9) { ctx.moveTo(tCenter(1), tCenter(13)); ctx.lineTo(tCenter(1), tCenter(8)); ctx.lineTo(tCenter(4), tCenter(8)); ctx.lineTo(tCenter(4), tCenter(12)); ctx.lineTo(tCenter(7), tCenter(12)); ctx.lineTo(tCenter(7), tCenter(10)); ctx.lineTo(tCenter(-1), tCenter(10)); }
-        }
-        ctx.stroke(); ctx.setLineDash([]);
-    }
-}
-
-function drawPlacementPreview() {
-    if (selectedPlacedTower) {
-        if (selectedPlacedTower.typeId !== 'FARM') {
-            ctx.beginPath(); ctx.arc(selectedPlacedTower.x, selectedPlacedTower.y, selectedPlacedTower.getRange(), 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'; ctx.fill(); ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)'; ctx.lineWidth = 1; ctx.stroke();
-        }
-        ctx.beginPath(); ctx.arc(selectedPlacedTower.x, selectedPlacedTower.y, selectedPlacedTower.typeInfo.radius + 4, 0, Math.PI * 2);
-        ctx.strokeStyle = '#facc15'; ctx.lineWidth = 3; ctx.stroke();
-    }
-
-    if (!selectedTowerType || gameState !== 'PLAYING') return;
-
-    const typeInfo = TOWER_TYPES[selectedTowerType];
-    const isPath = isCollidingWithPath(mouseX, mouseY, typeInfo.radius);
-    const isOccupied = towers.some(t => Math.hypot(t.x - mouseX, t.y - mouseY) < t.typeInfo.radius * 2);
-    const canAfford = money >= typeInfo.cost;
-    const valid = !isPath && !isOccupied && canAfford;
-
-    if (typeInfo.type !== 'farm') {
-        ctx.beginPath(); ctx.arc(mouseX, mouseY, typeInfo.range, 0, Math.PI * 2);
-        ctx.fillStyle = valid ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)'; ctx.fill();
-        ctx.strokeStyle = valid ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 0, 0, 0.8)'; ctx.lineWidth = 2; ctx.stroke();
-    }
-    ctx.fillStyle = valid ? 'rgba(0, 255, 0, 0.4)' : 'rgba(255, 0, 0, 0.4)';
-    ctx.beginPath(); ctx.arc(mouseX, mouseY, typeInfo.radius, 0, Math.PI*2); ctx.fill();
-}
-
-function gameLoop(timestamp) {
-    if (gameState === 'PLAYING') {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        for(let step = 0; step < gameSpeed; step++) {
-            updateLevel();
-            towers.forEach(t => t.update());
-            spikes.forEach(s => s.update());
-            
-            for (let i = projectiles.length - 1; i >= 0; i--) {
-                projectiles[i].update();
-                if (!projectiles[i].active) projectiles.splice(i, 1);
-            }
-
-            for (let i = enemies.length - 1; i >= 0; i--) {
-                if (enemies[i].hp <= 0 || enemies[i].update()) {
-                    enemies.splice(i, 1);
-                }
-            }
-
-            for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update();
-                if (particles[i].life <= 0) particles.splice(i, 1);
-            }
-
-            for (let i = floatingTexts.length - 1; i >= 0; i--) {
-                floatingTexts[i].update();
-                if (floatingTexts[i].life <= 0) floatingTexts.splice(i, 1);
-            }
-        }
-
-        drawMap();
-        spikes.forEach(s => s.draw(ctx));
-        towers.forEach(t => t.draw(ctx));
-        enemies.forEach(e => e.draw(ctx));
-        projectiles.forEach(p => p.draw(ctx));
-        particles.forEach(p => p.draw(ctx));
-        floatingTexts.forEach(ft => ft.draw(ctx));
-
-        drawPlacementPreview();
-    }
-    requestAnimationFrame(gameLoop);
-}
-
-// UI & Control Handlers
-document.getElementById('startBtn').addEventListener('click', () => {
+document.getElementById('startBtn').onclick = () => {
     initAudio();
     document.getElementById('startScreen').classList.add('hidden');
     gameState = 'PLAYING';
     updateUI();
-});
+};
 
-document.getElementById('nextWaveBtn').addEventListener('click', () => {
+document.getElementById('nextWaveBtn').onclick = () => {
     if (!waveActive && gameState === 'PLAYING') spawnWave();
-});
+};
 
-document.getElementById('speedBtn').addEventListener('click', (e) => {
-    if (gameSpeed === 1) { gameSpeed = 2; e.target.innerText = '⏩ 2x Speed'; e.target.classList.replace('bg-gray-600', 'bg-yellow-600'); }
-    else if (gameSpeed === 2) { gameSpeed = 3; e.target.innerText = '⚡ 3x Speed'; e.target.classList.replace('bg-yellow-600', 'bg-red-600'); }
-    else { gameSpeed = 1; e.target.innerText = '▶ 1x Speed'; e.target.classList.replace('bg-red-600', 'bg-gray-600'); }
-});
+document.getElementById('speedBtn').onclick = () => {
+    if (gameSpeed === 1) {
+        gameSpeed = 2;
+        document.getElementById('speedBtn').innerText = '⏩ 2x Speed';
+        document.getElementById('speedBtn').classList.replace('bg-gray-600', 'bg-green-600');
+    } else {
+        gameSpeed = 1;
+        document.getElementById('speedBtn').innerText = '▶ 1x Speed';
+        document.getElementById('speedBtn').classList.replace('bg-green-600', 'bg-gray-600');
+    }
+};
 
-document.getElementById('muteBtn').addEventListener('click', (e) => {
+document.getElementById('muteBtn').onclick = () => {
     soundMuted = !soundMuted;
-    e.target.innerText = soundMuted ? '🔇 Muted' : '🔊 Sound';
-});
+    document.getElementById('muteBtn').innerText = soundMuted ? '🔇 Muted' : '🔊 Sound';
+};
 
-document.getElementById('autoStartToggle').addEventListener('change', (e) => {
+document.getElementById('autoStartToggle').onchange = (e) => {
     autoStartEnabled = e.target.checked;
-    if (autoStartEnabled && !waveActive && gameState === 'PLAYING') spawnWave();
-});
+};
 
-// Tower selection buttons
-document.querySelectorAll('#towers-panel .tower-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const type = btn.getAttribute('data-type');
+document.getElementById('tab-towers').onclick = () => {
+    document.getElementById('towers-panel').classList.remove('hidden');
+    document.getElementById('extend-panel').classList.add('hidden');
+    document.getElementById('tab-towers').className = "flex-1 bg-[#8b5a2b] text-white text-[11px] font-bold py-2 rounded-tl-lg border-2 border-b-0 border-[#5c4033] shadow-inner";
+    document.getElementById('tab-extend').className = "flex-1 bg-[#6b4a2b] text-gray-300 text-[11px] font-bold py-2 rounded-tr-lg border-2 border-b-2 border-l-0 border-[#5c4033] shadow-inner transition hover:bg-[#7b5a3b]";
+};
+
+document.getElementById('tab-extend').onclick = () => {
+    document.getElementById('extend-panel').classList.remove('hidden');
+    document.getElementById('towers-panel').classList.add('hidden');
+    document.getElementById('tab-extend').className = "flex-1 bg-[#8b5a2b] text-white text-[11px] font-bold py-2 rounded-tr-lg border-2 border-b-0 border-[#5c4033] shadow-inner";
+    document.getElementById('tab-towers').className = "flex-1 bg-[#6b4a2b] text-gray-300 text-[11px] font-bold py-2 rounded-tl-lg border-2 border-b-2 border-r-0 border-[#5c4033] shadow-inner transition hover:bg-[#7b5a3b]";
+};
+
+document.querySelectorAll('.tower-btn[data-type]').forEach(btn => {
+    btn.onclick = () => {
+        let type = btn.getAttribute('data-type');
         if (selectedTowerType === type) {
             selectedTowerType = null;
             btn.classList.remove('selected');
         } else {
-            document.querySelectorAll('#towers-panel .tower-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelectorAll('.tower-btn').forEach(b => b.classList.remove('selected'));
             selectedTowerType = type;
-            selectedPlacedTower = null;
             btn.classList.add('selected');
+            selectedPlacedTower = null;
+            updateUI();
         }
-        updateUI();
-    });
+    };
 });
 
-// Upgrades and Sell buttons
-document.getElementById('upgradeBtn').addEventListener('click', () => {
+document.getElementById('upgradeBtn').onclick = () => {
     if (selectedPlacedTower) {
-        let cost = selectedPlacedTower.getUpgradeCost();
-        if (money >= cost && selectedPlacedTower.level < 3) {
-            money -= cost;
-            selectedPlacedTower.invested += cost;
+        let upgCost = selectedPlacedTower.getUpgradeCost();
+        if (money >= upgCost) {
+            money -= upgCost;
+            selectedPlacedTower.invested += upgCost;
             selectedPlacedTower.level++;
-            selectedPlacedTower.scaleAnim = 1.4;
+            selectedPlacedTower.scaleAnim = 1.3;
             playSound('upgrade');
-            createParticles(selectedPlacedTower.x, selectedPlacedTower.y, '#facc15', 12);
+            createParticles(selectedPlacedTower.x, selectedPlacedTower.y, '#facc15', 10);
             updateUI();
         }
     }
-});
+};
 
-document.getElementById('sellBtn').addEventListener('click', () => {
+document.getElementById('sellBtn').onclick = () => {
     if (selectedPlacedTower) {
-        let sellVal = selectedPlacedTower.getSellValue();
-        money += sellVal;
-        playSound('sell');
-        floatingTexts.push(new FloatingText(selectedPlacedTower.x, selectedPlacedTower.y, `+$${sellVal}`, '#4ade80'));
+        let val = selectedPlacedTower.getSellValue();
+        money += val;
         towers = towers.filter(t => t !== selectedPlacedTower);
+        createParticles(selectedPlacedTower.x, selectedPlacedTower.y, '#ef4444', 8);
+        playSound('sell');
         selectedPlacedTower = null;
         updateUI();
     }
-});
+};
 
-// Sidebar Tab Toggle
-document.getElementById('tab-towers').addEventListener('click', () => {
-    document.getElementById('towers-panel').classList.remove('hidden');
-    document.getElementById('extend-panel').classList.add('hidden');
-    document.getElementById('tab-towers').classList.replace('bg-[#6b4a2b]', 'bg-[#8b5a2b]');
-    document.getElementById('tab-towers').classList.replace('text-gray-300', 'text-white');
-    document.getElementById('tab-extend').classList.replace('bg-[#8b5a2b]', 'bg-[#6b4a2b]');
-    document.getElementById('tab-extend').classList.replace('text-white', 'text-gray-300');
-});
-
-document.getElementById('tab-extend').addEventListener('click', () => {
-    document.getElementById('extend-panel').classList.remove('hidden');
-    document.getElementById('towers-panel').classList.add('hidden');
-    document.getElementById('tab-extend').classList.replace('bg-[#6b4a2b]', 'bg-[#8b5a2b]');
-    document.getElementById('tab-extend').classList.replace('text-gray-300', 'text-white');
-    document.getElementById('tab-towers').classList.replace('bg-[#8b5a2b]', 'bg-[#6b4a2b]');
-    document.getElementById('tab-towers').classList.replace('text-white', 'text-gray-300');
-});
-
-// Mouse & Canvas interactions
 canvas.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
     mouseX = e.clientX - rect.left;
     mouseY = e.clientY - rect.top;
 });
 
-canvas.addEventListener('click', () => {
-    if (gameState !== 'PLAYING') return;
+canvas.addEventListener('click', (e) => {
+    initAudio();
+    const rect = canvas.getBoundingClientRect();
+    const cx = e.clientX - rect.left;
+    const cy = e.clientY - rect.top;
 
     if (selectedTowerType) {
-        const typeInfo = TOWER_TYPES[selectedTowerType];
-        const isPath = isCollidingWithPath(mouseX, mouseY, typeInfo.radius);
-        const isOccupied = towers.some(t => Math.hypot(t.x - mouseX, t.y - mouseY) < t.typeInfo.radius * 2);
+        let info = TOWER_TYPES[selectedTowerType];
+        if (money >= info.cost) {
+            let gridX = Math.floor(cx / TILE_SIZE);
+            let gridY = Math.floor(cy / TILE_SIZE);
 
-        if (!isPath && !isOccupied && money >= typeInfo.cost) {
-            money -= typeInfo.cost;
-            let newTower = new Tower(mouseX, mouseY, selectedTowerType, typeInfo);
-            towers.push(newTower);
-            playSound('pop');
-            createParticles(mouseX, mouseY, '#fff', 8);
+            let onPath = isCollidingWithPath(cx, cy, info.radius);
+            let overlappingTower = towers.some(t => Math.hypot(t.x - cx, t.y - cy) < t.typeInfo.radius + info.radius);
 
-            selectedTowerType = null;
-            document.querySelectorAll('#towers-panel .tower-btn').forEach(b => b.classList.remove('selected'));
-            updateUI();
+            if (!onPath && !overlappingTower) {
+                money -= info.cost;
+                let newTower = new Tower(cx, cy, selectedTowerType, info);
+                towers.push(newTower);
+                createParticles(cx, cy, '#ffffff', 8);
+                playSound('pop');
+
+                if (!e.shiftKey) {
+                    selectedTowerType = null;
+                    document.querySelectorAll('.tower-btn').forEach(b => b.classList.remove('selected'));
+                }
+                updateUI();
+            }
         }
     } else {
-        selectedPlacedTower = towers.find(t => Math.hypot(t.x - mouseX, t.y - mouseY) <= t.typeInfo.radius + 6) || null;
+        let clickedTower = towers.find(t => Math.hypot(t.x - cx, t.y - cy) <= t.typeInfo.radius + 5);
+        if (clickedTower) {
+            selectedPlacedTower = clickedTower;
+        } else {
+            selectedPlacedTower = null;
+        }
         updateUI();
     }
 });
 
-// Keyboard Hotkeys
 window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') {
-        e.preventDefault();
-        if (!waveActive && gameState === 'PLAYING') spawnWave();
-    }
+    if (gameState !== 'PLAYING') return;
+
     const keyMap = {
-        'Digit1': 'DART', 'Digit2': 'BOOMERANG', 'Digit3': 'TACK', 'Digit4': 'SNIPER', 'Digit5': 'GLUE',
-        'Digit6': 'BOMB', 'Digit7': 'ICE', 'Digit8': 'NINJA', 'Digit9': 'SPIKE', 'Digit0': 'FARM',
-        'KeyW': 'WIZARD', 'KeyV': 'VILLAGE', 'KeyS': 'SUPER', 'KeyP': 'PLASMA'
+        '1': 'DART', '2': 'SLINGSHOT', '3': 'TACK', '4': 'BOOMERANG',
+        '5': 'SNIPER', '6': 'GLUE', '7': 'BOMB', '8': 'ICE',
+        '9': 'DARTLING', '0': 'NINJA', 'q': 'MORTAR', 'w': 'SPIKE',
+        'e': 'FARM', 'r': 'ALCHEMIST', 't': 'WIZARD', 'y': 'DRUID',
+        'u': 'VILLAGE', 'i': 'CHOPPER', 'o': 'LASER', 'p': 'SUPER',
+        'a': 'TESLA', 's': 'PLASMA', 'd': 'SUN', 'f': 'ORBITAL'
     };
-    if (keyMap[e.code] && gameState === 'PLAYING') {
-        const btn = document.querySelector(`.tower-btn[data-type="${keyMap[e.code]}"]`);
+
+    let k = e.key.toLowerCase();
+    if (keyMap[k]) {
+        let btn = document.querySelector(`.tower-btn[data-type="${keyMap[k]}"]`);
         if (btn) btn.click();
+    } else if (e.code === 'Space') {
+        e.preventDefault();
+        document.getElementById('nextWaveBtn').click();
+    } else if (k === 'u') {
+        document.getElementById('upgradeBtn').click();
+    } else if (k === 'x') {
+        document.getElementById('sellBtn').click();
+    } else if (e.code === 'Escape') {
+        selectedTowerType = null;
+        selectedPlacedTower = null;
+        document.querySelectorAll('.tower-btn').forEach(b => b.classList.remove('selected'));
+        updateUI();
     }
 });
 
-// Start loop
-requestAnimationFrame(gameLoop);
+function gameLoop() {
+    for (let s = 0; s < gameSpeed; s++) {
+        if (gameState === 'PLAYING') {
+            updateLevel();
+
+            spikes.forEach(sp => sp.update());
+            spikes = spikes.filter(sp => sp.life > 0);
+
+            towers.forEach(t => t.update());
+
+            projectiles.forEach(p => p.update());
+            projectiles = projectiles.filter(p => p.active);
+
+            enemies.forEach(e => e.update());
+            enemies = enemies.filter(e => e.hp > 0);
+
+            particles.forEach(p => p.update());
+            particles = particles.filter(p => p.life > 0);
+
+            floatingTexts.forEach(ft => ft.update());
+            floatingTexts = floatingTexts.filter(ft => ft.life > 0);
+        }
+    }
+
+    // DRAWING
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw Grass Base
+    ctx.fillStyle = '#52c222';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw Path
+    ctx.strokeStyle = '#d2a679';
+    ctx.lineWidth = TILE_SIZE;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(waypoints[0].x, waypoints[0].y);
+    for (let i = 1; i < waypoints.length; i++) {
+        ctx.lineTo(waypoints[i].x, waypoints[i].y);
+    }
+    ctx.stroke();
+
+    // Inner Path Line
+    ctx.strokeStyle = '#e6c39c';
+    ctx.lineWidth = TILE_SIZE - 10;
+    ctx.stroke();
+
+    // Draw Decorations
+    decorations.forEach(d => {
+        ctx.save();
+        ctx.translate(d.x, d.y);
+        if (d.type === 'bush') {
+            ctx.fillStyle = '#3f9e16';
+            ctx.beginPath(); ctx.arc(0, 0, d.size, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#4cc41a';
+            ctx.beginPath(); ctx.arc(-2, -2, d.size * 0.7, 0, Math.PI * 2); ctx.fill();
+        } else {
+            ctx.fillStyle = '#facc15';
+            ctx.beginPath(); ctx.arc(0, 0, d.size * 0.4, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#ef4444';
+            for (let i = 0; i < 5; i++) {
+                ctx.rotate((Math.PI * 2) / 5);
+                ctx.beginPath(); ctx.arc(d.size * 0.5, 0, d.size * 0.3, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+        ctx.restore();
+    });
+
+    // Draw Spikes
+    spikes.forEach(sp => sp.draw(ctx));
+
+    // Draw Towers
+    towers.forEach(t => t.draw(ctx));
+
+    // Draw Enemies
+    enemies.forEach(e => e.draw(ctx));
+
+    // Draw Projectiles
+    projectiles.forEach(p => p.draw(ctx));
+
+    // Draw Particles
+    particles.forEach(p => p.draw(ctx));
+
+    // Draw Floating Text
+    floatingTexts.forEach(ft => ft.draw(ctx));
+
+    // Draw Selected Placed Tower Range Circle
+    if (selectedPlacedTower) {
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(selectedPlacedTower.x, selectedPlacedTower.y, selectedPlacedTower.getRange(), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+    }
+
+    // Draw Selected Tower Ghost & Range Preview
+    if (selectedTowerType) {
+        let info = TOWER_TYPES[selectedTowerType];
+        let onPath = isCollidingWithPath(mouseX, mouseY, info.radius);
+        let overlappingTower = towers.some(t => Math.hypot(t.x - mouseX, t.y - mouseY) < t.typeInfo.radius + info.radius);
+        let isValid = !onPath && !overlappingTower && money >= info.cost;
+
+        ctx.strokeStyle = isValid ? 'rgba(34, 197, 94, 0.8)' : 'rgba(239, 68, 68, 0.8)';
+        ctx.fillStyle = isValid ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(mouseX, mouseY, info.range, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.globalAlpha = 0.6;
+        ctx.fillStyle = isValid ? '#22c55e' : '#ef4444';
+        ctx.beginPath();
+        ctx.arc(mouseX, mouseY, info.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+    }
+
+    requestAnimationFrame(gameLoop);
+}
+
+window.onload = () => {
+    gameLoop();
+};
 </script>
 </body>
 </html>
