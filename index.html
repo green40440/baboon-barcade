@@ -1214,7 +1214,12 @@ class Projectile {
         this.x = x; this.y = y; this.target = target; this.damage = dynamicDamage; 
         this.speed = typeInfo.projSpeed; this.type = typeInfo.type;
         this.splash = typeInfo.splash || 0; this.angle = angle;
-        this.active = true; this.life = 100; this.parentTower = parentTower; 
+        this.active = true; this.life = 100; this.parentTower = parentTower;
+        this.distanceTravelled = 0;
+        this.outboundDistance = parentTower ? parentTower.getRange() * 0.62 : 120;
+        this.returning = false;
+        this.spin = 0;
+        this.hitEnemies = new Set();
     }
 
     update() {
@@ -1222,21 +1227,44 @@ class Projectile {
         this.life--;
         if (this.life <= 0) { this.active = false; return; }
 
-        this.x += Math.cos(this.angle) * this.speed;
-        this.y += Math.sin(this.angle) * this.speed;
+        if (this.type === 'boomerang' && this.parentTower) {
+            this.spin += 0.42;
+            if (!this.returning) {
+                // Sweep outward with a slight curve.
+                this.angle += Math.sin(this.distanceTravelled / 24) * 0.10;
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+                this.distanceTravelled += this.speed;
+                if (this.distanceTravelled >= this.outboundDistance) this.returning = true;
+            } else {
+                // Curve back to its owner, hitting bloons on both legs.
+                const dx = this.parentTower.x - this.x;
+                const dy = this.parentTower.y - this.y;
+                const homeAngle = Math.atan2(dy, dx);
+                const diff = Math.atan2(Math.sin(homeAngle - this.angle), Math.cos(homeAngle - this.angle));
+                this.angle += Math.max(-0.22, Math.min(0.22, diff));
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+                if (Math.hypot(dx, dy) < 18) { this.active = false; return; }
+            }
+        } else {
+            this.x += Math.cos(this.angle) * this.speed;
+            this.y += Math.sin(this.angle) * this.speed;
+        }
 
         for (let enemy of enemies) {
-            if (enemy.hp <= 0) continue;
+            if (enemy.hp <= 0 || this.hitEnemies.has(enemy)) continue;
             if (Math.hypot(enemy.x - this.x, enemy.y - this.y) < this.speed + enemy.radius) {
                 this.hit(enemy);
-                if (!['laser', 'quantum', 'godly', 'celestial'].includes(this.type)) break;
+                this.hitEnemies.add(enemy);
+                if (this.type !== 'boomerang' && !['laser', 'quantum', 'godly', 'celestial'].includes(this.type)) break;
             }
         }
         if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.active = false;
     }
     
     hit(mainTarget) {
-        if (!['laser', 'quantum', 'godly', 'celestial'].includes(this.type)) this.active = false;
+        if (this.type !== 'boomerang' && !['laser', 'quantum', 'godly', 'celestial'].includes(this.type)) this.active = false;
         
         if (this.splash > 0) {
             createParticles(this.x, this.y, '#f97316', 12);
@@ -1270,8 +1298,41 @@ class Projectile {
     }
 
     draw(ctx) {
-        ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
-        ctx.fillStyle = '#facc15'; ctx.fillRect(-6, -2, 12, 4);
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        if (this.type === 'boomerang') {
+            // A spinning V-shaped wooden boomerang.
+            ctx.rotate(this.spin + this.angle);
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = '#78350f'; ctx.lineWidth = 8;
+            ctx.beginPath(); ctx.moveTo(-10, -8); ctx.lineTo(0, 0); ctx.lineTo(10, -8); ctx.stroke();
+            ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(-10, -8); ctx.lineTo(0, 0); ctx.lineTo(10, -8); ctx.stroke();
+        } else {
+            ctx.rotate(this.angle);
+            const projectileColors = {
+                monkey: '#facc15', slingshot: '#d1d5db', tack: '#f472b6', sniper: '#374151',
+                glue: '#22c55e', bomb: '#fb923c', ice: '#67e8f9', dartling: '#facc15',
+                ninja: '#a78bfa', mortar: '#f97316', alchemist: '#c084fc', wizard: '#60a5fa',
+                druid: '#4ade80', chopper: '#e5e7eb', laser: '#f43f5e', super: '#fef08a',
+                tesla: '#38bdf8', plasma: '#c084fc', sun: '#fbbf24', orbital: '#f8fafc',
+                frost: '#67e8f9', necro: '#a3e635', volcano: '#fb7185', acid: '#84cc16',
+                chrono: '#22d3ee', quantum: '#e879f9', blackhole: '#c4b5fd', celestial: '#fde68a',
+                titan: '#94a3b8', godly: '#ffffff'
+            };
+            ctx.fillStyle = projectileColors[this.type] || '#facc15';
+            if (['laser', 'quantum', 'celestial', 'godly'].includes(this.type)) {
+                ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = 12; ctx.fillRect(-9, -2, 18, 4);
+            } else if (['bomb', 'mortar', 'volcano', 'blackhole'].includes(this.type)) {
+                ctx.beginPath(); ctx.arc(0, 0, 6, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = '#7f1d1d'; ctx.lineWidth = 2; ctx.stroke();
+            } else if (['ice', 'frost'].includes(this.type)) {
+                ctx.beginPath(); ctx.moveTo(0, -7); ctx.lineTo(5, 0); ctx.lineTo(0, 7); ctx.lineTo(-5, 0); ctx.closePath(); ctx.fill();
+            } else {
+                ctx.fillRect(-6, -2, 12, 4);
+            }
+        }
         ctx.restore();
     }
 }
