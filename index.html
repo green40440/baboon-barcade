@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Baboon Barricade: Deluxe Edition</title>
+    <title>Baboon Barricade: Ultimate Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         html, body {
@@ -42,18 +42,16 @@
             min-height: 0;
             position: relative;
         }
-        #view-port::-webkit-scrollbar { width: 16px; height: 16px; }
+        #view-port::-webkit-scrollbar { width: 14px; height: 14px; }
         #view-port::-webkit-scrollbar-track { background: #52c222; border-left: 3px solid #4a3320; border-top: 3px solid #4a3320; }
         #view-port::-webkit-scrollbar-thumb { background: #8b5a2b; border-radius: 8px; border: 3px solid #52c222; }
         #view-port::-webkit-scrollbar-thumb:hover { background: #6b4a2b; }
 
         #canvas-container {
-            width: 780px; 
-            height: 600px; 
+            width: 1200px; 
+            height: 1200px; 
             overflow: hidden;
             position: relative;
-            transition: width 0.8s ease-in-out, height 0.8s ease-in-out;
-            flex-shrink: 0;
             background-color: #52c222;
         }
         canvas {
@@ -64,7 +62,7 @@
             left: 0;
         }
         .sidebar {
-            width: 280px; 
+            width: 290px; 
             background-color: #d2a679; 
             border-left: 6px solid #8b5a2b;
             display: flex;
@@ -78,7 +76,7 @@
             border: 3px solid #a0522d;
             border-radius: 8px;
             padding: 6px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             cursor: pointer;
             transition: all 0.1s;
             display: flex;
@@ -116,27 +114,27 @@
 <body>
 
     <div id="game-wrapper">
-        <!-- Fixed Top UI Header -->
+        <!-- Top HUD Header -->
         <div class="absolute top-3 left-4 flex gap-6 text-white font-bold text-2xl top-ui tracking-wide z-30 pointer-events-none">
             <div class="flex items-center gap-2"><span class="text-red-500 text-3xl drop-shadow-md">❤️</span> <span id="livesDisplay">500</span></div>
-            <div class="flex items-center gap-2"><span class="text-yellow-400 text-3xl drop-shadow-md">💰</span> $<span id="moneyDisplay">200</span></div>
+            <div class="flex items-center gap-2"><span class="text-yellow-400 text-3xl drop-shadow-md">💰</span> $<span id="moneyDisplay">250</span></div>
         </div>
-        <div id="round-indicator" class="absolute top-3 text-white font-bold text-xl top-ui bg-blue-600/90 px-4 py-1 rounded-xl border-2 border-white shadow-lg transition-all duration-300 z-30 pointer-events-none flex flex-col items-center" style="right: calc(280px + 1rem);">
+        <div id="round-indicator" class="absolute top-3 text-white font-bold text-xl top-ui bg-blue-600/90 px-4 py-1 rounded-xl border-2 border-white shadow-lg transition-all duration-300 z-30 pointer-events-none flex flex-col items-center" style="right: calc(290px + 1rem);">
             <div>ROUND <span id="levelDisplay" class="text-2xl">1</span><span id="maxLevelDisplay" class="text-sm text-blue-200">/100</span></div>
             <div id="bossText" class="text-xs text-yellow-300 hidden uppercase tracking-wider font-extrabold">Boss Incoming!</div>
         </div>
 
-        <!-- Scrolling Map Viewport -->
+        <!-- Canvas Viewport -->
         <div id="view-port">
             <div id="canvas-container">
                 <canvas id="gameCanvas" width="1200" height="1200"></canvas>
             </div>
         </div>
 
-        <div id="startScreen" class="absolute inset-0 bg-black/60 backdrop-blur-md flex flex-col items-center justify-center z-40">
-            <div class="bg-yellow-400 text-yellow-900 px-4 py-1 rounded-full font-bold text-sm mb-4 border-2 border-yellow-600 shadow-lg">DELUXE WEB EDITION - 24 TOWERS</div>
+        <div id="startScreen" class="absolute inset-0 bg-black/70 backdrop-blur-md flex flex-col items-center justify-center z-40">
+            <div class="bg-yellow-400 text-yellow-950 px-4 py-1 rounded-full font-bold text-sm mb-3 border-2 border-yellow-600 shadow-lg">ULTIMATE WEB EDITION - 34 TOWERS & ENDLESS 500</div>
             <h2 class="text-6xl font-bold text-yellow-400 top-ui mb-2 text-center">Baboon<br>Barricade</h2>
-            <p class="text-white font-bold top-ui mb-8 text-xl">Pop all 100 waves! Full privileges remain active in endless mode.</p>
+            <p class="text-white font-bold top-ui mb-8 text-xl text-center px-4">Pop 100 waves to clear the main campaign, then continue all the way to Round 500!</p>
             <button id="startBtn" class="px-8 py-4 bg-green-500 hover:bg-green-400 text-white font-bold rounded-xl border-b-4 border-green-700 text-2xl transition hover:-translate-y-1">PLAY NOW</button>
         </div>
         
@@ -152,11 +150,11 @@
             <div class="flex flex-col gap-4 w-[500px]">
                 <button onclick="startEndless()" class="w-full px-6 py-4 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl border-b-4 border-purple-800 text-xl transition hover:-translate-y-1 flex flex-col items-center">
                     <span>Keep Going to Level 500</span>
-                    <span class="text-sm font-normal text-purple-200">Keep all your towers, full upgrades, standard prices & privileges!</span>
+                    <span class="text-sm font-normal text-purple-200">Keep all towers, full upgrades, standard prices & privileges!</span>
                 </button>
                 <button onclick="rebirth()" class="w-full px-6 py-4 bg-orange-500 hover:bg-orange-400 text-white font-bold rounded-xl border-b-4 border-orange-700 text-xl transition hover:-translate-y-1 flex flex-col items-center">
                     <span>Rebirth</span>
-                    <span class="text-sm font-normal text-orange-100">Restart at Level 1, but balloons move FASTER!</span>
+                    <span class="text-sm font-normal text-orange-100">Restart at Level 1 with faster balloons for maximum challenge!</span>
                 </button>
             </div>
         </div>
@@ -170,13 +168,13 @@
         <!-- Sidebar Navigation -->
         <div class="sidebar shrink-0 relative z-20 flex flex-col">
             <div id="tab-container" class="flex mb-3 shrink-0">
-                <button id="tab-towers" class="flex-1 bg-[#8b5a2b] text-white text-[11px] font-bold py-2 rounded-tl-lg border-2 border-b-0 border-[#5c4033] shadow-inner">TOWERS (24)</button>
+                <button id="tab-towers" class="flex-1 bg-[#8b5a2b] text-white text-[11px] font-bold py-2 rounded-tl-lg border-2 border-b-0 border-[#5c4033] shadow-inner">TOWERS (34)</button>
                 <button id="tab-extend" class="flex-1 bg-[#6b4a2b] text-gray-300 text-[11px] font-bold py-2 rounded-tr-lg border-2 border-b-2 border-l-0 border-[#5c4033] shadow-inner transition hover:bg-[#7b5a3b]">EXTEND</button>
             </div>
             
             <div id="towers-panel" class="flex-1 overflow-y-auto pr-1 space-y-2">
                 
-                <!-- 1. DART MONKEY ($170) -->
+                <!-- 1. DART MONKEY -->
                 <button class="tower-btn w-full relative" data-type="DART">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[1]</span>
                     <div class="w-10 h-10 rounded-full bg-[#8b5a2b] border-2 border-[#5c4033] flex items-center justify-center mb-1">
@@ -189,7 +187,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$170</p>
                 </button>
 
-                <!-- 2. SLINGSHOT MONKEY ($220) [NEW 1] -->
+                <!-- 2. SLINGSHOT MONKEY -->
                 <button class="tower-btn w-full relative" data-type="SLINGSHOT">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[2]</span>
                     <div class="w-10 h-10 rounded-full bg-[#a16207] border-2 border-[#713f12] flex items-center justify-center mb-1">
@@ -199,7 +197,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$220</p>
                 </button>
 
-                <!-- 3. TACK SHOOTER ($280) -->
+                <!-- 3. TACK SHOOTER -->
                 <button class="tower-btn w-full relative" data-type="TACK">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[3]</span>
                     <div class="w-10 h-10 bg-pink-500 rounded border-2 border-pink-700 flex flex-wrap p-1 items-center justify-center gap-1 mb-1 relative">
@@ -210,7 +208,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$280</p>
                 </button>
 
-                <!-- 4. BOOMERANG MONKEY ($320) -->
+                <!-- 4. BOOMERANG MONKEY -->
                 <button class="tower-btn w-full relative" data-type="BOOMERANG">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[4]</span>
                     <div class="w-10 h-10 rounded-full bg-[#b45309] border-2 border-[#78350f] flex items-center justify-center mb-1 relative">
@@ -222,7 +220,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$320</p>
                 </button>
 
-                <!-- 5. SNIPER MONKEY ($350) -->
+                <!-- 5. SNIPER MONKEY -->
                 <button class="tower-btn w-full relative" data-type="SNIPER">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[5]</span>
                     <div class="w-10 h-10 rounded-full bg-[#8b5a2b] border-2 border-[#5c4033] flex items-center justify-center mb-1 relative">
@@ -233,7 +231,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$350</p>
                 </button>
 
-                <!-- 6. GLUE MONKEY ($400) -->
+                <!-- 6. GLUE MONKEY -->
                 <button class="tower-btn w-full relative" data-type="GLUE">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[6]</span>
                     <div class="w-10 h-10 rounded-full bg-yellow-600 border-2 border-yellow-800 flex items-center justify-center mb-1 relative">
@@ -245,7 +243,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$400</p>
                 </button>
 
-                <!-- 7. BOMB CANNON ($450) -->
+                <!-- 7. BOMB CANNON -->
                 <button class="tower-btn w-full relative" data-type="BOMB">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[7]</span>
                     <div class="w-10 h-10 bg-gray-800 rounded-full border-2 border-gray-900 flex items-center justify-center mb-1 relative">
@@ -255,7 +253,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$450</p>
                 </button>
 
-                <!-- 8. ICE MONKEY ($500) -->
+                <!-- 8. ICE MONKEY -->
                 <button class="tower-btn w-full relative" data-type="ICE">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[8]</span>
                     <div class="w-10 h-10 rounded-full bg-blue-300 border-2 border-blue-500 flex items-center justify-center mb-1 relative overflow-hidden">
@@ -268,7 +266,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$500</p>
                 </button>
 
-                <!-- 9. DARTLING GUNNER ($550) [NEW 2] -->
+                <!-- 9. DARTLING GUNNER -->
                 <button class="tower-btn w-full relative" data-type="DARTLING">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[9]</span>
                     <div class="w-10 h-10 rounded bg-green-800 border-2 border-green-950 flex items-center justify-center mb-1 relative">
@@ -278,7 +276,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$550</p>
                 </button>
 
-                <!-- 10. NINJA MONKEY ($600) -->
+                <!-- 10. NINJA MONKEY -->
                 <button class="tower-btn w-full relative" data-type="NINJA">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[0]</span>
                     <div class="w-10 h-10 rounded-full bg-gray-800 border-2 border-black flex items-center justify-center mb-1 relative">
@@ -289,7 +287,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$600</p>
                 </button>
 
-                <!-- 11. MORTAR MONKEY ($650) [NEW 3] -->
+                <!-- 11. MORTAR MONKEY -->
                 <button class="tower-btn w-full relative" data-type="MORTAR">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[Q]</span>
                     <div class="w-10 h-10 rounded-full bg-stone-700 border-2 border-stone-900 flex items-center justify-center mb-1">
@@ -299,7 +297,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$650</p>
                 </button>
 
-                <!-- 12. SPIKE FACTORY ($700) -->
+                <!-- 12. SPIKE FACTORY -->
                 <button class="tower-btn w-full relative" data-type="SPIKE">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[W]</span>
                     <div class="w-10 h-10 bg-gray-300 rounded border-2 border-gray-500 flex items-center justify-center mb-1 relative">
@@ -311,7 +309,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$700</p>
                 </button>
 
-                <!-- 13. BANANA FARM ($800) -->
+                <!-- 13. BANANA FARM -->
                 <button class="tower-btn w-full relative" data-type="FARM">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[E]</span>
                     <div class="w-10 h-10 bg-green-600 rounded border-2 border-green-800 flex flex-col items-center justify-center mb-1 relative">
@@ -322,7 +320,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$800</p>
                 </button>
 
-                <!-- 14. ALCHEMIST MONKEY ($900) [NEW 4] -->
+                <!-- 14. ALCHEMIST MONKEY -->
                 <button class="tower-btn w-full relative" data-type="ALCHEMIST">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[R]</span>
                     <div class="w-10 h-10 rounded-full bg-emerald-900 border-2 border-emerald-950 flex items-center justify-center mb-1">
@@ -332,7 +330,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$900</p>
                 </button>
 
-                <!-- 15. WIZARD MONKEY ($1,100) -->
+                <!-- 15. WIZARD MONKEY -->
                 <button class="tower-btn w-full relative" data-type="WIZARD">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[T]</span>
                     <div class="w-10 h-10 rounded-full bg-purple-900 border-2 border-purple-950 flex items-center justify-center mb-1 relative">
@@ -343,7 +341,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$1,100</p>
                 </button>
 
-                <!-- 16. DRUID MONKEY ($1,250) [NEW 5] -->
+                <!-- 16. DRUID MONKEY -->
                 <button class="tower-btn w-full relative" data-type="DRUID">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[Y]</span>
                     <div class="w-10 h-10 rounded-full bg-emerald-700 border-2 border-emerald-900 flex items-center justify-center mb-1">
@@ -353,7 +351,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$1,250</p>
                 </button>
 
-                <!-- 17. MONKEY VILLAGE ($1,400) -->
+                <!-- 17. MONKEY VILLAGE -->
                 <button class="tower-btn w-full relative" data-type="VILLAGE">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[U]</span>
                     <div class="w-10 h-10 bg-amber-700 rounded border-2 border-amber-900 flex items-center justify-center mb-1 relative">
@@ -364,7 +362,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$1,400</p>
                 </button>
 
-                <!-- 18. APACHE CHOPPER ($1,800) [NEW 6] -->
+                <!-- 18. APACHE CHOPPER -->
                 <button class="tower-btn w-full relative" data-type="CHOPPER">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[I]</span>
                     <div class="w-10 h-10 rounded bg-slate-800 border-2 border-slate-950 flex items-center justify-center mb-1">
@@ -374,7 +372,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$1,800</p>
                 </button>
 
-                <!-- 19. LASER CANNON ($2,100) [NEW 7] -->
+                <!-- 19. LASER CANNON -->
                 <button class="tower-btn w-full relative" data-type="LASER">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[O]</span>
                     <div class="w-10 h-10 rounded bg-fuchsia-900 border-2 border-fuchsia-950 flex items-center justify-center mb-1">
@@ -384,7 +382,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$2,100</p>
                 </button>
 
-                <!-- 20. SUPER MONKEY ($2,500) -->
+                <!-- 20. SUPER MONKEY -->
                 <button class="tower-btn w-full relative" data-type="SUPER">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[P]</span>
                     <div class="w-10 h-10 rounded-full bg-blue-600 border-2 border-blue-800 flex items-center justify-center mb-1 relative">
@@ -395,7 +393,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$2,500</p>
                 </button>
 
-                <!-- 21. TESLA TOWER ($3,000) [NEW 8] -->
+                <!-- 21. TESLA TOWER -->
                 <button class="tower-btn w-full relative" data-type="TESLA">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[A]</span>
                     <div class="w-10 h-10 rounded bg-indigo-900 border-2 border-indigo-400 flex items-center justify-center mb-1">
@@ -405,7 +403,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$3,000</p>
                 </button>
 
-                <!-- 22. PLASMA CANNON ($3,500) -->
+                <!-- 22. PLASMA CANNON -->
                 <button class="tower-btn w-full relative" data-type="PLASMA">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[S]</span>
                     <div class="w-10 h-10 bg-cyan-900 rounded-full border-2 border-cyan-400 flex items-center justify-center mb-1 relative shadow-lg">
@@ -415,7 +413,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$3,500</p>
                 </button>
 
-                <!-- 23. SUN TEMPLE ($5,000) [NEW 9] -->
+                <!-- 23. SUN TEMPLE -->
                 <button class="tower-btn w-full relative" data-type="SUN">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[D]</span>
                     <div class="w-10 h-10 rounded-full bg-amber-500 border-2 border-yellow-300 flex items-center justify-center mb-1 shadow-lg">
@@ -425,7 +423,7 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$5,000</p>
                 </button>
 
-                <!-- 24. ORBITAL DEATH RAY ($8,500) [NEW 10] -->
+                <!-- 24. ORBITAL DEATH RAY -->
                 <button class="tower-btn w-full relative" data-type="ORBITAL">
                     <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[F]</span>
                     <div class="w-10 h-10 rounded-full bg-violet-950 border-2 border-violet-400 flex items-center justify-center mb-1 shadow-lg">
@@ -435,13 +433,111 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$8,500</p>
                 </button>
 
+                <!-- 25. FROST NOVA TOWER [NEW 1] -->
+                <button class="tower-btn w-full relative" data-type="FROST_NOVA">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[G]</span>
+                    <div class="w-10 h-10 rounded-full bg-cyan-950 border-2 border-cyan-300 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">❄️</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Frost Nova</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$10,000</p>
+                </button>
+
+                <!-- 26. NECROMANCER MONKEY [NEW 2] -->
+                <button class="tower-btn w-full relative" data-type="NECRO">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[H]</span>
+                    <div class="w-10 h-10 rounded-full bg-teal-950 border-2 border-emerald-400 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">💀</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Necromancer</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$12,500</p>
+                </button>
+
+                <!-- 27. VOLCANO TURRET [NEW 3] -->
+                <button class="tower-btn w-full relative" data-type="VOLCANO">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[J]</span>
+                    <div class="w-10 h-10 rounded bg-red-950 border-2 border-orange-500 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">🌋</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Volcano Turret</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$15,000</p>
+                </button>
+
+                <!-- 28. ACID SPITTER [NEW 4] -->
+                <button class="tower-btn w-full relative" data-type="ACID">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[K]</span>
+                    <div class="w-10 h-10 rounded-full bg-lime-950 border-2 border-lime-400 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">☣️</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Acid Spitter</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$18,000</p>
+                </button>
+
+                <!-- 29. CHRONO WARPER [NEW 5] -->
+                <button class="tower-btn w-full relative" data-type="CHRONO">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[L]</span>
+                    <div class="w-10 h-10 rounded bg-fuchsia-950 border-2 border-pink-400 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">⌛</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Chrono Warper</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$22,000</p>
+                </button>
+
+                <!-- 30. QUANTUM BEAMER [NEW 6] -->
+                <button class="tower-btn w-full relative" data-type="QUANTUM">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[Z]</span>
+                    <div class="w-10 h-10 rounded-full bg-blue-950 border-2 border-sky-300 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">⚛️</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Quantum Beamer</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$28,000</p>
+                </button>
+
+                <!-- 31. BLACK HOLE GENERATOR [NEW 7] -->
+                <button class="tower-btn w-full relative" data-type="BLACK_HOLE">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[C]</span>
+                    <div class="w-10 h-10 rounded-full bg-black border-2 border-purple-500 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">🕳️</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Black Hole Gen</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$35,000</p>
+                </button>
+
+                <!-- 32. CELESTIAL ARCHMAGE [NEW 8] -->
+                <button class="tower-btn w-full relative" data-type="CELESTIAL">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[V]</span>
+                    <div class="w-10 h-10 rounded-full bg-indigo-950 border-2 border-indigo-300 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">🌠</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Celestial Archmage</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$45,000</p>
+                </button>
+
+                <!-- 33. TITAN MECH MONKEY [NEW 9] -->
+                <button class="tower-btn w-full relative" data-type="TITAN_MECH">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[B]</span>
+                    <div class="w-10 h-10 rounded bg-slate-900 border-2 border-yellow-400 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">🤖</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Titan Mech</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$60,000</p>
+                </button>
+
+                <!-- 34. GODLY BABOON BARRICADE [NEW 10] -->
+                <button class="tower-btn w-full relative" data-type="GODLY_BABOON">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[N]</span>
+                    <div class="w-10 h-10 rounded-full bg-amber-400 border-2 border-yellow-100 flex items-center justify-center mb-1 shadow-lg animate-pulse">
+                        <div class="text-xl">👑</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Godly Baboon</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$100,000</p>
+                </button>
+
             </div>
 
-            <!-- Extend Map Panel -->
             <div id="extend-panel" class="hidden flex-1 overflow-y-auto pr-1 space-y-3">
                 <p class="text-[11px] text-[#5c4033] font-bold text-center bg-[#deb887] p-1 rounded border border-[#a0522d] mb-2 leading-tight">Unlock & expand the map!</p>
                 
-                <!-- PHASE 1 -->
                 <div id="extend-phase-1" class="space-y-3">
                     <button id="btn-ext-1" class="tower-btn w-full relative" onclick="buyExtension(1)">
                         <div class="w-12 h-12 bg-yellow-500 rounded border-2 border-yellow-700 flex items-center justify-center mb-1 shadow-inner"><span class="text-2xl drop-shadow-md">🚧</span></div>
@@ -460,7 +556,6 @@
                     </button>
                 </div>
 
-                <!-- PHASE 2 -->
                 <div id="extend-phase-2" class="hidden space-y-3">
                     <button id="btn-ext-4" class="tower-btn w-full relative" onclick="buyExtension(4)">
                         <div class="w-12 h-12 bg-yellow-500 rounded border-2 border-yellow-700 flex items-center justify-center mb-1 shadow-inner"><span class="text-2xl drop-shadow-md">🚧</span></div>
@@ -519,7 +614,6 @@
                 </div>
             </div>
 
-            <!-- Deluxe Play Controls -->
             <div class="shrink-0 mt-2 border-t-2 border-[#5c4033] pt-2">
                 <div class="flex gap-2 mb-2">
                     <button id="speedBtn" class="flex-1 py-1.5 bg-gray-600 hover:bg-gray-500 text-white font-bold text-xs rounded shadow transition">▶ 1x Speed</button>
@@ -544,9 +638,9 @@ const TILE_SIZE = 60;
 const COLS = Math.floor(canvas.width / TILE_SIZE); 
 const ROWS = Math.floor(canvas.height / TILE_SIZE); 
 
-// Game State Variables
+// Core Game State
 let gameState = 'START'; 
-let money = 200; 
+let money = 170; 
 let lives = 500;
 let level = 1;
 let MAX_LEVEL = 100;
@@ -574,6 +668,7 @@ let waveActive = false;
 let enemiesToSpawn = 0;
 let spawnTimer = 0;
 let spawnInterval = 60;
+let isBossWave = false;
 
 let trackExtensions = 0; 
 
@@ -596,9 +691,7 @@ let audioCtx = null;
 function initAudio() {
     if (!audioCtx) {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (AudioContext) {
-            audioCtx = new AudioContext();
-        }
+        if (AudioContext) audioCtx = new AudioContext();
     }
     if (audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume();
@@ -611,9 +704,7 @@ function playSound(type) {
     if (!audioCtx) return;
     
     try {
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
+        if (audioCtx.state === 'suspended') audioCtx.resume();
         
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
@@ -643,69 +734,41 @@ function playSound(type) {
             gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.04);
             duration = 0.04;
-        } else if (type === 'bomb' || type === 'mortar') {
+        } else if (type === 'bomb' || type === 'mortar' || type === 'volcano') {
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(140, audioCtx.currentTime);
             osc.frequency.linearRampToValueAtTime(10, audioCtx.currentTime + 0.3);
             gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
             duration = 0.3;
-        } else if (type === 'ice') {
+        } else if (type === 'ice' || type === 'frost') {
             osc.type = 'sine';
             osc.frequency.setValueAtTime(250, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.15);
             gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
             duration = 0.15;
-        } else if (type === 'glue' || type === 'alchemist') {
+        } else if (type === 'glue' || type === 'alchemist' || type === 'acid') {
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(300, audioCtx.currentTime);
             osc.frequency.linearRampToValueAtTime(90, audioCtx.currentTime + 0.15);
             gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
             duration = 0.15;
-        } else if (type === 'druid') {
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(520, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(260, audioCtx.currentTime + 0.1);
-            gain.gain.setValueAtTime(0.09, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            duration = 0.1;
-        } else if (type === 'chopper') {
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(180, audioCtx.currentTime);
-            osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.05);
-            gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.05);
-            duration = 0.05;
-        } else if (type === 'tesla') {
+        } else if (type === 'tesla' || type === 'quantum') {
             osc.type = 'sawtooth';
             osc.frequency.setValueAtTime(1400, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.09);
             gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.09);
             duration = 0.09;
-        } else if (type === 'magic') {
+        } else if (type === 'blackhole' || type === 'godly') {
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.12);
-            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
-            duration = 0.12;
-        } else if (type === 'plasma' || type === 'sun') {
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.08);
-            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.08);
-            duration = 0.08;
-        } else if (type === 'orbital') {
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(2000, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.25);
+            osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1800, audioCtx.currentTime + 0.3);
             gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
-            duration = 0.25;
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            duration = 0.3;
         } else if (type === 'upgrade') {
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(400, audioCtx.currentTime);
@@ -714,27 +777,11 @@ function playSound(type) {
             gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
             duration = 0.25;
-        } else if (type === 'sell') {
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            osc.frequency.linearRampToValueAtTime(200, audioCtx.currentTime + 0.12);
-            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
-            duration = 0.12;
-        } else if (type === 'twinkle') {
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(900, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1500, audioCtx.currentTime + 0.1);
-            gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.1);
-            duration = 0.1;
         }
 
         osc.start();
         osc.stop(audioCtx.currentTime + duration);
-    } catch(e) {
-        console.log("Audio playSound failed:", e);
-    }
+    } catch(e) {}
 }
 
 function buildPathMap() {
@@ -781,12 +828,8 @@ function buildPathMap() {
             
             if (mapGrid[gridY] && mapGrid[gridY][gridX] === 0) {
                 decorations.push({
-                    x: tx, 
-                    y: ty, 
-                    size: 10 + Math.random()*15, 
-                    type: Math.random() > 0.5 ? 'bush' : 'flower',
-                    wiggle: 0,
-                    wiggleTimer: 0
+                    x: tx, y: ty, size: 10 + Math.random()*15, 
+                    type: Math.random() > 0.5 ? 'bush' : 'flower'
                 });
             }
         }
@@ -797,7 +840,6 @@ buildPathMap();
 
 function isCollidingWithPath(cx, cy, radius) {
     let colliding = false;
-    
     const checkLine = (x1, y1, x2, y2) => {
         let p1 = {x: x1, y: y1}, p2 = {x: x2, y: y2};
         let l2 = Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2);
@@ -806,7 +848,6 @@ function isCollidingWithPath(cx, cy, radius) {
         let proj = { x: p1.x + t * (p2.x - p1.x), y: p1.y + t * (p2.y - p1.y) };
         if(Math.hypot(cx - proj.x, cy - proj.y) < TILE_SIZE/2 + radius) colliding = true;
     };
-
     for(let i=0; i<waypoints.length-1; i++) checkLine(waypoints[i].x, waypoints[i].y, waypoints[i+1].x, waypoints[i+1].y);
     return colliding;
 }
@@ -835,78 +876,62 @@ const BASE_TOWER_TYPES = {
     TESLA: { cost: 3000, range: 220, damage: 4, fireRate: 35, projSpeed: 30, type: 'tesla', radius: 24, name: 'Tesla Tower' },
     PLASMA: { cost: 3500, range: 280, damage: 5, splash: 40, fireRate: 6, projSpeed: 28, type: 'plasma', radius: 24, name: 'Plasma Cannon' },
     SUN: { cost: 5000, range: 320, damage: 8, splash: 50, fireRate: 8, projSpeed: 30, type: 'sun', radius: 28, name: 'Sun Temple' },
-    ORBITAL: { cost: 8500, range: 400, damage: 15, splash: 90, fireRate: 45, projSpeed: 35, type: 'orbital', radius: 30, name: 'Orbital Death Ray' }
+    ORBITAL: { cost: 8500, range: 400, damage: 15, splash: 90, fireRate: 45, projSpeed: 35, type: 'orbital', radius: 30, name: 'Orbital Death Ray' },
+    
+    // 10 NEW TOWERS (25 - 34)
+    FROST_NOVA: { cost: 10000, range: 200, damage: 6, fireRate: 40, projSpeed: 10, type: 'frost', radius: 26, name: 'Frost Nova' },
+    NECRO: { cost: 12500, range: 250, damage: 8, fireRate: 35, projSpeed: 15, type: 'necro', radius: 22, name: 'Necromancer' },
+    VOLCANO: { cost: 15000, range: 280, damage: 12, splash: 80, fireRate: 50, projSpeed: 14, type: 'volcano', radius: 26, name: 'Volcano Turret' },
+    ACID: { cost: 18000, range: 240, damage: 10, fireRate: 20, projSpeed: 18, type: 'acid', radius: 22, name: 'Acid Spitter' },
+    CHRONO: { cost: 22000, range: 260, damage: 15, fireRate: 45, projSpeed: 25, type: 'chrono', radius: 24, name: 'Chrono Warper' },
+    QUANTUM: { cost: 28000, range: 300, damage: 20, fireRate: 15, projSpeed: 28, type: 'quantum', radius: 24, name: 'Quantum Beamer' },
+    BLACK_HOLE: { cost: 35000, range: 320, damage: 30, splash: 120, fireRate: 60, projSpeed: 20, type: 'blackhole', radius: 28, name: 'Black Hole Gen' },
+    CELESTIAL: { cost: 45000, range: 450, damage: 45, splash: 100, fireRate: 40, projSpeed: 32, type: 'celestial', radius: 26, name: 'Celestial Archmage' },
+    TITAN_MECH: { cost: 60000, range: 380, damage: 60, splash: 110, fireRate: 12, projSpeed: 30, type: 'titan', radius: 30, name: 'Titan Mech' },
+    GODLY_BABOON: { cost: 100000, range: 500, damage: 100, splash: 140, fireRate: 5, projSpeed: 35, type: 'godly', radius: 32, name: 'Godly Baboon', baseIncome: 500 }
 };
 
 let TOWER_TYPES = JSON.parse(JSON.stringify(BASE_TOWER_TYPES));
 
 class FloatingText {
     constructor(x, y, text, color) {
-        this.x = x;
-        this.y = y;
-        this.text = text;
-        this.color = color;
-        this.life = 1.0;
-        this.vy = -0.5;
+        this.x = x; this.y = y; this.text = text; this.color = color; this.life = 1.0; this.vy = -0.5;
     }
-    update() {
-        this.y += this.vy;
-        this.life -= 0.02; 
-    }
+    update() { this.y += this.vy; this.life -= 0.02; }
     draw(ctx) {
         if (this.life <= 0) return;
         ctx.save();
         ctx.globalAlpha = Math.max(0, this.life);
-        ctx.fillStyle = this.color;
-        ctx.font = 'bold 16px "Comic Sans MS"';
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = 2;
-        ctx.strokeText(this.text, this.x, this.y);
-        ctx.fillText(this.text, this.x, this.y);
+        ctx.fillStyle = this.color; ctx.font = 'bold 16px "Comic Sans MS"';
+        ctx.strokeStyle = '#000'; ctx.lineWidth = 2;
+        ctx.strokeText(this.text, this.x, this.y); ctx.fillText(this.text, this.x, this.y);
         ctx.restore();
     }
 }
 
 class Particle {
     constructor(x, y, color) {
-        this.x = x;
-        this.y = y;
-        this.color = color;
-        const a = Math.random() * Math.PI * 2;
-        const s = Math.random() * 3 + 1;
-        this.vx = Math.cos(a) * s;
-        this.vy = Math.sin(a) * s;
-        this.life = 1.0;
-        this.decay = 0.05 + Math.random() * 0.05;
+        this.x = x; this.y = y; this.color = color;
+        const a = Math.random() * Math.PI * 2, s = Math.random() * 3 + 1;
+        this.vx = Math.cos(a) * s; this.vy = Math.sin(a) * s;
+        this.life = 1.0; this.decay = 0.05 + Math.random() * 0.05;
     }
-    update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        this.life -= this.decay;
-    }
+    update() { this.x += this.vx; this.y += this.vy; this.life -= this.decay; }
     draw(ctx) {
         ctx.globalAlpha = Math.max(0, this.life);
         ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.beginPath(); ctx.arc(this.x, this.y, 3, 0, Math.PI * 2); ctx.fill();
         ctx.globalAlpha = 1.0;
     }
 }
 
 function createParticles(x, y, color, count = 5) {
-    for (let i = 0; i < count; i++) {
-        particles.push(new Particle(x, y, color));
-    }
+    for (let i = 0; i < count; i++) particles.push(new Particle(x, y, color));
 }
 
 class Spike {
     constructor(x, y, damage) {
-        this.x = x;
-        this.y = y;
-        this.damage = damage;
-        this.life = 1500; 
-        this.radius = 12;
+        this.x = x; this.y = y; this.damage = damage; this.life = 1500; this.radius = 12;
     }
     update() {
         this.life--;
@@ -918,33 +943,20 @@ class Spike {
                 enemy.hp -= dmgToDeal;
                 createParticles(this.x, this.y, '#eab308', 3);
                 playSound('pop');
-                
                 if (enemy.hp <= 0 && enemy.active !== false) {
-                    enemy.active = false; 
-                    money += enemy.reward;
+                    enemy.active = false; money += enemy.reward;
                     floatingTexts.push(new FloatingText(enemy.x, enemy.y - 20, `+$${enemy.reward}`, '#4ade80')); 
                     updateUI();
                 }
-                
-                if (this.damage <= 0) {
-                    this.life = 0; 
-                    break;
-                }
+                if (this.damage <= 0) { this.life = 0; break; }
             }
         }
     }
     draw(ctx) {
         if (this.life <= 0) return;
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.globalAlpha = Math.min(1, this.life / 100); 
-        ctx.fillStyle = '#facc15'; 
-        ctx.beginPath();
-        ctx.moveTo(0, -6); ctx.lineTo(6, 6); ctx.lineTo(-6, 6);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(-6, -2); ctx.lineTo(6, -2); ctx.lineTo(0, 8);
-        ctx.fill();
+        ctx.save(); ctx.translate(this.x, this.y);
+        ctx.globalAlpha = Math.min(1, this.life / 100); ctx.fillStyle = '#facc15';
+        ctx.beginPath(); ctx.moveTo(0, -6); ctx.lineTo(6, 6); ctx.lineTo(-6, 6); ctx.fill();
         ctx.restore();
     }
 }
@@ -958,12 +970,14 @@ class Enemy {
         this.baseSpeed = speed * speedMultiplier; 
         this.waypointIndex = 1;
         this.isBoss = isBoss;
-        this.radius = isBoss ? 35 : 16;
+        this.radius = isBoss ? 36 : 16;
         this.angle = 0;
-        this.reward = isBoss ? 100 : 5;
+        this.reward = isBoss ? Math.floor(100 + level * 2) : Math.max(1, Math.floor(5 + level * 0.1));
         this.slowTimer = 0;
         this.glueTimer = 0;
+        this.acidTimer = 0;
         this.bossSpawnTimer = 180; 
+        this.active = true;
     }
 
     update() {
@@ -972,14 +986,13 @@ class Enemy {
         if (this.isBoss && this.hp > 0) {
             this.bossSpawnTimer--;
             if (this.bossSpawnTimer <= 0) {
-                let minion = new Enemy(Math.min(15, Math.floor(this.maxHp / 10)), this.baseSpeed * 1.5, false);
-                minion.x = this.x;
-                minion.y = this.y;
+                let minionHp = Math.min(100, Math.floor(this.maxHp / 8));
+                let minion = new Enemy(minionHp, this.baseSpeed * 1.3, false);
+                minion.x = this.x; minion.y = this.y;
                 minion.waypointIndex = this.waypointIndex;
                 enemies.push(minion);
-                this.bossSpawnTimer = 240; 
-                createParticles(this.x, this.y, '#ffffff', 10);
-                playSound('pop');
+                this.bossSpawnTimer = 200; 
+                createParticles(this.x, this.y, '#ffffff', 8);
             }
         }
 
@@ -991,15 +1004,12 @@ class Enemy {
         this.angle = Math.atan2(dy, dx);
 
         let currentSpeed = this.baseSpeed;
-        if (this.slowTimer > 0) {
-            currentSpeed *= 0.5; 
-            this.slowTimer--;
-        }
-        if (this.glueTimer > 0) {
-            currentSpeed *= 0.4; 
-            this.glueTimer--;
-            if (this.glueTimer % 30 === 0 && this.hp > 0) {
-                this.hp--;
+        if (this.slowTimer > 0) { currentSpeed *= 0.5; this.slowTimer--; }
+        if (this.glueTimer > 0) { currentSpeed *= 0.4; this.glueTimer--; }
+        if (this.acidTimer > 0) {
+            this.acidTimer--;
+            if (this.acidTimer % 20 === 0 && this.hp > 0) {
+                this.hp -= Math.floor(2 + level * 0.1);
                 createParticles(this.x, this.y, '#84cc16', 3);
             }
         }
@@ -1009,7 +1019,7 @@ class Enemy {
             this.y = target.y;
             this.waypointIndex++;
             if (this.waypointIndex >= waypoints.length) {
-                lives -= this.isBoss ? 50 : this.hp; 
+                lives -= this.isBoss ? 50 : Math.min(20, this.hp); 
                 this.hp = 0; 
                 updateUI();
                 checkGameOver();
@@ -1024,14 +1034,13 @@ class Enemy {
 
     getColor() {
         if (this.isBoss) return { bg: '#1e3a8a', outline: '#ffffff', detail: '#3b82f6' }; 
-        if (this.hp >= 43) return { bg: 'rainbow', outline: '#ffffff', isRainbow: true }; 
-        if (this.hp >= 22) return { bg: '#4c1d95', outline: '#f472b6', isSuperPurple: true }; 
-        if (this.hp >= 19) return { bg: '#a855f7', outline: '#7e22ce' }; 
-        if (this.hp >= 16) return { bg: '#000000', outline: '#333333' }; 
-        if (this.hp >= 13) return { bg: '#ec4899', outline: '#be185d' }; 
+        if (this.hp >= 50) return { bg: '#000000', outline: '#facc15' }; 
+        if (this.hp >= 35) return { bg: 'rainbow', outline: '#ffffff', isRainbow: true }; 
+        if (this.hp >= 22) return { bg: '#4c1d95', outline: '#f472b6' }; 
+        if (this.hp >= 15) return { bg: '#ec4899', outline: '#be185d' }; 
         if (this.hp >= 10) return { bg: '#eab308', outline: '#a16207' }; 
-        if (this.hp >= 7) return { bg: '#22c55e', outline: '#15803d' }; 
-        if (this.hp >= 4) return { bg: '#3b82f6', outline: '#1d4ed8' }; 
+        if (this.hp >= 6) return { bg: '#22c55e', outline: '#15803d' }; 
+        if (this.hp >= 3) return { bg: '#3b82f6', outline: '#1d4ed8' }; 
         return { bg: '#ef4444', outline: '#b91c1c' }; 
     }
 
@@ -1044,67 +1053,20 @@ class Enemy {
             ctx.rotate(this.angle);
             ctx.fillStyle = colors.bg; ctx.strokeStyle = colors.outline; ctx.lineWidth = 3;
             ctx.beginPath(); ctx.ellipse(0, 0, this.radius * 1.5, this.radius * 0.9, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-            
-            ctx.fillStyle = colors.detail;
-            ctx.beginPath(); ctx.ellipse(-this.radius, 0, this.radius * 0.3, this.radius * 0.6, 0, 0, Math.PI * 2); ctx.fill();
-            
-            ctx.fillStyle = '#666'; ctx.fillRect(-this.radius * 1.7, -5, 10, 10);
-            
             ctx.rotate(-this.angle);
             const barW = 50, barH = 6;
             ctx.fillStyle = '#ef4444'; ctx.fillRect(-barW/2, -this.radius - 15, barW, barH);
             ctx.fillStyle = '#22c55e'; ctx.fillRect(-barW/2, -this.radius - 15, barW * (this.hp / this.maxHp), barH);
         } else {
-            if (colors.isSuperPurple) {
-                ctx.strokeStyle = '#f472b6'; 
-                ctx.lineWidth = 4;
-                ctx.beginPath();
-                ctx.ellipse(0, -2, this.radius * 1.1, this.radius * 1.3, 0, 0, Math.PI * 2);
-                ctx.stroke();
-            }
-
             if (colors.isRainbow) {
-                ctx.strokeStyle = '#38bdf8'; 
-                ctx.lineWidth = 4;
-                ctx.beginPath();
-                ctx.ellipse(0, -2, this.radius * 1.1, this.radius * 1.3, 0, 0, Math.PI * 2);
-                ctx.stroke();
-
                 let grad = ctx.createLinearGradient(-this.radius, -this.radius, this.radius, this.radius);
-                grad.addColorStop(0, '#ef4444');   
-                grad.addColorStop(0.2, '#f97316'); 
-                grad.addColorStop(0.4, '#eab308'); 
-                grad.addColorStop(0.6, '#22c55e'); 
-                grad.addColorStop(0.8, '#3b82f6'); 
-                grad.addColorStop(1, '#a855f7');   
+                grad.addColorStop(0, '#ef4444'); grad.addColorStop(0.5, '#22c55e'); grad.addColorStop(1, '#a855f7');   
                 ctx.fillStyle = grad;
             } else {
                 ctx.fillStyle = colors.bg;
             }
-
             ctx.strokeStyle = colors.outline; ctx.lineWidth = 2;
-            
             ctx.beginPath(); ctx.ellipse(0, -2, this.radius * 0.9, this.radius * 1.1, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-            
-            ctx.fillStyle = 'rgba(255,255,255,0.4)';
-            ctx.beginPath(); ctx.ellipse(-this.radius*0.3, -this.radius*0.4, this.radius*0.2, this.radius*0.4, Math.PI/6, 0, Math.PI*2); ctx.fill();
-
-            if (colors.isRainbow) {
-                ctx.fillStyle = '#a855f7'; 
-            } else {
-                ctx.fillStyle = colors.bg;
-            }
-            
-            ctx.beginPath(); ctx.moveTo(0, this.radius * 1.1 - 2); ctx.lineTo(-4, this.radius * 1.1 + 4); ctx.lineTo(4, this.radius * 1.1 + 4); ctx.closePath(); ctx.fill(); ctx.stroke();
-
-            if (this.slowTimer > 0) {
-                ctx.fillStyle = 'rgba(191, 219, 254, 0.6)'; 
-                ctx.beginPath(); ctx.ellipse(0, -2, this.radius * 0.9 + 2, this.radius * 1.1 + 2, 0, 0, Math.PI * 2); ctx.fill();
-            }
-            if (this.glueTimer > 0) {
-                ctx.fillStyle = 'rgba(132, 204, 22, 0.7)'; 
-                ctx.beginPath(); ctx.ellipse(0, -2, this.radius * 0.9 + 3, this.radius * 1.1 + 3, 0, 0, Math.PI * 2); ctx.fill();
-            }
         }
         ctx.restore();
     }
@@ -1112,59 +1074,35 @@ class Enemy {
 
 class Tower {
     constructor(x, y, typeId, typeInfo) {
-        this.x = x;
-        this.y = y;
-        this.typeId = typeId;
-        this.typeInfo = typeInfo;
-        
-        this.level = 1;
-        this.invested = typeInfo.cost;
-        this.pops = 0; 
-        
-        this.cooldown = 0;
-        this.target = null;
-        this.angle = 0;
-        this.scaleAnim = 1.0; 
+        this.x = x; this.y = y; this.typeId = typeId; this.typeInfo = typeInfo;
+        this.level = 1; this.invested = typeInfo.cost; this.pops = 0; 
+        this.cooldown = 0; this.target = null; this.angle = 0; this.scaleAnim = 1.0; 
     }
 
     getDamage() { 
         let baseDmg = this.typeInfo.damage * this.level;
         let villageBonus = 0;
-        if (this.typeId !== 'VILLAGE' && this.typeId !== 'FARM') {
-            towers.forEach(t => {
-                if (t.typeId === 'VILLAGE' && Math.hypot(t.x - this.x, t.y - this.y) <= t.getRange()) {
-                    villageBonus += t.level;
-                }
-            });
-        }
-        return baseDmg + villageBonus; 
+        let godlyBonus = 1.0;
+        towers.forEach(t => {
+            if (t.typeId === 'VILLAGE' && Math.hypot(t.x - this.x, t.y - this.y) <= t.getRange()) villageBonus += t.level;
+            if (t.typeId === 'GODLY_BABOON' && Math.hypot(t.x - this.x, t.y - this.y) <= t.getRange()) godlyBonus = 2.0;
+        });
+        return Math.floor((baseDmg + villageBonus) * godlyBonus); 
     } 
     
     getRange() { return this.typeInfo.range * (1 + (this.level - 1) * 0.15); } 
-    
     getFireRate() { 
-        let baseRate = Math.max(1, this.typeInfo.fireRate * Math.pow(0.8, this.level - 1));
-        let speedMult = 1.0;
-        if (this.typeId !== 'VILLAGE' && this.typeId !== 'FARM') {
-            towers.forEach(t => {
-                if (t.typeId === 'VILLAGE' && Math.hypot(t.x - this.x, t.y - this.y) <= t.getRange()) {
-                    speedMult *= Math.pow(0.85, t.level);
-                }
-            });
-        }
-        return Math.max(1, baseRate * speedMult); 
+        let baseRate = Math.max(1, this.typeInfo.fireRate * Math.pow(0.82, this.level - 1));
+        return Math.max(1, baseRate); 
     } 
 
     getIncome() { return (this.typeInfo.baseIncome || 0) * this.level; }
-    
     getUpgradeCost() { return Math.floor(this.typeInfo.cost * this.level * 1.5); }
     getSellValue() { return Math.floor(this.invested * 0.6); }
 
     update() {
         if (this.scaleAnim > 1.0) this.scaleAnim -= 0.05;
-
         if (this.typeId === 'FARM' || this.typeId === 'VILLAGE') return; 
-
         if (this.cooldown > 0) this.cooldown--;
 
         if (this.typeId === 'SPIKE') {
@@ -1184,51 +1122,32 @@ class Tower {
                 if (pathSpots.length > 0) {
                     let spot = pathSpots[Math.floor(Math.random() * pathSpots.length)];
                     spikes.push(new Spike(spot.x, spot.y, this.getDamage() * 5)); 
-                    this.cooldown = this.getFireRate();
-                    this.scaleAnim = 1.2;
-                    playSound('twinkle');
+                    this.cooldown = this.getFireRate(); this.scaleAnim = 1.2;
                 }
             }
             return;
         }
 
-        if (this.typeId === 'TACK') { 
+        if (this.typeId === 'TACK' || this.typeId === 'FROST_NOVA') { 
             if (this.cooldown <= 0) {
                 let inRange = enemies.some(e => Math.hypot(e.x - this.x, e.y - this.y) <= this.getRange());
                 if (inRange) {
-                    for (let i = 0; i < 8; i++) {
-                        let a = (i * Math.PI) / 4;
+                    let count = this.typeId === 'FROST_NOVA' ? 12 : 8;
+                    for (let i = 0; i < count; i++) {
+                        let a = (i * Math.PI * 2) / count;
                         projectiles.push(new Projectile(this.x, this.y, null, this.typeInfo, a, this.getDamage(), this));
                     }
-                    this.cooldown = this.getFireRate();
-                    this.scaleAnim = 1.2; 
-                    playSound('laser');
+                    this.cooldown = this.getFireRate(); this.scaleAnim = 1.2; 
+                    playSound(this.typeId === 'FROST_NOVA' ? 'frost' : 'laser');
                 }
             }
             return;
         }
 
-        if (this.typeId === 'TESLA') {
-            if (this.cooldown <= 0) {
-                let inRangeEnemies = enemies.filter(e => Math.hypot(e.x - this.x, e.y - this.y) <= this.getRange());
-                if (inRangeEnemies.length > 0) {
-                    for (let i = 0; i < Math.min(3, inRangeEnemies.length); i++) {
-                        let targetE = inRangeEnemies[i];
-                        let angle = Math.atan2(targetE.y - this.y, targetE.x - this.x);
-                        projectiles.push(new Projectile(this.x, this.y, targetE, this.typeInfo, angle, this.getDamage(), this));
-                    }
-                    this.cooldown = this.getFireRate();
-                    this.scaleAnim = 1.25;
-                    playSound('tesla');
-                }
-            }
-            return;
-        }
-
+        // Target acquisition logic
         this.target = null;
         let bestTarget = null;
         let bestVal = -1;
-
         const currentRange = this.getRange();
 
         for (let enemy of enemies) {
@@ -1247,31 +1166,16 @@ class Tower {
                     for(let spread = -0.2; spread <= 0.2; spread += 0.2) {
                         projectiles.push(new Projectile(this.x, this.y, this.target, this.typeInfo, this.angle + spread, this.getDamage(), this));
                     }
-                } else if (this.typeId === 'CHOPPER') {
-                    projectiles.push(new Projectile(this.x - 8, this.y, this.target, this.typeInfo, this.angle, this.getDamage(), this));
-                    projectiles.push(new Projectile(this.x + 8, this.y, this.target, this.typeInfo, this.angle, this.getDamage(), this));
+                } else if (this.typeId === 'CHOPPER' || this.typeId === 'TITAN_MECH') {
+                    projectiles.push(new Projectile(this.x - 10, this.y, this.target, this.typeInfo, this.angle, this.getDamage(), this));
+                    projectiles.push(new Projectile(this.x + 10, this.y, this.target, this.typeInfo, this.angle, this.getDamage(), this));
                 } else {
                     projectiles.push(new Projectile(this.x, this.y, this.target, this.typeInfo, this.angle, this.getDamage(), this));
                 }
 
                 this.cooldown = this.getFireRate();
                 this.scaleAnim = 1.2; 
-                
-                if (this.typeId === 'SUPER') playSound('laser');
-                else if (this.typeId === 'SLINGSHOT') playSound('slingshot');
-                else if (this.typeId === 'BOMB') playSound('bomb');
-                else if (this.typeId === 'ICE') playSound('ice');
-                else if (this.typeId === 'GLUE') playSound('glue');
-                else if (this.typeId === 'WIZARD') playSound('magic');
-                else if (this.typeId === 'PLASMA') playSound('plasma');
-                else if (this.typeId === 'MORTAR') playSound('mortar');
-                else if (this.typeId === 'ALCHEMIST') playSound('alchemist');
-                else if (this.typeId === 'DRUID') playSound('druid');
-                else if (this.typeId === 'CHOPPER') playSound('chopper');
-                else if (this.typeId === 'LASER') playSound('laser');
-                else if (this.typeId === 'SUN') playSound('sun');
-                else if (this.typeId === 'ORBITAL') playSound('orbital');
-                else playSound('pop');
+                playSound(this.typeInfo.type);
             }
         }
     }
@@ -1284,230 +1188,39 @@ class Tower {
         ctx.fillStyle = 'rgba(0,0,0,0.3)';
         ctx.beginPath(); ctx.ellipse(0, 10, this.typeInfo.radius, this.typeInfo.radius*0.7, 0, 0, Math.PI*2); ctx.fill();
 
-        if (this.typeId === 'SNIPER' && this.target && this.cooldown < this.getFireRate() * 0.8) {
-            ctx.save();
-            ctx.rotate(this.angle);
-            ctx.beginPath();
-            ctx.moveTo(16, 0);
-            let dist = Math.hypot(this.target.x - this.x, this.target.y - this.y);
-            ctx.lineTo(dist, 0);
-            ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)'; 
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            ctx.restore();
-        }
-
         if (this.typeId === 'TACK') {
             ctx.fillStyle = '#ec4899'; ctx.strokeStyle = '#be185d'; ctx.lineWidth = 3;
             ctx.beginPath(); ctx.arc(0, 0, this.typeInfo.radius, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-            ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(0, 0, this.typeInfo.radius * 0.6, 0, Math.PI*2); ctx.fill();
-            
-            if (this.level >= 3) {
-                ctx.fillStyle = '#ef4444';
-                ctx.beginPath(); ctx.moveTo(-6, -10); ctx.lineTo(0, -22); ctx.lineTo(6, -10); ctx.fill();
-                ctx.beginPath(); ctx.moveTo(-6, 10); ctx.lineTo(0, 22); ctx.lineTo(6, 10); ctx.fill();
-            }
-
-            ctx.fillStyle = (this.level >= 2) ? '#facc15' : '#333'; 
-            for(let i=0; i<8; i++) { ctx.rotate(Math.PI/4); ctx.fillRect(this.typeInfo.radius * 0.6, -3, 8, 6); }
-        } 
-        else if (this.typeId === 'BOMB') {
+        } else if (this.typeId === 'FROST_NOVA') {
+            ctx.fillStyle = '#06b6d4'; ctx.strokeStyle = '#cffadf'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.arc(0, 0, this.typeInfo.radius, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+        } else if (this.typeId === 'GODLY_BABOON') {
+            ctx.fillStyle = '#f59e0b'; ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.arc(0, 0, this.typeInfo.radius, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+        } else {
             ctx.rotate(this.angle);
-            ctx.fillStyle = (this.level >= 3) ? '#fbbf24' : '#1f2937'; 
-            ctx.beginPath(); ctx.arc(0, 0, 15, 0, Math.PI*2); ctx.fill();
-            
-            ctx.fillStyle = '#111827'; 
-            if (this.level >= 2) {
-                ctx.fillRect(0, -12, 25, 8);
-                ctx.fillRect(0, 4, 25, 8);
-            } else {
-                ctx.fillRect(0, -10, 25, 20);
-            }
-            ctx.fillStyle = '#000'; ctx.fillRect(20, -12, 8, 24); 
-        }
-        else if (this.typeId === 'MORTAR') {
-            ctx.rotate(this.angle);
-            ctx.fillStyle = '#44403c'; ctx.beginPath(); ctx.arc(0, 0, 18, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle = '#1c1917'; ctx.fillRect(0, -9, 28, 18);
-            ctx.fillStyle = '#000'; ctx.fillRect(24, -10, 6, 20);
-        }
-        else if (this.typeId === 'FARM') {
-            ctx.fillStyle = '#16a34a'; ctx.beginPath(); ctx.arc(0, -5, 18, 0, Math.PI*2); ctx.fill(); 
-            ctx.fillStyle = '#713f12'; ctx.fillRect(-4, 0, 8, 14); 
-            
-            if (this.level >= 2) { 
-                ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3;
-                ctx.strokeRect(-20, 6, 40, 6);
-            }
-            
-            ctx.fillStyle = '#facc15';
-            ctx.beginPath(); ctx.arc(-6, -6, 3, 0, Math.PI*2); ctx.fill();
-            ctx.beginPath(); ctx.arc(6, -8, 3, 0, Math.PI*2); ctx.fill();
-            ctx.beginPath(); ctx.arc(0, -12, 3, 0, Math.PI*2); ctx.fill();
-            if (this.level >= 2) { ctx.beginPath(); ctx.arc(-8, -14, 3, 0, Math.PI*2); ctx.fill(); }
-            if (this.level >= 3) { ctx.beginPath(); ctx.arc(8, -2, 3, 0, Math.PI*2); ctx.fill(); }
-        }
-        else if (this.typeId === 'VILLAGE') {
-            ctx.fillStyle = '#b45309'; ctx.fillRect(-18, -12, 36, 26);
-            ctx.fillStyle = '#dc2626'; ctx.beginPath(); ctx.moveTo(-22, -12); ctx.lineTo(0, -26); ctx.lineTo(22, -12); ctx.fill();
-            ctx.fillStyle = '#fef08a'; ctx.fillRect(-6, 2, 12, 12);
-            if (this.level >= 2) {
-                ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.arc(0, -28, 6, 0, Math.PI*2); ctx.fill();
-            }
-            if (this.level >= 3) {
-                ctx.strokeStyle = '#facc15'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, -28, 12, 0, Math.PI*2); ctx.stroke();
-            }
-        }
-        else if (this.typeId === 'TESLA') {
-            ctx.fillStyle = '#312e81'; ctx.fillRect(-14, -14, 28, 28);
-            ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI*2); ctx.fill();
-            ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 3; ctx.strokeRect(-16, -16, 32, 32);
-        }
-        else if (this.typeId === 'PLASMA') {
-            ctx.rotate(this.angle);
-            ctx.fillStyle = '#083344'; ctx.beginPath(); ctx.arc(0, 0, 18, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle = '#06b6d4'; ctx.fillRect(0, -8, 28, 16);
-            ctx.fillStyle = '#a5f3fc'; ctx.beginPath(); ctx.arc(28, 0, 8, 0, Math.PI*2); ctx.fill();
-            if (this.level >= 2) {
-                ctx.strokeStyle = '#22d3ee'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(0, 0, 22, 0, Math.PI*2); ctx.stroke();
-            }
-        }
-        else if (this.typeId === 'SUN') {
-            ctx.fillStyle = '#f59e0b'; ctx.beginPath(); ctx.arc(0, 0, 22, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle = '#fef08a'; ctx.beginPath(); ctx.arc(0, 0, 14, 0, Math.PI*2); ctx.fill();
-            ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 4;
-            for(let i=0; i<8; i++) { ctx.rotate(Math.PI/4); ctx.strokeRect(20, -2, 8, 4); }
-        }
-        else if (this.typeId === 'ORBITAL') {
-            ctx.fillStyle = '#2e1065'; ctx.beginPath(); ctx.arc(0, 0, 24, 0, Math.PI*2); ctx.fill();
-            ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 4; ctx.strokeRect(-20, -20, 40, 40);
-            ctx.fillStyle = '#c084fc'; ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI*2); ctx.fill();
-        }
-        else if (this.typeId === 'SPIKE') {
-            ctx.fillStyle = '#9ca3af'; ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle = '#374151'; ctx.fillRect(-10, -10, 20, 20);
-            
-            if (this.level >= 3) { 
-                ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.arc(0, 0, 6, 0, Math.PI*2); ctx.fill();
-            }
-
-            ctx.fillStyle = (this.level >= 2) ? '#ef4444' : '#facc15'; 
-            ctx.fillRect(-2, -14, 4, 8); ctx.fillRect(-2, 6, 4, 8);
-            ctx.fillRect(-14, -2, 8, 4); ctx.fillRect(6, -2, 8, 4);
-        }
-        else {
-            ctx.rotate(this.angle);
-            
-            let monkeyBase = '#8b5a2b';
-            if (this.typeId === 'ICE') monkeyBase = '#93c5fd';
-            else if (this.typeId === 'NINJA') monkeyBase = '#1f2937';
-            else if (this.typeId === 'BOOMERANG') monkeyBase = '#d97706';
-            else if (this.typeId === 'GLUE') monkeyBase = '#ca8a04';
-            else if (this.typeId === 'WIZARD') monkeyBase = '#581c87';
-            else if (this.typeId === 'ALCHEMIST') monkeyBase = '#065f46';
-            else if (this.typeId === 'DRUID') monkeyBase = '#047857';
-            else if (this.typeId === 'DARTLING') monkeyBase = '#166534';
-            else if (this.typeId === 'CHOPPER') monkeyBase = '#1e293b';
-            else if (this.typeId === 'LASER') monkeyBase = '#701a75';
-            else if (this.typeId === 'SUPER') monkeyBase = (this.level >= 3) ? '#1e3a8a' : '#2563eb';
-
-            ctx.fillStyle = monkeyBase; ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI*2); ctx.fill();
-            
-            if (this.typeId === 'SUPER') {
-                ctx.fillStyle = '#dc2626';
-                ctx.beginPath(); ctx.arc(-10, 0, 14, Math.PI/2, Math.PI*1.5); ctx.fill();
-                
-                if (this.level >= 3) {
-                    ctx.strokeStyle = 'rgba(56, 189, 248, 0.6)'; ctx.lineWidth = 4;
-                    ctx.beginPath(); ctx.arc(0, 0, 24, 0, Math.PI*2); ctx.stroke();
-                }
-            }
-
+            ctx.fillStyle = '#8b5a2b'; ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = '#d2b48c'; ctx.beginPath(); ctx.ellipse(4, 0, 10, 12, 0, 0, Math.PI*2); ctx.fill();
-            
-            ctx.fillStyle = (this.typeId === 'ICE') ? '#1d4ed8' : (this.typeId === 'NINJA' && this.level >= 3) ? '#a855f7' : '#000';
-            ctx.beginPath(); ctx.arc(8, -4, 2, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(8, -4, 2, 0, Math.PI*2); ctx.fill();
             ctx.beginPath(); ctx.arc(8, 4, 2, 0, Math.PI*2); ctx.fill();
-
-            if (this.typeId === 'WIZARD') {
-                ctx.fillStyle = '#facc15'; ctx.beginPath(); ctx.moveTo(0, -18); ctx.lineTo(12, 0); ctx.lineTo(-12, 0); ctx.fill();
-            }
-
-            if (this.typeId === 'DART' && this.level >= 2) {
-                ctx.fillStyle = '#ef4444';
-                ctx.fillRect(2, -15, 4, 30);
-            }
-            if (this.typeId === 'SLINGSHOT') {
-                ctx.strokeStyle = '#a16207'; ctx.lineWidth = 3;
-                ctx.beginPath(); ctx.moveTo(10, -8); ctx.lineTo(20, -12); ctx.lineTo(10, 0); ctx.lineTo(20, 12); ctx.lineTo(10, 8); ctx.stroke();
-            } else if (this.typeId === 'DARTLING') {
-                ctx.fillStyle = '#111'; ctx.fillRect(10, -6, 22, 12);
-            } else if (this.typeId === 'ALCHEMIST') {
-                ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(18, 6, 6, 0, Math.PI*2); ctx.fill();
-            } else if (this.typeId === 'DRUID') {
-                ctx.fillStyle = '#15803d'; ctx.fillRect(10, -2, 18, 4);
-            } else if (this.typeId === 'CHOPPER') {
-                ctx.fillStyle = '#64748b'; ctx.fillRect(-18, -18, 36, 4); ctx.fillRect(-18, 14, 36, 4);
-            } else if (this.typeId === 'LASER') {
-                ctx.fillStyle = '#d946ef'; ctx.fillRect(10, -4, 20, 8);
-            } else if (this.typeId === 'BOOMERANG') {
-                ctx.strokeStyle = '#b45309'; ctx.lineWidth = 4;
-                ctx.beginPath(); ctx.arc(18, 8, 8, -Math.PI/2, Math.PI/2); ctx.stroke();
-            } else if (this.typeId === 'GLUE') {
-                ctx.fillStyle = '#84cc16'; ctx.fillRect(10, 6, 14, 6);
-            } else if (this.typeId === 'SNIPER') {
-                ctx.fillStyle = '#15803d'; ctx.beginPath(); ctx.arc(0, 0, 16, Math.PI*0.7, Math.PI*1.3); ctx.fill();
-                ctx.fillStyle = '#4b5563'; ctx.fillRect(8, 6, 35, 4);
-                ctx.fillStyle = '#1f2937'; ctx.fillRect(38, 5, 8, 6);
-            } else if (this.typeId === 'ICE') {
-                ctx.fillStyle = '#93c5fd'; ctx.beginPath(); ctx.arc(14, 10, 6, 0, Math.PI*2); ctx.fill();
-                ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(14, 10, 3, 0, Math.PI*2); ctx.fill();
-            } else if (this.typeId === 'NINJA') {
-                ctx.fillStyle = '#9ca3af'; ctx.beginPath(); ctx.moveTo(14, 10); ctx.lineTo(18, 6); ctx.lineTo(16, 10); ctx.lineTo(20, 12); ctx.lineTo(16, 12); ctx.lineTo(14, 16); ctx.fill();
-            } else if (this.typeId === 'SUPER') {
-                ctx.fillStyle = 'rgba(239, 68, 68, 0.6)'; ctx.beginPath(); ctx.arc(10, -4, 4, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(10, 4, 4, 0, Math.PI*2); ctx.fill();
-            }
         }
         
-        ctx.rotate(-this.angle); 
-        ctx.fillStyle = '#facc15';
-        for (let i = 0; i < this.level; i++) {
-            let starX = (i - (this.level-1)/2) * 12; 
-            ctx.beginPath(); ctx.arc(starX, -22, 4, 0, Math.PI*2); ctx.fill();
-            ctx.strokeStyle = '#a16207'; ctx.lineWidth = 1; ctx.stroke();
-        }
-
         ctx.restore();
     }
 }
 
 class Projectile {
     constructor(x, y, target, typeInfo, angle, dynamicDamage, parentTower) {
-        this.x = x;
-        this.y = y;
-        this.target = target;
-        this.damage = dynamicDamage; 
-        this.speed = typeInfo.projSpeed;
-        this.type = typeInfo.type;
-        this.splash = typeInfo.splash || 0;
-        this.angle = angle;
-        this.active = true;
-        this.life = 100; 
-        this.rotation = 0; 
-        this.parentTower = parentTower; 
-        this.curve = (this.type === 'boomerang') ? 0.08 : 0;
+        this.x = x; this.y = y; this.target = target; this.damage = dynamicDamage; 
+        this.speed = typeInfo.projSpeed; this.type = typeInfo.type;
+        this.splash = typeInfo.splash || 0; this.angle = angle;
+        this.active = true; this.life = 100; this.parentTower = parentTower; 
     }
 
     update() {
         if (!this.active) return;
         this.life--;
-        if (this.life <= 0) {
-            this.active = false;
-            return;
-        }
-
-        this.rotation += 0.3;
-        this.angle += this.curve;
+        if (this.life <= 0) { this.active = false; return; }
 
         this.x += Math.cos(this.angle) * this.speed;
         this.y += Math.sin(this.angle) * this.speed;
@@ -1516,34 +1229,33 @@ class Projectile {
             if (enemy.hp <= 0) continue;
             if (Math.hypot(enemy.x - this.x, enemy.y - this.y) < this.speed + enemy.radius) {
                 this.hit(enemy);
-                if (this.type !== 'boomerang' && this.type !== 'wizard' && this.type !== 'laser' && this.type !== 'tesla' && this.type !== 'sun' && this.type !== 'orbital') break;
+                if (!['laser', 'quantum', 'godly', 'celestial'].includes(this.type)) break;
             }
         }
-        
         if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.active = false;
     }
     
     hit(mainTarget) {
-        if (this.type !== 'boomerang' && this.type !== 'wizard' && this.type !== 'laser' && this.type !== 'tesla' && this.type !== 'sun' && this.type !== 'orbital') {
-            this.active = false;
-        }
+        if (!['laser', 'quantum', 'godly', 'celestial'].includes(this.type)) this.active = false;
         
-        if (this.type === 'bomb' || this.type === 'plasma' || this.type === 'mortar' || this.type === 'alchemist' || this.type === 'sun' || this.type === 'orbital') {
-            createParticles(this.x, this.y, '#111', 15);
-            createParticles(this.x, this.y, this.type === 'plasma' ? '#22d3ee' : this.type === 'alchemist' ? '#10b981' : this.type === 'sun' ? '#f59e0b' : this.type === 'orbital' ? '#c084fc' : '#ef4444', 10);
-            playSound(this.type === 'plasma' ? 'plasma' : this.type === 'alchemist' ? 'alchemist' : this.type === 'sun' ? 'sun' : this.type === 'orbital' ? 'orbital' : 'bomb');
+        if (this.splash > 0) {
+            createParticles(this.x, this.y, '#f97316', 12);
             for (let e of enemies) {
-                if (Math.hypot(e.x - this.x, e.y - this.y) <= this.splash) {
-                    this.damageEnemy(e);
-                }
+                if (Math.hypot(e.x - this.x, e.y - this.y) <= this.splash) this.damageEnemy(e);
             }
         } else {
             createParticles(mainTarget.x, mainTarget.y, mainTarget.getColor().bg, 5);
-            if (this.type === 'ice') { mainTarget.slowTimer = 90; playSound('ice'); }
-            else if (this.type === 'glue') { mainTarget.glueTimer = 180; playSound('glue'); }
-            else { playSound('pop'); }
+            if (this.type === 'ice' || this.type === 'frost') mainTarget.slowTimer = 90;
+            if (this.type === 'glue') mainTarget.glueTimer = 180;
+            if (this.type === 'acid') mainTarget.acidTimer = 200;
+            if (this.type === 'chrono') {
+                mainTarget.waypointIndex = Math.max(1, mainTarget.waypointIndex - 1);
+                mainTarget.x = waypoints[mainTarget.waypointIndex - 1].x;
+                mainTarget.y = waypoints[mainTarget.waypointIndex - 1].y;
+            }
             this.damageEnemy(mainTarget);
         }
+        playSound('pop');
     }
     
     damageEnemy(enemy) {
@@ -1551,354 +1263,162 @@ class Projectile {
         if (this.parentTower) this.parentTower.pops += this.damage; 
 
         if (enemy.hp <= 0 && enemy.active !== false) {
-            enemy.active = false; 
-            money += enemy.reward;
+            enemy.active = false; money += enemy.reward;
             floatingTexts.push(new FloatingText(enemy.x, enemy.y - 20, `+$${enemy.reward}`, '#4ade80')); 
-            updateUI();
-        } else {
             updateUI();
         }
     }
 
     draw(ctx) {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.angle);
-        
-        if (this.type === 'monkey') {
-            ctx.fillStyle = '#fff'; ctx.fillRect(-6, -1, 12, 2);
-            ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.moveTo(6, 0); ctx.lineTo(10, 0); ctx.lineTo(6, 3); ctx.fill();
-        } else if (this.type === 'slingshot') {
-            ctx.fillStyle = '#78350f'; ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI*2); ctx.fill();
-        } else if (this.type === 'boomerang') {
-            ctx.rotate(this.rotation);
-            ctx.strokeStyle = '#b45309'; ctx.lineWidth = 4;
-            ctx.beginPath(); ctx.arc(0, 0, 8, -Math.PI/2, Math.PI/2); ctx.stroke();
-        } else if (this.type === 'glue') {
-            ctx.fillStyle = '#84cc16'; ctx.beginPath(); ctx.arc(0, 0, 6, 0, Math.PI*2); ctx.fill();
-        } else if (this.type === 'wizard') {
-            ctx.fillStyle = '#c084fc'; ctx.beginPath(); ctx.arc(0, 0, 7, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(0, 0, 3, 0, Math.PI*2); ctx.fill();
-        } else if (this.type === 'alchemist') {
-            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(0, 0, 7, 0, Math.PI*2); ctx.fill();
-        } else if (this.type === 'druid') {
-            ctx.fillStyle = '#15803d'; ctx.fillRect(-6, -2, 12, 4);
-        } else if (this.type === 'chopper' || this.type === 'dartling') {
-            ctx.fillStyle = '#eab308'; ctx.fillRect(-6, -1, 12, 2);
-        } else if (this.type === 'laser') {
-            ctx.fillStyle = '#d946ef'; ctx.fillRect(-12, -2, 24, 4);
-        } else if (this.type === 'tesla') {
-            ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.arc(0, 0, 6, 0, Math.PI*2); ctx.fill();
-        } else if (this.type === 'sun') {
-            ctx.fillStyle = '#fef08a'; ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI*2); ctx.fill();
-        } else if (this.type === 'orbital') {
-            ctx.fillStyle = '#c084fc'; ctx.fillRect(-15, -4, 30, 8);
-        } else if (this.type === 'plasma') {
-            ctx.fillStyle = '#22d3ee'; ctx.beginPath(); ctx.arc(0, 0, 8, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle = '#a5f3fc'; ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI*2); ctx.fill();
-        } else if (this.type === 'tack') {
-            ctx.fillStyle = '#eab308'; ctx.fillRect(-2, -1, 4, 2);
-        } else if (this.type === 'sniper') {
-            ctx.fillStyle = '#fef08a'; ctx.fillRect(-10, -1, 20, 2);
-        } else if (this.type === 'bomb' || this.type === 'mortar') {
-            ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(0, 0, 6, 0, Math.PI*2); ctx.fill();
-        } else if (this.type === 'ice') {
-            ctx.fillStyle = '#93c5fd'; ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI*2); ctx.fill();
-        } else if (this.type === 'ninja') {
-            ctx.rotate(this.rotation); 
-            ctx.fillStyle = '#9ca3af'; ctx.fillRect(-4, -1, 8, 2); ctx.fillRect(-1, -4, 2, 8);
-        } else if (this.type === 'super') {
-            ctx.fillStyle = '#ef4444'; ctx.fillRect(-8, -2, 16, 4);
-            ctx.fillStyle = '#fef08a'; ctx.fillRect(-6, -1, 12, 2);
-        }
+        ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
+        ctx.fillStyle = '#facc15'; ctx.fillRect(-6, -2, 12, 4);
         ctx.restore();
     }
 }
 
-function spawnWave() {
-    if (level === 101 && !endlessModeActive) {
-        gameState = 'VICTORY'; document.getElementById('victoryScreen').classList.remove('hidden'); return;
-    }
-    if (level > MAX_LEVEL) {
-        gameState = 'VICTORY'; document.getElementById('trueVictoryScreen').classList.remove('hidden'); return;
-    }
-
+function startNextWave() {
+    if (waveActive) return;
     waveActive = true;
-    document.getElementById('nextWaveBtn').disabled = true;
-    document.getElementById('nextWaveBtn').innerText = `ROUND ${level} ACTIVE`;
-
-    let isBossWave = (level % 10 === 0);
+    enemiesToSpawn = 10 + Math.floor(level * 1.8);
+    spawnTimer = 0;
+    spawnInterval = Math.max(6, 45 - Math.floor(level * 0.2));
     
-    if (isBossWave) {
-        enemiesToSpawn = 1; spawnInterval = 100;
-    } else {
-        enemiesToSpawn = 10 + Math.floor(level * 2);
-        spawnInterval = Math.max(10, 50 - Math.floor(level));
-    }
-    spawnTimer = spawnInterval;
+    isBossWave = (level % 10 === 0);
+    let bossText = document.getElementById('bossText');
+    if (isBossWave) bossText.classList.remove('hidden');
+    else bossText.classList.add('hidden');
+    
+    updateUI();
 }
 
-function spawnEnemy() {
-    let isBoss = (level % 10 === 0);
-    let maxHpLimit = endlessModeActive ? 84 : 21;
-    let hpNormal = Math.min(maxHpLimit, Math.floor(3 + level * 0.6)); 
-    let hpBoss = Math.floor(400 * Math.pow(1.2, level / 10)); 
-    let hp = isBoss ? hpBoss : hpNormal;
-    let baseSpeed = isBoss ? 0.8 : (1.8 + Math.min(2.0, level * 0.03)); 
-
-    enemies.push(new Enemy(hp, baseSpeed, isBoss));
+function startEndless() {
+    endlessModeActive = true;
+    MAX_LEVEL = 500;
+    document.getElementById('victoryScreen').classList.add('hidden');
+    document.getElementById('maxLevelDisplay').textContent = '/500';
+    level = 101;
+    waveActive = false;
+    updateUI();
+    if (autoStartEnabled) startNextWave();
 }
 
-function updateLevel() {
-    if (enemiesToSpawn > 0) {
-        spawnTimer--;
-        if (spawnTimer <= 0) {
-            spawnEnemy();
-            enemiesToSpawn--;
-            spawnTimer = spawnInterval;
-        }
-    } else if (enemies.length === 0 && waveActive) {
-        waveActive = false;
-        
-        towers.forEach(t => {
-            if (t.typeId === 'FARM') {
-                let income = t.getIncome();
-                money += income;
-                floatingTexts.push(new FloatingText(t.x, t.y - 20, `+$${income}`, '#facc15'));
-                t.scaleAnim = 1.3; 
-                createParticles(t.x, t.y, '#facc15', 5);
-                playSound('twinkle');
-            }
-        });
-
-        level++;
-        updateUI();
-        
-        if (level === 101 && !endlessModeActive) {
-            gameState = 'VICTORY'; document.getElementById('victoryScreen').classList.remove('hidden');
-        } else if (level > MAX_LEVEL) {
-            gameState = 'VICTORY'; document.getElementById('trueVictoryScreen').classList.remove('hidden');
-        } else {
-            document.getElementById('nextWaveBtn').disabled = false;
-            document.getElementById('nextWaveBtn').innerText = `START ROUND ${level}`;
-            let roundReward = 100 + level;
-            money += roundReward;
-            
-            floatingTexts.push(new FloatingText(canvas.width/2, 100, `Round Complete! +$${roundReward}`, '#facc15'));
-            playSound('upgrade');
-            
-            updateUI();
-            
-            if (autoStartEnabled && gameState === 'PLAYING') {
-                setTimeout(() => { if (!waveActive && gameState === 'PLAYING') spawnWave(); }, 1200);
-            }
-        }
-    }
+function rebirth() {
+    speedMultiplier += 0.3;
+    level = 1;
+    MAX_LEVEL = 100;
+    money = 500;
+    lives = 500;
+    towers = [];
+    enemies = [];
+    projectiles = [];
+    endlessModeActive = false;
+    document.getElementById('victoryScreen').classList.add('hidden');
+    document.getElementById('maxLevelDisplay').textContent = '/100';
+    waveActive = false;
+    updateUI();
 }
 
 function checkGameOver() {
     if (lives <= 0) {
-        gameState = 'GAME_OVER';
-        document.getElementById('deathLevel').innerText = `You reached Round ${level}`;
+        gameState = 'GAMEOVER';
+        document.getElementById('deathLevel').textContent = `You reached Round ${level}`;
         document.getElementById('gameOverScreen').classList.remove('hidden');
     }
 }
 
-function startEndless() {
-    endlessModeActive = true; 
-    MAX_LEVEL = 500;
-    
-    document.getElementById('tab-towers').click();
-
-    gameState = 'PLAYING'; 
-    document.getElementById('victoryScreen').classList.add('hidden');
-    selectedPlacedTower = null; 
-    floatingTexts = [];
-    buildPathMap(); 
-    updateUI();
-}
-
-function rebirth() {
-    speedMultiplier += 0.5; level = 1; money = 200; lives = 500; trackExtensions = 0;
-    towers = []; enemies = []; projectiles = []; particles = []; floatingTexts = []; spikes = [];
-    selectedPlacedTower = null;
-    pathGridCoords = [...INITIAL_PATH];
-    waypoints = pathGridCoords.map(p => ({ x: p.x * TILE_SIZE + TILE_SIZE / 2, y: p.y * TILE_SIZE + TILE_SIZE / 2 }));
-    document.getElementById('canvas-container').style.width = '780px'; document.getElementById('canvas-container').style.height = '600px';
-    TOWER_TYPES = JSON.parse(JSON.stringify(BASE_TOWER_TYPES));
-    
-    buildPathMap();
-    gameState = 'PLAYING'; document.getElementById('victoryScreen').classList.add('hidden');
-    document.getElementById('nextWaveBtn').disabled = false; document.getElementById('nextWaveBtn').innerText = `START ROUND 1`;
-    updateUI();
-}
-
-function buyExtension(levelToBuy) {
-    if (waveActive) return; 
-    const container = document.getElementById('canvas-container');
-    
-    if (levelToBuy === 1 && trackExtensions === 0 && money >= 300) { money -= 300; trackExtensions = 1; pathGridCoords.pop(); pathGridCoords.push({x:11, y:2}, {x:13, y:2}, {x:13, y:10}); container.style.width = '900px'; } 
-    else if (levelToBuy === 2 && trackExtensions === 1 && money >= 600) { money -= 600; trackExtensions = 2; pathGridCoords.pop(); pathGridCoords.push({x:13, y:8}, {x:15, y:8}, {x:15, y:-1}); container.style.width = '1020px'; } 
-    else if (levelToBuy === 3 && trackExtensions === 2 && money >= 2000) { money -= 2000; trackExtensions = 3; pathGridCoords.pop(); pathGridCoords.push({x:15, y:2}, {x:18, y:2}, {x:18, y:7}, {x:16, y:7}, {x:16, y:10}); container.style.width = '1200px'; } 
-    else if (levelToBuy === 4 && trackExtensions === 3 && money >= 4000) { money -= 4000; trackExtensions = 4; pathGridCoords.pop(); pathGridCoords.push({x:16, y:12}, {x:12, y:12}, {x:12, y:14}); container.style.height = '840px'; } 
-    else if (levelToBuy === 5 && trackExtensions === 4 && money >= 8000) { money -= 8000; trackExtensions = 5; pathGridCoords.pop(); pathGridCoords.push({x:12, y:15}, {x:8, y:15}, {x:8, y:17}); container.style.height = '1020px'; } 
-    else if (levelToBuy === 6 && trackExtensions === 5 && money >= 15000) { money -= 15000; trackExtensions = 6; pathGridCoords.pop(); pathGridCoords.push({x:8, y:18}, {x:4, y:18}, {x:4, y:20}); container.style.height = '1200px'; } 
-    else if (levelToBuy === 7 && trackExtensions === 6 && money >= 25000) { money -= 25000; trackExtensions = 7; pathGridCoords.pop(); pathGridCoords.push({x:4, y:19}, {x:1, y:19}, {x:1, y:20}); } 
-    else if (levelToBuy === 8 && trackExtensions === 7 && money >= 35000) { money -= 35000; trackExtensions = 8; pathGridCoords.pop(); pathGridCoords.push({x:1, y:13}, {x:-1, y:13}); } 
-    else if (levelToBuy === 9 && trackExtensions === 8 && money >= 50000) { money -= 50000; trackExtensions = 9; pathGridCoords.pop(); pathGridCoords.push({x:1, y:8}, {x:4, y:8}, {x:4, y:12}, {x:7, y:12}, {x:7, y:10}, {x:-1, y:10}); }
-
-    waypoints = pathGridCoords.map(p => ({
-        x: p.x * TILE_SIZE + TILE_SIZE / 2,
-        y: p.y * TILE_SIZE + TILE_SIZE / 2
-    }));
-    buildPathMap();
-    updateUI();
-    playSound('upgrade');
-}
-
 function updateUI() {
-    document.getElementById('moneyDisplay').innerText = money.toLocaleString();
-    document.getElementById('livesDisplay').innerText = lives;
-    document.getElementById('levelDisplay').innerText = level;
-    document.getElementById('maxLevelDisplay').innerText = `/${MAX_LEVEL}`;
+    document.getElementById('livesDisplay').textContent = lives;
+    document.getElementById('moneyDisplay').textContent = money;
+    document.getElementById('levelDisplay').textContent = level;
 
-    const bossText = document.getElementById('bossText');
-    if (level % 10 === 0) {
-        bossText.classList.remove('hidden');
+    const nextWaveBtn = document.getElementById('nextWaveBtn');
+    if (waveActive) {
+        nextWaveBtn.disabled = true;
+        nextWaveBtn.textContent = 'IN PROGRESS...';
     } else {
-        bossText.classList.add('hidden');
+        nextWaveBtn.disabled = false;
+        nextWaveBtn.textContent = 'START ROUND [Space]';
     }
 
-    // Update Tower Shop buttons
     document.querySelectorAll('.tower-btn[data-type]').forEach(btn => {
-        let type = btn.getAttribute('data-type');
-        let info = TOWER_TYPES[type];
-        if (info) {
-            let costDisplay = btn.querySelector('.cost-display');
-            if (costDisplay) costDisplay.innerText = `$${info.cost.toLocaleString()}`;
-            
-            if (money < info.cost) {
-                btn.classList.add('disabled');
-            } else {
-                btn.classList.remove('disabled');
-            }
-        }
+        const type = btn.getAttribute('data-type');
+        const cost = TOWER_TYPES[type].cost;
+        if (money < cost) btn.classList.add('disabled');
+        else btn.classList.remove('disabled');
     });
 
-    // Update Extension panel phase visibility
-    if (trackExtensions >= 3) {
-        document.getElementById('extend-phase-1').classList.add('hidden');
-        document.getElementById('extend-phase-2').classList.remove('hidden');
-    } else {
-        document.getElementById('extend-phase-1').classList.remove('hidden');
-        document.getElementById('extend-phase-2').classList.add('hidden');
-    }
-
-    const checkExtBtn = (id, cost, reqExt) => {
-        let btn = document.getElementById(`btn-ext-${id}`);
-        if (!btn) return;
-        if (trackExtensions > reqExt) {
-            btn.classList.add('hidden');
-        } else {
-            btn.classList.remove('hidden');
-            if (money < cost || trackExtensions !== reqExt || waveActive) {
-                btn.classList.add('disabled');
-            } else {
-                btn.classList.remove('disabled');
-            }
-        }
-    };
-
-    checkExtBtn(1, 300, 0);
-    checkExtBtn(2, 600, 1);
-    checkExtBtn(3, 2000, 2);
-    checkExtBtn(4, 4000, 3);
-    checkExtBtn(5, 8000, 4);
-    checkExtBtn(6, 15000, 5);
-    checkExtBtn(7, 25000, 6);
-    checkExtBtn(8, 35000, 7);
-    checkExtBtn(9, 50000, 8);
-
-    // Update Selected Placed Tower panel
-    const selPanel = document.getElementById('selection-panel');
     if (selectedPlacedTower) {
-        selPanel.classList.remove('hidden');
-        document.getElementById('sel-tower-name').innerText = selectedPlacedTower.typeInfo.name;
-        document.getElementById('sel-tower-level').innerText = `Lvl ${selectedPlacedTower.level}`;
-        document.getElementById('stat-dmg').innerText = selectedPlacedTower.getDamage();
-        document.getElementById('stat-rng').innerText = Math.round(selectedPlacedTower.getRange());
-        document.getElementById('stat-spd').innerText = Math.round(600 / selectedPlacedTower.getFireRate()) / 10;
-        document.getElementById('stat-pops').innerText = selectedPlacedTower.pops;
-
-        let specialStat = document.getElementById('stat-special');
-        if (selectedPlacedTower.typeId === 'FARM') {
-            specialStat.classList.remove('hidden');
-            specialStat.innerText = `Farm Income: +$${selectedPlacedTower.getIncome()}/round`;
-        } else if (selectedPlacedTower.typeId === 'VILLAGE') {
-            specialStat.classList.remove('hidden');
-            specialStat.innerText = `Buffs Range Towers: +${selectedPlacedTower.level} Dmg`;
-        } else {
-            specialStat.classList.add('hidden');
-        }
-
-        let upgCost = selectedPlacedTower.getUpgradeCost();
+        document.getElementById('selection-panel').classList.remove('hidden');
+        document.getElementById('sel-tower-name').textContent = selectedPlacedTower.typeInfo.name;
+        document.getElementById('sel-tower-level').textContent = `Lvl ${selectedPlacedTower.level}`;
+        document.getElementById('stat-dmg').textContent = selectedPlacedTower.getDamage();
+        document.getElementById('stat-rng').textContent = Math.floor(selectedPlacedTower.getRange());
+        document.getElementById('stat-pops').textContent = selectedPlacedTower.pops;
+        document.getElementById('sel-tower-upg').textContent = selectedPlacedTower.getUpgradeCost();
+        document.getElementById('sel-tower-value').textContent = selectedPlacedTower.getSellValue();
+        
         let upgBtn = document.getElementById('upgradeBtn');
-        upgBtn.disabled = money < upgCost;
-        document.getElementById('sel-tower-upg').innerText = upgCost.toLocaleString();
-        document.getElementById('sel-tower-value').innerText = selectedPlacedTower.getSellValue().toLocaleString();
+        upgBtn.disabled = (money < selectedPlacedTower.getUpgradeCost());
     } else {
-        selPanel.classList.add('hidden');
+        document.getElementById('selection-panel').classList.add('hidden');
     }
 }
 
-document.getElementById('startBtn').onclick = () => {
-    initAudio();
+function buyExtension(num) {
+    let costs = [300, 600, 2000, 4000, 8000, 15000, 25000, 35000, 50000];
+    let cost = costs[num - 1];
+    if (money >= cost && trackExtensions === num - 1) {
+        money -= cost;
+        trackExtensions = num;
+        buildPathMap();
+        updateUI();
+        playSound('upgrade');
+        if (num === 3) {
+            document.getElementById('extend-phase-1').classList.add('hidden');
+            document.getElementById('extend-phase-2').classList.remove('hidden');
+        }
+    }
+}
+
+document.getElementById('startBtn').addEventListener('click', () => {
     document.getElementById('startScreen').classList.add('hidden');
     gameState = 'PLAYING';
-    updateUI();
-};
+    initAudio();
+});
 
-document.getElementById('nextWaveBtn').onclick = () => {
-    if (!waveActive && gameState === 'PLAYING') spawnWave();
-};
+document.getElementById('nextWaveBtn').addEventListener('click', startNextWave);
 
-document.getElementById('speedBtn').onclick = () => {
-    if (gameSpeed === 1) {
-        gameSpeed = 2;
-        document.getElementById('speedBtn').innerText = '⏩ 2x Speed';
-        document.getElementById('speedBtn').classList.replace('bg-gray-600', 'bg-green-600');
-    } else {
-        gameSpeed = 1;
-        document.getElementById('speedBtn').innerText = '▶ 1x Speed';
-        document.getElementById('speedBtn').classList.replace('bg-green-600', 'bg-gray-600');
-    }
-};
+document.getElementById('speedBtn').addEventListener('click', () => {
+    if (gameSpeed === 1) { gameSpeed = 2; document.getElementById('speedBtn').textContent = '⏩ 2x Speed'; }
+    else if (gameSpeed === 2) { gameSpeed = 3; document.getElementById('speedBtn').textContent = '⏩ 3x Speed'; }
+    else { gameSpeed = 1; document.getElementById('speedBtn').textContent = '▶ 1x Speed'; }
+});
 
-document.getElementById('muteBtn').onclick = () => {
+document.getElementById('muteBtn').addEventListener('click', () => {
     soundMuted = !soundMuted;
-    document.getElementById('muteBtn').innerText = soundMuted ? '🔇 Muted' : '🔊 Sound';
-};
+    document.getElementById('muteBtn').textContent = soundMuted ? '🔇 Muted' : '🔊 Sound';
+});
 
-document.getElementById('autoStartToggle').onchange = (e) => {
+document.getElementById('autoStartToggle').addEventListener('change', (e) => {
     autoStartEnabled = e.target.checked;
-};
+});
 
-document.getElementById('tab-towers').onclick = () => {
+document.getElementById('tab-towers').addEventListener('click', () => {
     document.getElementById('towers-panel').classList.remove('hidden');
     document.getElementById('extend-panel').classList.add('hidden');
-    document.getElementById('tab-towers').className = "flex-1 bg-[#8b5a2b] text-white text-[11px] font-bold py-2 rounded-tl-lg border-2 border-b-0 border-[#5c4033] shadow-inner";
-    document.getElementById('tab-extend').className = "flex-1 bg-[#6b4a2b] text-gray-300 text-[11px] font-bold py-2 rounded-tr-lg border-2 border-b-2 border-l-0 border-[#5c4033] shadow-inner transition hover:bg-[#7b5a3b]";
-};
+    document.getElementById('tab-towers').classList.replace('bg-[#6b4a2b]', 'bg-[#8b5a2b]');
+    document.getElementById('tab-extend').classList.replace('bg-[#8b5a2b]', 'bg-[#6b4a2b]');
+});
 
-document.getElementById('tab-extend').onclick = () => {
+document.getElementById('tab-extend').addEventListener('click', () => {
     document.getElementById('extend-panel').classList.remove('hidden');
     document.getElementById('towers-panel').classList.add('hidden');
-    document.getElementById('tab-extend').className = "flex-1 bg-[#8b5a2b] text-white text-[11px] font-bold py-2 rounded-tr-lg border-2 border-b-0 border-[#5c4033] shadow-inner";
-    document.getElementById('tab-towers').className = "flex-1 bg-[#6b4a2b] text-gray-300 text-[11px] font-bold py-2 rounded-tl-lg border-2 border-b-2 border-r-0 border-[#5c4033] shadow-inner transition hover:bg-[#7b5a3b]";
-};
+    document.getElementById('tab-extend').classList.replace('bg-[#6b4a2b]', 'bg-[#8b5a2b]');
+    document.getElementById('tab-towers').classList.replace('bg-[#8b5a2b]', 'bg-[#6b4a2b]');
+});
 
 document.querySelectorAll('.tower-btn[data-type]').forEach(btn => {
-    btn.onclick = () => {
+    btn.addEventListener('click', () => {
         let type = btn.getAttribute('data-type');
         if (selectedTowerType === type) {
             selectedTowerType = null;
@@ -1906,39 +1426,32 @@ document.querySelectorAll('.tower-btn[data-type]').forEach(btn => {
         } else {
             document.querySelectorAll('.tower-btn').forEach(b => b.classList.remove('selected'));
             selectedTowerType = type;
-            btn.classList.add('selected');
             selectedPlacedTower = null;
-            updateUI();
+            btn.classList.add('selected');
         }
-    };
+        updateUI();
+    });
 });
 
-document.getElementById('upgradeBtn').onclick = () => {
-    if (selectedPlacedTower) {
-        let upgCost = selectedPlacedTower.getUpgradeCost();
-        if (money >= upgCost) {
-            money -= upgCost;
-            selectedPlacedTower.invested += upgCost;
-            selectedPlacedTower.level++;
-            selectedPlacedTower.scaleAnim = 1.3;
-            playSound('upgrade');
-            createParticles(selectedPlacedTower.x, selectedPlacedTower.y, '#facc15', 10);
-            updateUI();
-        }
-    }
-};
-
-document.getElementById('sellBtn').onclick = () => {
-    if (selectedPlacedTower) {
-        let val = selectedPlacedTower.getSellValue();
-        money += val;
-        towers = towers.filter(t => t !== selectedPlacedTower);
-        createParticles(selectedPlacedTower.x, selectedPlacedTower.y, '#ef4444', 8);
-        playSound('sell');
-        selectedPlacedTower = null;
+document.getElementById('upgradeBtn').addEventListener('click', () => {
+    if (selectedPlacedTower && money >= selectedPlacedTower.getUpgradeCost()) {
+        money -= selectedPlacedTower.getUpgradeCost();
+        selectedPlacedTower.invested += selectedPlacedTower.getUpgradeCost();
+        selectedPlacedTower.level++;
+        playSound('upgrade');
         updateUI();
     }
-};
+});
+
+document.getElementById('sellBtn').addEventListener('click', () => {
+    if (selectedPlacedTower) {
+        money += selectedPlacedTower.getSellValue();
+        towers = towers.filter(t => t !== selectedPlacedTower);
+        selectedPlacedTower = null;
+        playSound('sell');
+        updateUI();
+    }
+});
 
 canvas.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
@@ -1947,27 +1460,18 @@ canvas.addEventListener('mousemove', (e) => {
 });
 
 canvas.addEventListener('click', (e) => {
-    initAudio();
     const rect = canvas.getBoundingClientRect();
-    const cx = e.clientX - rect.left;
-    const cy = e.clientY - rect.top;
+    let cx = e.clientX - rect.left;
+    let cy = e.clientY - rect.top;
 
     if (selectedTowerType) {
         let info = TOWER_TYPES[selectedTowerType];
-        if (money >= info.cost) {
-            let gridX = Math.floor(cx / TILE_SIZE);
-            let gridY = Math.floor(cy / TILE_SIZE);
-
-            let onPath = isCollidingWithPath(cx, cy, info.radius);
-            let overlappingTower = towers.some(t => Math.hypot(t.x - cx, t.y - cy) < t.typeInfo.radius + info.radius);
-
-            if (!onPath && !overlappingTower) {
+        if (money >= info.cost && !isCollidingWithPath(cx, cy, info.radius)) {
+            let overlaps = towers.some(t => Math.hypot(t.x - cx, t.y - cy) < t.typeInfo.radius + info.radius);
+            if (!overlaps) {
                 money -= info.cost;
-                let newTower = new Tower(cx, cy, selectedTowerType, info);
-                towers.push(newTower);
-                createParticles(cx, cy, '#ffffff', 8);
+                towers.push(new Tower(cx, cy, selectedTowerType, info));
                 playSound('pop');
-
                 if (!e.shiftKey) {
                     selectedTowerType = null;
                     document.querySelectorAll('.tower-btn').forEach(b => b.classList.remove('selected'));
@@ -1976,174 +1480,121 @@ canvas.addEventListener('click', (e) => {
             }
         }
     } else {
-        let clickedTower = towers.find(t => Math.hypot(t.x - cx, t.y - cy) <= t.typeInfo.radius + 5);
-        if (clickedTower) {
-            selectedPlacedTower = clickedTower;
-        } else {
-            selectedPlacedTower = null;
-        }
+        selectedPlacedTower = towers.find(t => Math.hypot(t.x - cx, t.y - cy) <= t.typeInfo.radius + 5) || null;
         updateUI();
     }
 });
 
 window.addEventListener('keydown', (e) => {
-    if (gameState !== 'PLAYING') return;
-
-    const keyMap = {
-        '1': 'DART', '2': 'SLINGSHOT', '3': 'TACK', '4': 'BOOMERANG',
-        '5': 'SNIPER', '6': 'GLUE', '7': 'BOMB', '8': 'ICE',
-        '9': 'DARTLING', '0': 'NINJA', 'q': 'MORTAR', 'w': 'SPIKE',
-        'e': 'FARM', 'r': 'ALCHEMIST', 't': 'WIZARD', 'y': 'DRUID',
-        'u': 'VILLAGE', 'i': 'CHOPPER', 'o': 'LASER', 'p': 'SUPER',
-        'a': 'TESLA', 's': 'PLASMA', 'd': 'SUN', 'f': 'ORBITAL'
-    };
-
-    let k = e.key.toLowerCase();
-    if (keyMap[k]) {
-        let btn = document.querySelector(`.tower-btn[data-type="${keyMap[k]}"]`);
-        if (btn) btn.click();
-    } else if (e.code === 'Space') {
-        e.preventDefault();
-        document.getElementById('nextWaveBtn').click();
-    } else if (k === 'u') {
-        document.getElementById('upgradeBtn').click();
-    } else if (k === 'x') {
-        document.getElementById('sellBtn').click();
-    } else if (e.code === 'Escape') {
-        selectedTowerType = null;
-        selectedPlacedTower = null;
-        document.querySelectorAll('.tower-btn').forEach(b => b.classList.remove('selected'));
-        updateUI();
-    }
+    if (e.code === 'Space') { startNextWave(); }
+    if (e.key === 'u' || e.key === 'U') document.getElementById('upgradeBtn').click();
+    if (e.key === 'x' || e.key === 'X') document.getElementById('sellBtn').click();
 });
 
-function gameLoop() {
-    for (let s = 0; s < gameSpeed; s++) {
-        if (gameState === 'PLAYING') {
-            updateLevel();
+function update() {
+    if (gameState !== 'PLAYING') return;
 
-            spikes.forEach(sp => sp.update());
-            spikes = spikes.filter(sp => sp.life > 0);
-
-            towers.forEach(t => t.update());
-
-            projectiles.forEach(p => p.update());
-            projectiles = projectiles.filter(p => p.active);
-
-            enemies.forEach(e => e.update());
-            enemies = enemies.filter(e => e.hp > 0);
-
-            particles.forEach(p => p.update());
-            particles = particles.filter(p => p.life > 0);
-
-            floatingTexts.forEach(ft => ft.update());
-            floatingTexts = floatingTexts.filter(ft => ft.life > 0);
-        }
-    }
-
-    // DRAWING
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw Grass Base
-    ctx.fillStyle = '#52c222';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Draw Path
-    ctx.strokeStyle = '#d2a679';
-    ctx.lineWidth = TILE_SIZE;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.beginPath();
-    ctx.moveTo(waypoints[0].x, waypoints[0].y);
-    for (let i = 1; i < waypoints.length; i++) {
-        ctx.lineTo(waypoints[i].x, waypoints[i].y);
-    }
-    ctx.stroke();
-
-    // Inner Path Line
-    ctx.strokeStyle = '#e6c39c';
-    ctx.lineWidth = TILE_SIZE - 10;
-    ctx.stroke();
-
-    // Draw Decorations
-    decorations.forEach(d => {
-        ctx.save();
-        ctx.translate(d.x, d.y);
-        if (d.type === 'bush') {
-            ctx.fillStyle = '#3f9e16';
-            ctx.beginPath(); ctx.arc(0, 0, d.size, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = '#4cc41a';
-            ctx.beginPath(); ctx.arc(-2, -2, d.size * 0.7, 0, Math.PI * 2); ctx.fill();
-        } else {
-            ctx.fillStyle = '#facc15';
-            ctx.beginPath(); ctx.arc(0, 0, d.size * 0.4, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = '#ef4444';
-            for (let i = 0; i < 5; i++) {
-                ctx.rotate((Math.PI * 2) / 5);
-                ctx.beginPath(); ctx.arc(d.size * 0.5, 0, d.size * 0.3, 0, Math.PI * 2); ctx.fill();
+    for (let speedCycle = 0; speedCycle < gameSpeed; speedCycle++) {
+        if (waveActive && enemiesToSpawn > 0) {
+            spawnTimer++;
+            if (spawnTimer >= spawnInterval) {
+                spawnTimer = 0;
+                let isBoss = isBossWave && enemiesToSpawn === 1;
+                let baseHp = isBoss ? Math.floor(150 + level * 50 + Math.pow(level, 1.85)) : Math.floor(1 + Math.pow(level, 1.25) * 0.8 + Math.random() * (level * 0.5));
+                let baseSpeed = Math.min(6.5, 1.2 + Math.floor(level / 20) * 0.2 + Math.random() * 0.4);
+                enemies.push(new Enemy(baseHp, baseSpeed, isBoss));
+                enemiesToSpawn--;
             }
         }
-        ctx.restore();
+
+        enemies = enemies.filter(e => e.hp > 0 && !e.update());
+        towers.forEach(t => t.update());
+        projectiles.forEach(p => p.update());
+        projectiles = projectiles.filter(p => p.active);
+        spikes.forEach(s => s.update());
+        spikes = spikes.filter(s => s.life > 0 && s.damage > 0);
+        particles.forEach(p => p.update());
+        particles = particles.filter(p => p.life > 0);
+        floatingTexts.forEach(ft => ft.update());
+        floatingTexts = floatingTexts.filter(ft => ft.life > 0);
+
+        if (enemies.length === 0 && enemiesToSpawn <= 0 && waveActive) {
+            waveActive = false;
+            let bonus = 100 + level * 10;
+            money += bonus;
+            floatingTexts.push(new FloatingText(canvas.width/2, canvas.height/2, `Round ${level} Complete! +$${bonus}`, '#facc15'));
+            
+            towers.forEach(t => {
+                if (t.typeId === 'FARM' || t.typeId === 'GODLY_BABOON') {
+                    let farmIncome = t.getIncome();
+                    money += farmIncome;
+                    floatingTexts.push(new FloatingText(t.x, t.y - 20, `+$${farmIncome}`, '#facc15'));
+                }
+            });
+
+            if (level === 100 && !endlessModeActive) {
+                document.getElementById('victoryScreen').classList.remove('hidden');
+            } else if (level >= MAX_LEVEL) {
+                if (MAX_LEVEL >= 500) document.getElementById('trueVictoryScreen').classList.remove('hidden');
+                else document.getElementById('victoryScreen').classList.remove('hidden');
+            } else {
+                level++;
+                updateUI();
+                if (autoStartEnabled) setTimeout(() => { if (!waveActive && gameState === 'PLAYING') startNextWave(); }, 600);
+            }
+        }
+    }
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw Map Path
+    ctx.strokeStyle = '#d2a679'; ctx.lineWidth = TILE_SIZE; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    waypoints.forEach((wp, idx) => {
+        if (idx === 0) ctx.moveTo(wp.x, wp.y);
+        else ctx.lineTo(wp.x, wp.y);
+    });
+    ctx.stroke();
+
+    // Draw Map Decorations
+    decorations.forEach(d => {
+        ctx.fillStyle = d.type === 'bush' ? '#15803d' : '#eab308';
+        ctx.beginPath(); ctx.arc(d.x, d.y, d.size, 0, Math.PI*2); ctx.fill();
     });
 
-    // Draw Spikes
-    spikes.forEach(sp => sp.draw(ctx));
-
-    // Draw Towers
+    spikes.forEach(s => s.draw(ctx));
     towers.forEach(t => t.draw(ctx));
-
-    // Draw Enemies
     enemies.forEach(e => e.draw(ctx));
-
-    // Draw Projectiles
     projectiles.forEach(p => p.draw(ctx));
-
-    // Draw Particles
     particles.forEach(p => p.draw(ctx));
-
-    // Draw Floating Text
     floatingTexts.forEach(ft => ft.draw(ctx));
 
-    // Draw Selected Placed Tower Range Circle
+    // Selection ring
     if (selectedPlacedTower) {
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(selectedPlacedTower.x, selectedPlacedTower.y, selectedPlacedTower.getRange(), 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
+        ctx.strokeStyle = '#facc15'; ctx.lineWidth = 2; ctx.setLineDash([6, 6]);
+        ctx.beginPath(); ctx.arc(selectedPlacedTower.x, selectedPlacedTower.y, selectedPlacedTower.getRange(), 0, Math.PI*2); ctx.stroke();
+        ctx.setLineDash([]);
     }
 
-    // Draw Selected Tower Ghost & Range Preview
+    // Hover placement preview
     if (selectedTowerType) {
         let info = TOWER_TYPES[selectedTowerType];
-        let onPath = isCollidingWithPath(mouseX, mouseY, info.radius);
-        let overlappingTower = towers.some(t => Math.hypot(t.x - mouseX, t.y - mouseY) < t.typeInfo.radius + info.radius);
-        let isValid = !onPath && !overlappingTower && money >= info.cost;
-
-        ctx.strokeStyle = isValid ? 'rgba(34, 197, 94, 0.8)' : 'rgba(239, 68, 68, 0.8)';
-        ctx.fillStyle = isValid ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(mouseX, mouseY, info.range, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.globalAlpha = 0.6;
-        ctx.fillStyle = isValid ? '#22c55e' : '#ef4444';
-        ctx.beginPath();
-        ctx.arc(mouseX, mouseY, info.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = 1.0;
+        let invalid = isCollidingWithPath(mouseX, mouseY, info.radius);
+        ctx.fillStyle = invalid ? 'rgba(239, 68, 68, 0.4)' : 'rgba(34, 197, 94, 0.4)';
+        ctx.beginPath(); ctx.arc(mouseX, mouseY, info.range, 0, Math.PI*2); ctx.fill();
     }
+}
 
+function gameLoop() {
+    update();
+    draw();
     requestAnimationFrame(gameLoop);
 }
 
-window.onload = () => {
-    gameLoop();
-};
+gameLoop();
+updateUI();
 </script>
 </body>
 </html>
