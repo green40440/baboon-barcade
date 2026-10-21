@@ -181,6 +181,24 @@
             .sidebar { padding: 6px !important; }
         }
 
+        /* NIGHT MODE */
+        body.night {
+            background:
+              radial-gradient(ellipse at 18% 12%, rgba(30,58,138,.38), transparent 42%),
+              radial-gradient(ellipse at 82% 88%, rgba(14,110,100,.14), transparent 40%),
+              linear-gradient(135deg, #04060c 0%, #070b16 48%, #0a1128 100%) !important;
+        }
+        body.night #view-port { background: #0a1a14; }
+        body.night #canvas-container { background: #0a1a14 !important; }
+        body.night #game-wrapper { background: #0b1320 !important; }
+        /* Sidebar tower names were dark-on-dark; keep them readable. */
+        .tower-btn > p[class*="text-[#5c4033]"] { color: #f1e8dc !important; }
+        #nightBtn[aria-pressed="true"] {
+            background: linear-gradient(180deg, #6366f1, #4338ca) !important;
+            border-color: #818cf8 !important;
+            box-shadow: 0 0 14px rgba(99,102,241,.5) !important;
+        }
+
     </style>
 </head>
 <body>
@@ -687,6 +705,7 @@
             </div>
 
             <div class="shrink-0 mt-2 border-t-2 border-[#5c4033] pt-2">
+                <button id="nightBtn" aria-pressed="false" class="w-full py-1.5 mb-2 bg-indigo-900 hover:bg-indigo-800 text-white font-bold text-xs rounded-lg shadow transition border border-indigo-500">🌙 Night Mode</button>
                 <div class="flex gap-2 mb-2">
                     <button id="speedBtn" class="flex-1 py-1.5 bg-gray-600 hover:bg-gray-500 text-white font-bold text-xs rounded shadow transition">▶ 1x Speed</button>
                     <button id="muteBtn" class="py-1.5 px-3 bg-blue-800 hover:bg-blue-700 text-white font-bold text-xs rounded shadow transition">🔊 Sound</button>
@@ -743,6 +762,36 @@ let spawnInterval = 60;
 let isBossWave = false;
 
 let trackExtensions = 0; 
+
+// NIGHT MODE: state, persisted preference, and precomputed ambience.
+let nightMode = false;
+try { nightMode = localStorage.getItem('bbNightMode') === '1'; } catch (e) {}
+const nightStars = [];
+const fireflies = [];
+for (let i = 0; i < 60; i++) {
+    nightStars.push({
+        x: Math.random() * 1200,
+        y: Math.random() * 1200,
+        phase: Math.random() * Math.PI * 2,
+        size: Math.random() < 0.18 ? 2.2 : 1.3
+    });
+}
+for (let i = 0; i < 16; i++) {
+    fireflies.push({
+        bx: Math.random() * 1200,
+        by: Math.random() * 1200,
+        seed: Math.random() * 100,
+        amp: 26 + Math.random() * 50
+    });
+}
+function setNightMode(on) {
+    nightMode = on;
+    document.body.classList.toggle('night', on);
+    const btn = document.getElementById('nightBtn');
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.textContent = '🌙 Night Mode';
+    try { localStorage.setItem('bbNightMode', on ? '1' : '0'); } catch (e) {}
+}
 
 const INITIAL_PATH = [
     {x: -1, y: 2}, {x: 3, y: 2}, {x: 3, y: 7}, {x: 6, y: 7}, 
@@ -1473,7 +1522,7 @@ class Projectile {
         };
         const color = colorMap[this.type] || '#fde047';
         const special = ['laser','tesla','plasma','quantum','chrono','celestial','godly','blackhole','sun'].includes(this.type);
-        ctx.shadowColor = color; ctx.shadowBlur = special ? 18 : 7;
+        ctx.shadowColor = color; ctx.shadowBlur = special ? (nightMode ? 26 : 18) : (nightMode ? 13 : 7);
         if (this.type === 'boomerang') {
             ctx.rotate((this.spin || 0) + this.angle);
             ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -1642,6 +1691,12 @@ document.getElementById('autoStartToggle').addEventListener('change', (e) => {
     autoStartEnabled = e.target.checked;
 });
 
+document.getElementById('nightBtn').addEventListener('click', () => {
+    setNightMode(!nightMode);
+});
+
+setNightMode(nightMode);
+
 document.getElementById('tab-towers').addEventListener('click', () => {
     document.getElementById('towers-panel').classList.remove('hidden');
     document.getElementById('extend-panel').classList.add('hidden');
@@ -1725,7 +1780,13 @@ canvas.addEventListener('click', (e) => {
 });
 
 window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') { startNextWave(); }
+    const el = document.activeElement;
+    const onControl = el && (el.tagName === 'INPUT' || el.tagName === 'BUTTON' || el.tagName === 'TEXTAREA');
+    if (e.code === 'Space') {
+        if (onControl) return; // let focused controls handle their own Space
+        e.preventDefault();
+        startNextWave();
+    }
     if (e.key === 'u' || e.key === 'U') document.getElementById('upgradeBtn').click();
     if (e.key === 'x' || e.key === 'X') document.getElementById('sellBtn').click();
 });
@@ -1788,18 +1849,52 @@ function update() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Deep, layered meadow base with soft light pools.
+    // Deep, layered meadow base with soft light pools (night: moonlit teal).
     const base = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-    base.addColorStop(0, '#4fbf42');
-    base.addColorStop(.45, '#329c3f');
-    base.addColorStop(1, '#1e7b3a');
+    if (nightMode) {
+        base.addColorStop(0, '#16352c');
+        base.addColorStop(.45, '#0e241d');
+        base.addColorStop(1, '#091a14');
+    } else {
+        base.addColorStop(0, '#4fbf42');
+        base.addColorStop(.45, '#329c3f');
+        base.addColorStop(1, '#1e7b3a');
+    }
     ctx.fillStyle = base;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const sunGlow = ctx.createRadialGradient(250, 190, 20, 250, 190, 650);
-    sunGlow.addColorStop(0, 'rgba(255,255,190,.20)');
-    sunGlow.addColorStop(1, 'rgba(255,255,190,0)');
-    ctx.fillStyle = sunGlow; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    if (nightMode) {
+        // Moonlight glow, twinkling stars and a cratered moon.
+        const mx = canvas.width * 0.35, my = 185;
+        const moonGlow = ctx.createRadialGradient(mx, my, 20, mx, my, 620);
+        moonGlow.addColorStop(0, 'rgba(191,219,254,.20)');
+        moonGlow.addColorStop(1, 'rgba(191,219,254,0)');
+        ctx.fillStyle = moonGlow; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
+        const now = performance.now();
+        nightStars.forEach(s => {
+            const tw = .45 + .55 * Math.abs(Math.sin(now / 1400 + s.phase));
+            ctx.globalAlpha = tw * .9;
+            ctx.fillStyle = '#e2e8f0';
+            ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2); ctx.fill();
+        });
+        ctx.restore();
+        ctx.save();
+        ctx.shadowColor = 'rgba(226,232,240,.8)'; ctx.shadowBlur = 40;
+        ctx.fillStyle = '#e2e8f0';
+        ctx.beginPath(); ctx.arc(mx, my, 52, 0, Math.PI * 2); ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = 'rgba(148,163,184,.5)';
+        [[-16, -10, 9], [12, 6, 7], [-4, 20, 5], [20, -18, 4]].forEach(([ox, oy, r]) => {
+            ctx.beginPath(); ctx.arc(mx + ox, my + oy, r, 0, Math.PI * 2); ctx.fill();
+        });
+        ctx.restore();
+    } else {
+        const sunGlow = ctx.createRadialGradient(250, 190, 20, 250, 190, 650);
+        sunGlow.addColorStop(0, 'rgba(255,255,190,.20)');
+        sunGlow.addColorStop(1, 'rgba(255,255,190,0)');
+        ctx.fillStyle = sunGlow; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
 
     // Stable, varied blades/tufts and tiny stones; deterministic so they don't flicker.
     for (let gx = 9; gx < canvas.width; gx += 23) {
@@ -1810,7 +1905,9 @@ function draw() {
                 ctx.save();
                 ctx.translate(gx + f * 10, gy + f * 7);
                 ctx.rotate(f * 2.7);
-                ctx.strokeStyle = f > .7 ? 'rgba(190,242,100,.25)' : 'rgba(8,75,35,.19)';
+                ctx.strokeStyle = nightMode
+                    ? (f > .7 ? 'rgba(125,211,165,.14)' : 'rgba(3,40,26,.5)')
+                    : (f > .7 ? 'rgba(190,242,100,.25)' : 'rgba(8,75,35,.19)');
                 ctx.lineWidth = f > .8 ? 2 : 1;
                 ctx.beginPath();
                 ctx.moveTo(-2, 2); ctx.quadraticCurveTo(-1, -2, 1 + f * 3, -5 - f * 2);
@@ -1831,18 +1928,28 @@ function draw() {
         waypoints.forEach((wp, i) => { if (i === 0) ctx.moveTo(wp.x, wp.y); else ctx.lineTo(wp.x, wp.y); });
     };
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    tracePath(); ctx.strokeStyle = 'rgba(15,23,42,.28)'; ctx.lineWidth = TILE_SIZE + 20; ctx.stroke();
-    tracePath(); ctx.strokeStyle = '#704323'; ctx.lineWidth = TILE_SIZE + 8; ctx.stroke();
-    tracePath(); ctx.strokeStyle = '#a96c3b'; ctx.lineWidth = TILE_SIZE; ctx.stroke();
-    tracePath(); ctx.strokeStyle = '#c58a50'; ctx.lineWidth = TILE_SIZE * .72; ctx.stroke();
-    tracePath(); ctx.strokeStyle = 'rgba(255,230,180,.36)'; ctx.lineWidth = 2; ctx.setLineDash([7, 17]); ctx.stroke(); ctx.setLineDash([]);
-    // Track edge stitches.
-    tracePath(); ctx.strokeStyle = 'rgba(66,36,20,.35)'; ctx.lineWidth = TILE_SIZE + 6; ctx.setLineDash([2, 13]); ctx.stroke(); ctx.setLineDash([]);
+    if (nightMode) {
+        tracePath(); ctx.strokeStyle = 'rgba(2,6,23,.55)'; ctx.lineWidth = TILE_SIZE + 20; ctx.stroke();
+        tracePath(); ctx.strokeStyle = '#241408'; ctx.lineWidth = TILE_SIZE + 8; ctx.stroke();
+        tracePath(); ctx.strokeStyle = '#3d2513'; ctx.lineWidth = TILE_SIZE; ctx.stroke();
+        tracePath(); ctx.strokeStyle = '#4d3018'; ctx.lineWidth = TILE_SIZE * .72; ctx.stroke();
+        tracePath(); ctx.strokeStyle = 'rgba(253,230,138,.22)'; ctx.lineWidth = 2; ctx.setLineDash([7, 17]); ctx.stroke(); ctx.setLineDash([]);
+        // Track edge stitches.
+        tracePath(); ctx.strokeStyle = 'rgba(0,0,0,.5)'; ctx.lineWidth = TILE_SIZE + 6; ctx.setLineDash([2, 13]); ctx.stroke(); ctx.setLineDash([]);
+    } else {
+        tracePath(); ctx.strokeStyle = 'rgba(15,23,42,.28)'; ctx.lineWidth = TILE_SIZE + 20; ctx.stroke();
+        tracePath(); ctx.strokeStyle = '#704323'; ctx.lineWidth = TILE_SIZE + 8; ctx.stroke();
+        tracePath(); ctx.strokeStyle = '#a96c3b'; ctx.lineWidth = TILE_SIZE; ctx.stroke();
+        tracePath(); ctx.strokeStyle = '#c58a50'; ctx.lineWidth = TILE_SIZE * .72; ctx.stroke();
+        tracePath(); ctx.strokeStyle = 'rgba(255,230,180,.36)'; ctx.lineWidth = 2; ctx.setLineDash([7, 17]); ctx.stroke(); ctx.setLineDash([]);
+        // Track edge stitches.
+        tracePath(); ctx.strokeStyle = 'rgba(66,36,20,.35)'; ctx.lineWidth = TILE_SIZE + 6; ctx.setLineDash([2, 13]); ctx.stroke(); ctx.setLineDash([]);
+    }
 
     // Soft ambient vignetting keeps the action readable.
     const vignette = ctx.createRadialGradient(canvas.width * .5, canvas.height * .5, canvas.width * .18, canvas.width * .5, canvas.height * .5, canvas.width * .8);
     vignette.addColorStop(0, 'rgba(255,255,255,0)');
-    vignette.addColorStop(1, 'rgba(4,30,16,.18)');
+    vignette.addColorStop(1, nightMode ? 'rgba(2,6,23,.45)' : 'rgba(4,30,16,.18)');
     ctx.fillStyle = vignette; ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Layered map decorations.
@@ -1871,6 +1978,24 @@ function draw() {
             ctx.fillStyle = '#f59e0b'; ctx.beginPath(); ctx.arc(d.x, d.y, d.size * .25, 0, Math.PI * 2); ctx.fill();
         }
     });
+
+    // Night cast over terrain + decorations, then blinking fireflies above it.
+    if (nightMode) {
+        ctx.fillStyle = 'rgba(8,12,40,.22)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const t = performance.now() / 1000;
+        ctx.save();
+        fireflies.forEach(f => {
+            const x = f.bx + Math.sin(t * .6 + f.seed) * f.amp;
+            const y = f.by + Math.cos(t * .45 + f.seed * 1.7) * f.amp;
+            const blink = .3 + .7 * Math.abs(Math.sin(t * 1.6 + f.seed * 5));
+            ctx.globalAlpha = blink;
+            ctx.shadowColor = '#d9f99d'; ctx.shadowBlur = 12;
+            ctx.fillStyle = '#e8fca0';
+            ctx.beginPath(); ctx.arc(x, y, 2.2, 0, Math.PI * 2); ctx.fill();
+        });
+        ctx.restore();
+    }
 
     // A faint glow under powerful towers and a subtle target/placement overlay.
     towers.forEach(t => {
