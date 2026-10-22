@@ -193,6 +193,14 @@
         body.night #game-wrapper { background: #0b1320 !important; }
         /* Sidebar tower names were dark-on-dark; keep them readable. */
         .tower-btn > p[class*="text-[#5c4033]"] { color: #f1e8dc !important; }
+        #achToast {
+            position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px);
+            opacity: 0; transition: opacity .3s, transform .3s; z-index: 60; pointer-events: none;
+            background: linear-gradient(135deg, #7c3aed, #4c1d95); border: 2px solid #a78bfa;
+            color: #fff; font-weight: bold; font-size: 13px; padding: 10px 18px; border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,.45); max-width: 90vw; text-align: center;
+        }
+        #achToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
         #nightBtn[aria-pressed="true"] {
             background: linear-gradient(180deg, #6366f1, #4338ca) !important;
             border-color: #818cf8 !important;
@@ -222,10 +230,13 @@
         </div>
 
         <div id="startScreen" class="absolute inset-0 bg-black/70 backdrop-blur-md flex flex-col items-center justify-center z-40">
-            <div class="bg-yellow-400 text-yellow-950 px-4 py-1 rounded-full font-bold text-sm mb-3 border-2 border-yellow-600 shadow-lg">ULTIMATE WEB EDITION - 34 TOWERS & ENDLESS 500</div>
+            <div class="bg-yellow-400 text-yellow-950 px-4 py-1 rounded-full font-bold text-sm mb-3 border-2 border-yellow-600 shadow-lg">ULTIMATE WEB EDITION - 50 TOWERS & ENDLESS MODE</div>
             <h2 class="text-6xl font-bold text-yellow-400 top-ui mb-2 text-center">Baboon<br>Barricade</h2>
-            <p class="text-white font-bold top-ui mb-8 text-xl text-center px-4">Pop 100 waves to clear the main campaign, then continue all the way to Round 500!</p>
+            <p class="text-white font-bold top-ui mb-8 text-xl text-center px-4">Pop 100 waves to clear the main campaign, then keep going forever in Endless Mode!</p>
+            <p class="text-amber-200 top-ui mb-6 text-sm text-center px-4">Every tower has a keyboard shortcut — press its key (shown on each card) to select it.</p>
             <button id="startBtn" class="px-8 py-4 bg-green-500 hover:bg-green-400 text-white font-bold rounded-xl border-b-4 border-green-700 text-2xl transition hover:-translate-y-1">PLAY NOW</button>
+            <button id="continueBtn" class="hidden px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl border-b-4 border-purple-800 text-xl transition hover:-translate-y-1 mt-3">CONTINUE SAVED GAME</button>
+            <p id="saveNote" class="text-gray-300 top-ui mt-4 text-xs text-center px-4">PLAY NOW starts a fresh game and erases your saved checkpoint.</p>
         </div>
         
         <div id="gameOverScreen" class="absolute inset-0 bg-red-900/80 backdrop-blur-sm flex flex-col items-center justify-center z-40 hidden">
@@ -239,8 +250,8 @@
             <p class="text-xl font-bold text-white top-ui mb-6">Choose your fate:</p>
             <div class="flex flex-col gap-4 w-[500px]">
                 <button onclick="startEndless()" class="w-full px-6 py-4 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl border-b-4 border-purple-800 text-xl transition hover:-translate-y-1 flex flex-col items-center">
-                    <span>Keep Going to Level 500</span>
-                    <span class="text-sm font-normal text-purple-200">Keep all towers, full upgrades, standard prices & privileges!</span>
+                    <span>Keep Going — Endless Mode</span>
+                    <span class="text-sm font-normal text-purple-200">Keep all towers, full upgrades, and play forever with no round limit!</span>
                 </button>
                 <button onclick="rebirth()" class="w-full px-6 py-4 bg-orange-500 hover:bg-orange-400 text-white font-bold rounded-xl border-b-4 border-orange-700 text-xl transition hover:-translate-y-1 flex flex-col items-center">
                     <span>Rebirth</span>
@@ -258,11 +269,13 @@
         <!-- Sidebar Navigation -->
         <div class="sidebar shrink-0 relative z-20 flex flex-col">
             <div id="tab-container" class="flex mb-3 shrink-0">
-                <button id="tab-towers" class="flex-1 bg-[#8b5a2b] text-white text-[11px] font-bold py-2 rounded-tl-lg border-2 border-b-0 border-[#5c4033] shadow-inner">TOWERS (34)</button>
-                <button id="tab-extend" class="flex-1 bg-[#6b4a2b] text-gray-300 text-[11px] font-bold py-2 rounded-tr-lg border-2 border-b-2 border-l-0 border-[#5c4033] shadow-inner transition hover:bg-[#7b5a3b]">EXTEND</button>
+                <button id="tab-towers" class="flex-1 bg-[#8b5a2b] text-white text-[11px] font-bold py-2 rounded-tl-lg border-2 border-b-0 border-[#5c4033] shadow-inner">TOWERS (50)</button>
+                <button id="tab-extend" class="flex-1 bg-[#6b4a2b] text-gray-300 text-[11px] font-bold py-2 border-2 border-b-0 border-[#5c4033] shadow-inner transition hover:bg-[#7b5a3b]">EXTEND</button>
+                <button id="tab-stats" class="flex-1 bg-[#6b4a2b] text-gray-300 text-[11px] font-bold py-2 rounded-tr-lg border-2 border-b-2 border-l-0 border-[#5c4033] shadow-inner transition hover:bg-[#7b5a3b]">STATS</button>
             </div>
             
             <div id="towers-panel" class="flex-1 overflow-y-auto pr-1 space-y-2">
+                <p class="text-[10px] text-amber-200/90 text-center">Press a tower's key [shown on each card] to select it · ⇧ = hold Shift · U = upgrade · X = sell · Space = start round</p>
                 
                 <!-- 1. DART MONKEY -->
                 <button class="tower-btn w-full relative" data-type="DART">
@@ -623,6 +636,166 @@
                     <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$100,000</p>
                 </button>
 
+                <!-- 35. VOID MONKEY -->
+                <button class="tower-btn w-full relative" data-type="VOID">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[35]</span>
+                    <div class="w-10 h-10 rounded-full bg-violet-950 border-2 border-violet-400 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">🌀</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Void Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$120,000</p>
+                </button>
+
+                <!-- 36. TSUNAMI TOWER -->
+                <button class="tower-btn w-full relative" data-type="TSUNAMI">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[36]</span>
+                    <div class="w-10 h-10 rounded-full bg-sky-950 border-2 border-sky-400 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">🌊</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Tsunami Tower</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$150,000</p>
+                </button>
+
+                <!-- 37. METEOR STRIKE -->
+                <button class="tower-btn w-full relative" data-type="METEOR">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[37]</span>
+                    <div class="w-10 h-10 rounded-full bg-orange-950 border-2 border-orange-400 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">☄️</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Meteor Strike</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$180,000</p>
+                </button>
+
+                <!-- 38. PLASMA SNIPER -->
+                <button class="tower-btn w-full relative" data-type="PSNIPER">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[38]</span>
+                    <div class="w-10 h-10 rounded-full bg-rose-950 border-2 border-rose-400 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">🎯</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Plasma Sniper</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$220,000</p>
+                </button>
+
+                <!-- 39. GOLDEN MONKEY -->
+                <button class="tower-btn w-full relative" data-type="GOLDEN">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[39]</span>
+                    <div class="w-10 h-10 rounded-full bg-amber-400 border-2 border-yellow-200 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">🌟</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Golden Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$280,000</p>
+                </button>
+
+                <!-- 40. TIME LORD -->
+                <button class="tower-btn w-full relative" data-type="TIME_LORD">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[40]</span>
+                    <div class="w-10 h-10 rounded-full bg-slate-900 border-2 border-purple-400 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">⏱️</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Time Lord</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$350,000</p>
+                </button>
+
+                <!-- 41. ANNIHILATOR -->
+                <button class="tower-btn w-full relative" data-type="ANNIHILATOR">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[41]</span>
+                    <div class="w-10 h-10 rounded-full bg-fuchsia-950 border-2 border-fuchsia-400 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">☢️</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Annihilator</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$450,000</p>
+                </button>
+
+                <!-- 42. DRAGON MONKEY -->
+                <button class="tower-btn w-full relative" data-type="DRAGON">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[42]</span>
+                    <div class="w-10 h-10 rounded-full bg-red-950 border-2 border-red-400 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">🐉</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Dragon Monkey</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$600,000</p>
+                </button>
+
+                <!-- 43. STAR FORGE -->
+                <button class="tower-btn w-full relative" data-type="STAR_FORGE">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[43]</span>
+                    <div class="w-10 h-10 rounded-full bg-amber-600 border-2 border-yellow-300 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">⭐</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Star Forge</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$800,000</p>
+                </button>
+
+                <!-- 44. GALAXY GUARDIAN -->
+                <button class="tower-btn w-full relative" data-type="GALAXY">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[44]</span>
+                    <div class="w-10 h-10 rounded-full bg-indigo-950 border-2 border-indigo-300 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">🌌</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Galaxy Guardian</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$1,000,000</p>
+                </button>
+
+                <!-- 45. CHAOS WIZARD -->
+                <button class="tower-btn w-full relative" data-type="CHAOS_WIZ">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[45]</span>
+                    <div class="w-10 h-10 rounded-full bg-purple-950 border-2 border-purple-300 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">🔮</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Chaos Wizard</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$1,500,000</p>
+                </button>
+
+                <!-- 46. TITAN OF DOOM -->
+                <button class="tower-btn w-full relative" data-type="DOOM_TITAN">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[46]</span>
+                    <div class="w-10 h-10 rounded bg-zinc-900 border-2 border-orange-400 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">👾</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Titan of Doom</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$2,000,000</p>
+                </button>
+
+                <!-- 47. COSMIC OVERLORD -->
+                <button class="tower-btn w-full relative" data-type="OVERLORD">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[47]</span>
+                    <div class="w-10 h-10 rounded-full bg-blue-950 border-2 border-blue-300 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">👁️</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Cosmic Overlord</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$3,000,000</p>
+                </button>
+
+                <!-- 48. BABOON GOD EMPEROR -->
+                <button class="tower-btn w-full relative" data-type="EMPEROR">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[48]</span>
+                    <div class="w-10 h-10 rounded-full bg-amber-800 border-2 border-yellow-200 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">🦍</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Baboon God Emperor</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$5,000,000</p>
+                </button>
+
+                <!-- 49. SINGULARITY CORE -->
+                <button class="tower-btn w-full relative" data-type="SINGULARITY">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[49]</span>
+                    <div class="w-10 h-10 rounded-full bg-black border-2 border-purple-400 flex items-center justify-center mb-1 shadow-lg">
+                        <div class="text-xl">⚫</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">Singularity Core</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$8,000,000</p>
+                </button>
+
+                <!-- 50. THE ULTIMATE BABOON -->
+                <button class="tower-btn w-full relative" data-type="ULTIMATE">
+                    <span class="absolute top-1 left-2 text-[10px] font-mono text-gray-800 bg-yellow-300/80 px-1 rounded font-bold">[50]</span>
+                    <div class="w-10 h-10 rounded-full bg-yellow-500 border-2 border-white flex items-center justify-center mb-1 shadow-lg animate-pulse">
+                        <div class="text-xl">🏆</div>
+                    </div>
+                    <p class="font-bold text-[#5c4033] text-xs leading-tight">The Ultimate Baboon</p>
+                    <p class="font-bold text-green-700 bg-green-200 px-2 rounded mt-0.5 shadow-sm border border-green-400 text-xs cost-display">$15,000,000</p>
+                </button>
+
             </div>
 
             <div id="extend-panel" class="hidden flex-1 overflow-y-auto pr-1 space-y-3">
@@ -680,6 +853,19 @@
                 </div>
             </div>
 
+            <!-- Stats / Achievements Panel -->
+            <div id="stats-panel" class="hidden flex-1 overflow-y-auto pr-1">
+                <div class="bg-black/30 rounded-lg p-3 space-y-1 text-xs mb-3">
+                    <p class="font-bold text-amber-200 text-[11px] mb-1">RUN STATISTICS</p>
+                    <p class="text-gray-200">Rounds cleared: <span id="ss-rounds" class="font-bold text-white">0</span></p>
+                    <p class="text-gray-200">Balloons popped: <span id="ss-popped" class="font-bold text-white">0</span></p>
+                    <p class="text-gray-200">Cash earned: <span id="ss-cash" class="font-bold text-green-400">$0</span></p>
+                    <p class="text-gray-200">Towers built: <span id="ss-built" class="font-bold text-white">0</span></p>
+                </div>
+                <p class="font-bold text-amber-200 text-[11px] mb-1">ACHIEVEMENTS</p>
+                <div id="ach-list" class="space-y-1"></div>
+            </div>
+
             <!-- Selection / Upgrade Panel -->
             <div id="selection-panel" class="hidden shrink-0 mt-2 p-3 bg-blue-900 border-2 border-blue-700 rounded-lg shadow-inner text-center">
                 <p class="text-white font-bold text-sm mb-1"><span id="sel-tower-name" class="text-yellow-300">Tower</span> <span id="sel-tower-level" class="text-blue-300 text-xs font-normal ml-1">Lvl 1</span></p>
@@ -716,6 +902,7 @@
                 <button id="nextWaveBtn" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg border-b-4 border-blue-800 shadow transition active:translate-y-1 active:border-b-0 disabled:bg-gray-400 disabled:border-gray-500 disabled:cursor-not-allowed text-sm">
                     START ROUND [Space]
                 </button>
+                <p id="wavePreview" class="text-[10px] text-blue-200 text-center mt-1 h-3 leading-3"></p>
             </div>
 
         </div>
@@ -763,9 +950,21 @@ let isBossWave = false;
 
 let trackExtensions = 0; 
 
+// Single guarded storage adapter: real persistence when available, safe in-memory no-op when not.
+const bbStorage = (() => {
+    try {
+        const s = null; // hosted build: storage adapter is a safe no-op
+        s.setItem('__bbTest', '1'); s.removeItem('__bbTest');
+        return { ok: true, get: k => s.getItem(k), set: (k, v) => s.setItem(k, v), remove: k => s.removeItem(k) };
+    } catch (e) {
+        return { ok: false, get: () => null, set: () => {}, remove: () => {} };
+    }
+})();
+let storageOK = bbStorage.ok;
+
 // NIGHT MODE: state, persisted preference, and precomputed ambience.
 let nightMode = false;
-try { nightMode = localStorage.getItem('bbNightMode') === '1'; } catch (e) {}
+try { nightMode = bbStorage.get('bbNightMode') === '1'; } catch (e) {}
 const nightStars = [];
 const fireflies = [];
 for (let i = 0; i < 60; i++) {
@@ -790,7 +989,7 @@ function setNightMode(on) {
     const btn = document.getElementById('nightBtn');
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     btn.textContent = '🌙 Night Mode';
-    try { localStorage.setItem('bbNightMode', on ? '1' : '0'); } catch (e) {}
+    try { bbStorage.set('bbNightMode', on ? '1' : '0'); } catch (e) {}
 }
 
 const INITIAL_PATH = [
@@ -803,6 +1002,65 @@ let waypoints = pathGridCoords.map(p => ({
     x: p.x * TILE_SIZE + TILE_SIZE / 2,
     y: p.y * TILE_SIZE + TILE_SIZE / 2
 }));
+
+// Track extensions: each purchase reroutes the path tail to a longer route.
+// (Coordinates match the extension routes buildPathMap reserves.)
+const EXTENSION_SEGMENTS = {
+    1: [[11,2],[13,2],[13,10]],
+    2: [[13,8],[15,8],[15,-1]],
+    3: [[15,2],[18,2],[18,7],[16,7],[16,10]],
+    4: [[16,12],[12,12],[12,14]],
+    5: [[12,15],[8,15],[8,17]],
+    6: [[8,18],[4,18],[4,20]],
+    7: [[4,19],[1,19],[1,20]],
+    8: [[1,13],[-1,13]],
+    9: [[1,8],[4,8],[4,12],[7,12],[7,10],[-1,10]]
+};
+
+function computeStagePath(stage) {
+    let coords = INITIAL_PATH.map(p => ({ x: p.x, y: p.y }));
+    for (let n = 1; n <= stage; n++) {
+        const seg = EXTENSION_SEGMENTS[n];
+        if (!seg) break;
+        coords = coords.slice(0, -1).concat(seg.map(([x, y]) => ({ x, y })));
+    }
+    return coords;
+}
+
+function applyExtensionPath(num) {
+    const seg = EXTENSION_SEGMENTS[num];
+    if (!seg) return;
+    const oldWaypoints = waypoints;
+    // Replace the old endpoint with the new route segment by segment.
+    pathGridCoords = pathGridCoords.slice(0, -1);
+    seg.forEach(([x, y]) => pathGridCoords.push({ x, y }));
+    waypoints = pathGridCoords.map(p => ({
+        x: p.x * TILE_SIZE + TILE_SIZE / 2,
+        y: p.y * TILE_SIZE + TILE_SIZE / 2
+    }));
+    // Enemies heading for the dropped endpoint: transfer their progress along
+    // the old final segment onto the new route (never backward, never diagonally).
+    enemies.forEach(e => {
+        if (e.waypointIndex < oldWaypoints.length - 1) return; // target unchanged
+        const branchIndex = oldWaypoints.length - 2;
+        const branch = waypoints[branchIndex]; // same junction point in both routes
+        const distFromBranch = Math.hypot(e.x - branch.x, e.y - branch.y);
+        let acc = 0;
+        for (let i = branchIndex; i < waypoints.length - 1; i++) {
+            const a = waypoints[i], b = waypoints[i + 1];
+            const segLen = Math.hypot(b.x - a.x, b.y - a.y);
+            const remaining = distFromBranch - acc;
+            if (remaining <= segLen || i === waypoints.length - 2) {
+                const t = Math.max(0, Math.min(1, remaining / segLen));
+                e.x = a.x + (b.x - a.x) * t;
+                e.y = a.y + (b.y - a.y) * t;
+                e.waypointIndex = i + 1;
+                break;
+            }
+            acc += segLen;
+        }
+    });
+}
 
 const mapGrid = Array.from({length: ROWS + 2}, () => Array(COLS + 2).fill(0));
 let decorationsGenerated = false;
@@ -819,8 +1077,17 @@ function initAudio() {
     }
 }
 
+// Map the 16 new towers' firing sounds onto existing sound effects.
+const SOUND_ALIASES = {
+    void: 'blackhole', tsunami: 'frost', meteor: 'bomb', psniper: 'laser',
+    golden: 'godly', timelord: 'tesla', annihilator: 'quantum', dragon: 'volcano',
+    starforge: 'godly', galaxy: 'blackhole', chaos: 'laser', doomtitan: 'bomb',
+    overlord: 'tesla', emperor: 'godly', singularity: 'blackhole', ultimate: 'godly'
+};
+
 function playSound(type) {
     if (soundMuted) return;
+    if (SOUND_ALIASES[type]) type = SOUND_ALIASES[type];
     initAudio(); 
     if (!audioCtx) return;
     
@@ -928,16 +1195,9 @@ function buildPathMap() {
 
     markGrid(pathGridCoords, 1);
     
-    if (trackExtensions < 1) markGrid([{x:11, y:8}, {x:11, y:2}, {x:13, y:2}, {x:13, y:10}], 2);
-    if (trackExtensions < 2) markGrid([{x:13, y:8}, {x:15, y:8}, {x:15, y:-1}], 2);
-    if (trackExtensions < 3) markGrid([{x:15, y:2}, {x:18, y:2}, {x:18, y:7}, {x:16, y:7}, {x:16, y:10}], 2);
-    if (trackExtensions >= 3) {
-        if (trackExtensions < 4) markGrid([{x:16, y:7}, {x:16, y:12}, {x:12, y:12}, {x:12, y:14}], 2);
-        if (trackExtensions < 5) markGrid([{x:12, y:12}, {x:12, y:15}, {x:8, y:15}, {x:8, y:17}], 2);
-        if (trackExtensions < 6) markGrid([{x:8, y:15}, {x:8, y:18}, {x:4, y:18}, {x:4, y:20}], 2);
-        if (trackExtensions < 7) markGrid([{x:4, y:18}, {x:4, y:19}, {x:1, y:19}, {x:1, y:20}], 2);
-        if (trackExtensions < 8) markGrid([{x:1, y:19}, {x:1, y:13}, {x:-1, y:13}], 2);
-        if (trackExtensions < 9) markGrid([{x:1, y:13}, {x:1, y:8}, {x:4, y:8}, {x:4, y:12}, {x:7, y:12}, {x:7, y:10}, {x:-1, y:10}], 2);
+    // Reserve every full extension route (bought or future) so decorations never grow on the track.
+    for (let n = 1; n <= 9; n++) {
+        markGrid(computeStagePath(n), 2);
     }
     
     if (!decorationsGenerated) {
@@ -1009,7 +1269,25 @@ const BASE_TOWER_TYPES = {
     BLACK_HOLE: { cost: 35000, range: 320, damage: 30, splash: 120, fireRate: 60, projSpeed: 20, type: 'blackhole', radius: 28, name: 'Black Hole Gen' },
     CELESTIAL: { cost: 45000, range: 450, damage: 45, splash: 100, fireRate: 40, projSpeed: 32, type: 'celestial', radius: 26, name: 'Celestial Archmage' },
     TITAN_MECH: { cost: 60000, range: 380, damage: 60, splash: 110, fireRate: 12, projSpeed: 30, type: 'titan', radius: 30, name: 'Titan Mech' },
-    GODLY_BABOON: { cost: 100000, range: 500, damage: 100, splash: 140, fireRate: 5, projSpeed: 35, type: 'godly', radius: 32, name: 'Godly Baboon', baseIncome: 500 }
+    GODLY_BABOON: { cost: 100000, range: 500, damage: 100, splash: 140, fireRate: 5, projSpeed: 35, type: 'godly', radius: 32, name: 'Godly Baboon', baseIncome: 500 },
+
+    // 16 MORE TOWERS (35 - 50) for the Ultimate Endless Edition
+    VOID: { cost: 120000, range: 340, damage: 150, splash: 130, fireRate: 70, projSpeed: 15, type: 'void', radius: 28, name: 'Void Monkey' },
+    TSUNAMI: { cost: 150000, range: 300, damage: 120, splash: 140, fireRate: 55, projSpeed: 16, type: 'tsunami', radius: 26, name: 'Tsunami Tower' },
+    METEOR: { cost: 180000, range: 400, damage: 220, splash: 160, fireRate: 85, projSpeed: 12, type: 'meteor', radius: 26, name: 'Meteor Strike' },
+    PSNIPER: { cost: 220000, range: 1200, damage: 400, fireRate: 60, projSpeed: 40, type: 'psniper', radius: 22, name: 'Plasma Sniper' },
+    GOLDEN: { cost: 280000, range: 260, damage: 260, fireRate: 20, projSpeed: 26, type: 'golden', radius: 24, name: 'Golden Monkey', baseIncome: 1000 },
+    TIME_LORD: { cost: 350000, range: 300, damage: 300, splash: 90, fireRate: 45, projSpeed: 30, type: 'timelord', radius: 26, name: 'Time Lord' },
+    ANNIHILATOR: { cost: 450000, range: 360, damage: 600, fireRate: 30, projSpeed: 32, type: 'annihilator', radius: 26, name: 'Annihilator' },
+    DRAGON: { cost: 600000, range: 320, damage: 500, splash: 170, fireRate: 40, projSpeed: 20, type: 'dragon', radius: 28, name: 'Dragon Monkey' },
+    STAR_FORGE: { cost: 800000, range: 380, damage: 800, splash: 150, fireRate: 25, projSpeed: 30, type: 'starforge', radius: 28, name: 'Star Forge' },
+    GALAXY: { cost: 1000000, range: 400, damage: 1000, splash: 190, fireRate: 35, projSpeed: 22, type: 'galaxy', radius: 28, name: 'Galaxy Guardian' },
+    CHAOS_WIZ: { cost: 1500000, range: 360, damage: 1500, splash: 120, fireRate: 20, projSpeed: 28, type: 'chaos', radius: 24, name: 'Chaos Wizard' },
+    DOOM_TITAN: { cost: 2000000, range: 400, damage: 2200, splash: 220, fireRate: 30, projSpeed: 24, type: 'doomtitan', radius: 30, name: 'Titan of Doom' },
+    OVERLORD: { cost: 3000000, range: 500, damage: 3500, splash: 200, fireRate: 25, projSpeed: 30, type: 'overlord', radius: 30, name: 'Cosmic Overlord' },
+    EMPEROR: { cost: 5000000, range: 520, damage: 5000, splash: 240, fireRate: 18, projSpeed: 32, type: 'emperor', radius: 30, name: 'Baboon God Emperor', baseIncome: 5000 },
+    SINGULARITY: { cost: 8000000, range: 420, damage: 8000, splash: 260, fireRate: 28, projSpeed: 20, type: 'singularity', radius: 28, name: 'Singularity Core' },
+    ULTIMATE: { cost: 15000000, range: 800, damage: 25000, splash: 300, fireRate: 2, projSpeed: 40, type: 'ultimate', radius: 34, name: 'The Ultimate Baboon' }
 };
 
 let TOWER_TYPES = JSON.parse(JSON.stringify(BASE_TOWER_TYPES));
@@ -1066,6 +1344,7 @@ class Spike {
                 playSound('pop');
                 if (enemy.hp <= 0 && enemy.active !== false) {
                     enemy.active = false; money += enemy.reward;
+                    onEnemyKilled(enemy);
                     floatingTexts.push(new FloatingText(enemy.x, enemy.y - 20, `+$${enemy.reward}`, '#4ade80')); 
                     updateUI();
                 }
@@ -1369,7 +1648,15 @@ class Tower {
             VOLCANO:['#7f1d1d','#f97316','#fef08a'], ACID:['#3f6212','#84cc16','#ecfccb'],
             CHRONO:['#164e63','#22d3ee','#cffafe'], QUANTUM:['#701a75','#d946ef','#fae8ff'],
             BLACK_HOLE:['#27272a','#7c3aed','#ddd6fe'], CELESTIAL:['#854d0e','#fbbf24','#fff'],
-            TITAN_MECH:['#334155','#64748b','#38bdf8'], GODLY_BABOON:['#92400e','#f59e0b','#fff7ed']
+            TITAN_MECH:['#334155','#64748b','#38bdf8'], GODLY_BABOON:['#92400e','#f59e0b','#fff7ed'],
+            VOID:['#0f0f23','#6d28d9','#c4b5fd'], TSUNAMI:['#0e4f6b','#0ea5e9','#bae6fd'],
+            METEOR:['#431407','#ea580c','#fed7aa'], PSNIPER:['#500724','#f43f5e','#fecdd3'],
+            GOLDEN:['#713f12','#fbbf24','#fef9c3'], TIME_LORD:['#111827','#a78bfa','#ede9fe'],
+            ANNIHILATOR:['#4a044e','#d946ef','#fae8ff'], DRAGON:['#450a0a','#dc2626','#fecaca'],
+            STAR_FORGE:['#78350f','#f59e0b','#fef3c7'], GALAXY:['#1e1b4b','#818cf8','#e0e7ff'],
+            CHAOS_WIZ:['#4c1d95','#c084fc','#f5d0fe'], DOOM_TITAN:['#18181b','#f97316','#ffedd5'],
+            OVERLORD:['#312e81','#818cf8','#c7d2fe'], EMPEROR:['#7c2d12','#facc15','#fef08a'],
+            SINGULARITY:['#000000','#a855f7','#e9d5ff'], ULTIMATE:['#3f2d0e','#fde047','#fffbeb']
         };
         const c = palettes[this.typeId] || ['#654321','#b08968','#fef3c7'];
         const pulse = 0.5 + Math.sin(performance.now()/250 + this.x*0.03)*0.5;
@@ -1391,12 +1678,12 @@ class Tower {
             ctx.fillStyle='#f5deb3';ctx.strokeStyle=c[0];ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-r*.75,-r*.05);ctx.lineTo(0,-r*.85);ctx.lineTo(r*.75,-r*.05);ctx.closePath();ctx.fill();ctx.stroke();
             ctx.fillStyle=c[0];ctx.fillRect(-r*.55,-r*.05,r*1.1,r*.7);ctx.fillStyle='#fef3c7';ctx.fillRect(-r*.16,r*.2,r*.32,r*.45);
             if(this.typeId==='FARM'){ctx.fillStyle='#65a30d';for(let i=-1;i<=1;i++){ctx.beginPath();ctx.ellipse(i*6,-r*.48,4,7,i*.4,0,Math.PI*2);ctx.fill();}}
-        } else if(['LASER','TESLA','PLASMA','QUANTUM','CHRONO','BLACK_HOLE','CELESTIAL','SUN','SUPER','GODLY_BABOON'].includes(this.typeId)) {
+        } else if(['LASER','TESLA','PLASMA','QUANTUM','CHRONO','BLACK_HOLE','CELESTIAL','SUN','SUPER','GODLY_BABOON','VOID','TSUNAMI','PSNIPER','TIME_LORD','ANNIHILATOR','STAR_FORGE','GALAXY','CHAOS_WIZ','OVERLORD','SINGULARITY','ULTIMATE'].includes(this.typeId)) {
             ctx.shadowColor=c[2];ctx.shadowBlur=8+pulse*8;ctx.fillStyle=c[0];ctx.strokeStyle=c[2];ctx.lineWidth=2;ctx.beginPath();
             for(let i=0;i<6;i++){let a=Math.PI/3*i+Math.PI/6,x=Math.cos(a)*r*.78,y=Math.sin(a)*r*.78;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.closePath();ctx.fill();ctx.stroke();ctx.shadowBlur=0;
             ctx.fillStyle=c[2];ctx.beginPath();ctx.arc(0,0,r*(.22+pulse*.08),0,Math.PI*2);ctx.fill();
             if(this.typeId==='GODLY_BABOON'){ctx.fillStyle='#78350f';ctx.beginPath();ctx.arc(-r*.2,-r*.05,3,0,Math.PI*2);ctx.arc(r*.2,-r*.05,3,0,Math.PI*2);ctx.fill();}
-        } else if(this.typeId==='CHOPPER' || this.typeId==='TITAN_MECH') {
+        } else if(this.typeId==='CHOPPER' || this.typeId==='TITAN_MECH' || this.typeId==='DOOM_TITAN') {
             ctx.fillStyle=c[0];ctx.strokeStyle=c[2];ctx.lineWidth=2;ctx.fillRect(-r*.72,-r*.45,r*1.44,r*.9);ctx.strokeRect(-r*.72,-r*.45,r*1.44,r*.9);
             ctx.fillStyle=c[2];ctx.fillRect(-r*.4,-r*.25,r*.8,r*.28);ctx.strokeStyle='#e2e8f0';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-r*1.2,-r*.85);ctx.lineTo(r*1.2,-r*.85);ctx.stroke();
         } else {
@@ -1467,14 +1754,14 @@ class Projectile {
             if (Math.hypot(enemy.x - this.x, enemy.y - this.y) < this.speed + enemy.radius) {
                 this.hit(enemy);
                 this.hitEnemies.add(enemy);
-                if (this.type !== 'boomerang' && !['laser', 'quantum', 'godly', 'celestial'].includes(this.type)) break;
+                if (this.type !== 'boomerang' && !['laser', 'quantum', 'godly', 'celestial', 'psniper', 'timelord', 'annihilator', 'chaos', 'ultimate'].includes(this.type)) break;
             }
         }
         if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.active = false;
     }
     
     hit(mainTarget) {
-        if (this.type !== 'boomerang' && !['laser', 'quantum', 'godly', 'celestial'].includes(this.type)) this.active = false;
+        if (this.type !== 'boomerang' && !['laser', 'quantum', 'godly', 'celestial', 'psniper', 'timelord', 'annihilator', 'chaos', 'ultimate'].includes(this.type)) this.active = false;
         
         if (this.splash > 0) {
             createParticles(this.x, this.y, '#f97316', 12);
@@ -1502,6 +1789,7 @@ class Projectile {
 
         if (enemy.hp <= 0 && enemy.active !== false) {
             enemy.active = false; money += enemy.reward;
+            onEnemyKilled(enemy);
             floatingTexts.push(new FloatingText(enemy.x, enemy.y - 20, `+$${enemy.reward}`, '#4ade80')); 
             updateUI();
         }
@@ -1518,10 +1806,14 @@ class Projectile {
             super:'#fef08a', tesla:'#67e8f9', plasma:'#d8b4fe', sun:'#fbbf24',
             orbital:'#f8fafc', frost:'#a5f3fc', necro:'#bef264', volcano:'#fdba74',
             acid:'#bef264', chrono:'#67e8f9', quantum:'#f0abfc', blackhole:'#c4b5fd',
-            celestial:'#fef3c7', titan:'#93c5fd', godly:'#ffffff'
+            celestial:'#fef3c7', titan:'#93c5fd', godly:'#ffffff',
+            void:'#a78bfa', tsunami:'#7dd3fc', meteor:'#fb923c', psniper:'#fb7185',
+            golden:'#fde047', timelord:'#c4b5fd', annihilator:'#f0abfc', dragon:'#f87171',
+            starforge:'#fbbf24', galaxy:'#a5b4fc', chaos:'#e879f9', doomtitan:'#fdba74',
+            overlord:'#93c5fd', emperor:'#fef08a', singularity:'#c4b5fd', ultimate:'#ffffff'
         };
         const color = colorMap[this.type] || '#fde047';
-        const special = ['laser','tesla','plasma','quantum','chrono','celestial','godly','blackhole','sun'].includes(this.type);
+        const special = ['laser','tesla','plasma','quantum','chrono','celestial','godly','blackhole','sun','void','psniper','timelord','annihilator','chaos','galaxy','doomtitan','singularity','ultimate'].includes(this.type);
         ctx.shadowColor = color; ctx.shadowBlur = special ? (nightMode ? 26 : 18) : (nightMode ? 13 : 7);
         if (this.type === 'boomerang') {
             ctx.rotate((this.spin || 0) + this.angle);
@@ -1534,13 +1826,13 @@ class Projectile {
             ctx.beginPath(); ctx.moveTo(-9,-8); ctx.lineTo(0,0); ctx.lineTo(9,-8); ctx.stroke();
         } else {
             ctx.rotate(this.angle);
-            if (['laser','tesla','plasma','quantum','chrono','celestial','godly'].includes(this.type)) {
+            if (['laser','tesla','plasma','quantum','chrono','celestial','godly','psniper','timelord','annihilator','chaos','ultimate'].includes(this.type)) {
                 const grad = ctx.createLinearGradient(-15, 0, 15, 0);
                 grad.addColorStop(0, 'rgba(255,255,255,0)');
                 grad.addColorStop(.4, color); grad.addColorStop(.6, '#ffffff'); grad.addColorStop(1, 'rgba(255,255,255,0)');
                 ctx.fillStyle = grad; ctx.fillRect(-16, -4, 32, 8);
                 ctx.fillStyle = color; ctx.beginPath(); ctx.arc(0, 0, 3.5, 0, Math.PI * 2); ctx.fill();
-            } else if (['bomb','mortar','volcano','blackhole'].includes(this.type)) {
+            } else if (['bomb','mortar','volcano','blackhole','void','meteor','dragon','galaxy','doomtitan','singularity'].includes(this.type)) {
                 const rad = this.type === 'blackhole' ? 8 : 6;
                 const grad = ctx.createRadialGradient(-2, -2, 1, 0, 0, rad);
                 grad.addColorStop(0, '#ffffff'); grad.addColorStop(.25, color); grad.addColorStop(1, '#7f1d1d');
@@ -1549,7 +1841,7 @@ class Projectile {
                 if (this.type === 'blackhole') {
                     ctx.strokeStyle = '#e9d5ff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.ellipse(0,0,11,4,.5,0,Math.PI*2); ctx.stroke();
                 }
-            } else if (['ice','frost'].includes(this.type)) {
+            } else if (['ice','frost','tsunami'].includes(this.type)) {
                 ctx.fillStyle = color; ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1;
                 ctx.beginPath(); ctx.moveTo(0,-9); ctx.lineTo(5,0); ctx.lineTo(0,9); ctx.lineTo(-5,0); ctx.closePath(); ctx.fill(); ctx.stroke();
                 ctx.beginPath(); ctx.moveTo(-3,0); ctx.lineTo(3,0); ctx.moveTo(0,-5); ctx.lineTo(0,5); ctx.stroke();
@@ -1566,12 +1858,13 @@ class Projectile {
 
 function startNextWave() {
     if (waveActive) return;
+    const plan = getWavePlan(level);
     waveActive = true;
-    enemiesToSpawn = 10 + Math.floor(level * 1.8);
+    enemiesToSpawn = plan.count;
     spawnTimer = 0;
     spawnInterval = Math.max(6, 45 - Math.floor(level * 0.2));
     
-    isBossWave = (level % 10 === 0);
+    isBossWave = plan.boss;
     let bossText = document.getElementById('bossText');
     if (isBossWave) bossText.classList.remove('hidden');
     else bossText.classList.add('hidden');
@@ -1581,12 +1874,13 @@ function startNextWave() {
 
 function startEndless() {
     endlessModeActive = true;
-    MAX_LEVEL = 500;
+    MAX_LEVEL = Infinity; // Endless mode: no round cap, ever.
     document.getElementById('victoryScreen').classList.add('hidden');
-    document.getElementById('maxLevelDisplay').textContent = '/500';
+    document.getElementById('maxLevelDisplay').textContent = '/∞';
     level = 101;
     waveActive = false;
     updateUI();
+    saveGame();
     if (autoStartEnabled) startNextWave();
 }
 
@@ -1604,6 +1898,7 @@ function rebirth() {
     document.getElementById('maxLevelDisplay').textContent = '/100';
     waveActive = false;
     updateUI();
+    saveGame();
 }
 
 function checkGameOver() {
@@ -1620,6 +1915,17 @@ function updateUI() {
     document.getElementById('levelDisplay').textContent = level;
 
     const nextWaveBtn = document.getElementById('nextWaveBtn');
+    // Next-wave preview uses the same plan calculation as startNextWave().
+    const wp = document.getElementById('wavePreview');
+    if (wp) {
+        if (gameState === 'PLAYING' && !waveActive && document.getElementById('victoryScreen').classList.contains('hidden')) {
+            const plan = getWavePlan(level);
+            wp.textContent = 'Next wave: ' + plan.count + ' balloons' + (plan.boss ? ' \u00b7 BOSS WAVE!' : '');
+        } else {
+            wp.textContent = '';
+        }
+    }
+    refreshStatsPanel();
     if (waveActive) {
         nextWaveBtn.disabled = true;
         nextWaveBtn.textContent = 'IN PROGRESS...';
@@ -1635,6 +1941,14 @@ function updateUI() {
         else btn.classList.remove('disabled');
     });
 
+    const extensionCosts = [300, 600, 2000, 4000, 8000, 15000, 25000, 35000, 50000];
+    document.querySelectorAll('#extend-panel [id^="btn-ext-"]').forEach(btn => {
+        const num = parseInt(btn.id.replace('btn-ext-', ''), 10);
+        const cost = extensionCosts[num - 1];
+        if (money < cost || trackExtensions !== num - 1) btn.classList.add('disabled');
+        else btn.classList.remove('disabled');
+    });
+
     if (selectedPlacedTower) {
         document.getElementById('selection-panel').classList.remove('hidden');
         document.getElementById('sel-tower-name').textContent = selectedPlacedTower.typeInfo.name;
@@ -1644,6 +1958,14 @@ function updateUI() {
         document.getElementById('stat-pops').textContent = selectedPlacedTower.pops;
         document.getElementById('sel-tower-upg').textContent = selectedPlacedTower.getUpgradeCost();
         document.getElementById('sel-tower-value').textContent = selectedPlacedTower.getSellValue();
+
+        const incomeSpan = document.getElementById('stat-special');
+        if (selectedPlacedTower.getIncome() > 0) {
+            incomeSpan.textContent = `Income: +$${selectedPlacedTower.getIncome()}/round`;
+            incomeSpan.classList.remove('hidden');
+        } else {
+            incomeSpan.classList.add('hidden');
+        }
         
         let upgBtn = document.getElementById('upgradeBtn');
         upgBtn.disabled = (money < selectedPlacedTower.getUpgradeCost());
@@ -1652,14 +1974,42 @@ function updateUI() {
     }
 }
 
+function distToSegment(cx, cy, x1, y1, x2, y2) {
+    const l2 = Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2);
+    if (l2 === 0) return Math.hypot(cx - x1, cy - y1);
+    const t = Math.max(0, Math.min(1, ((cx - x1) * (x2 - x1) + (cy - y1) * (y2 - y1)) / l2));
+    return Math.hypot(cx - (x1 + t * (x2 - x1)), cy - (y1 + t * (y2 - y1)));
+}
+
+function routeBlockedByTower(coords) {
+    const wps = coords.map(p => ({ x: p.x * TILE_SIZE + TILE_SIZE / 2, y: p.y * TILE_SIZE + TILE_SIZE / 2 }));
+    return towers.some(t => {
+        for (let i = 0; i < wps.length - 1; i++) {
+            if (distToSegment(t.x, t.y, wps[i].x, wps[i].y, wps[i + 1].x, wps[i + 1].y) < TILE_SIZE / 2 + (t.typeInfo.radius || 16)) return true;
+        }
+        return false;
+    });
+}
+
 function buyExtension(num) {
     let costs = [300, 600, 2000, 4000, 8000, 15000, 25000, 35000, 50000];
     let cost = costs[num - 1];
     if (money >= cost && trackExtensions === num - 1) {
+        // Reject the purchase (without charging) if a tower stands on the new route.
+        const seg = EXTENSION_SEGMENTS[num];
+        const prospective = pathGridCoords.slice(0, -1).concat(seg.map(([x, y]) => ({ x, y })));
+        if (routeBlockedByTower(prospective)) {
+            floatingTexts.push(new FloatingText(canvas.width / 2, canvas.height / 2, 'Move towers off the new route!', '#f87171'));
+            playSound('bomb');
+            return;
+        }
         money -= cost;
         trackExtensions = num;
+        applyExtensionPath(num);
         buildPathMap();
         updateUI();
+        checkAchievements();
+        saveGame();
         playSound('upgrade');
         if (num === 3) {
             document.getElementById('extend-phase-1').classList.add('hidden');
@@ -1672,6 +2022,10 @@ document.getElementById('startBtn').addEventListener('click', () => {
     document.getElementById('startScreen').classList.add('hidden');
     gameState = 'PLAYING';
     initAudio();
+    // PLAY NOW = fresh run: reset run stats and erase the saved checkpoint.
+    stats = { roundsCleared: 0, balloonsPopped: 0, cashEarned: 0, towersBuilt: 0 };
+    clearSave();
+    updateUI();
 });
 
 document.getElementById('nextWaveBtn').addEventListener('click', startNextWave);
@@ -1697,19 +2051,7 @@ document.getElementById('nightBtn').addEventListener('click', () => {
 
 setNightMode(nightMode);
 
-document.getElementById('tab-towers').addEventListener('click', () => {
-    document.getElementById('towers-panel').classList.remove('hidden');
-    document.getElementById('extend-panel').classList.add('hidden');
-    document.getElementById('tab-towers').classList.replace('bg-[#6b4a2b]', 'bg-[#8b5a2b]');
-    document.getElementById('tab-extend').classList.replace('bg-[#8b5a2b]', 'bg-[#6b4a2b]');
-});
-
-document.getElementById('tab-extend').addEventListener('click', () => {
-    document.getElementById('extend-panel').classList.remove('hidden');
-    document.getElementById('towers-panel').classList.add('hidden');
-    document.getElementById('tab-extend').classList.replace('bg-[#6b4a2b]', 'bg-[#8b5a2b]');
-    document.getElementById('tab-towers').classList.replace('bg-[#8b5a2b]', 'bg-[#6b4a2b]');
-});
+// (tab switching is handled by switchTab near the end of this script)
 
 document.querySelectorAll('.tower-btn[data-type]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1734,6 +2076,7 @@ document.getElementById('upgradeBtn').addEventListener('click', () => {
         selectedPlacedTower.level++;
         playSound('upgrade');
         updateUI();
+        saveGame();
     }
 });
 
@@ -1744,6 +2087,7 @@ document.getElementById('sellBtn').addEventListener('click', () => {
         selectedPlacedTower = null;
         playSound('sell');
         updateUI();
+        saveGame();
     }
 });
 
@@ -1766,6 +2110,9 @@ canvas.addEventListener('click', (e) => {
                 money -= info.cost;
                 towers.push(new Tower(cx, cy, selectedTowerType, info));
                 playSound('pop');
+                stats.towersBuilt++;
+                checkAchievements();
+                saveGame();
                 if (!e.shiftKey) {
                     selectedTowerType = null;
                     document.querySelectorAll('.tower-btn').forEach(b => b.classList.remove('selected'));
@@ -1787,9 +2134,227 @@ window.addEventListener('keydown', (e) => {
         e.preventDefault();
         startNextWave();
     }
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+    if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)) return;
     if (e.key === 'u' || e.key === 'U') document.getElementById('upgradeBtn').click();
     if (e.key === 'x' || e.key === 'X') document.getElementById('sellBtn').click();
 });
+
+// --- Tower keyboard hotkeys: all 50 towers are bound to keys ---
+// 1-10: 1234567890 · 11-19: qwertyiop · 20-28: asdfghjkl · 29-34: zcvbnm · 35-40: ,./;-= · 41-50: Shift+1..0
+// (U and X are reserved for upgrade/sell.)
+const TOWER_HOTKEYS = (() => {
+    const rows = ['1234567890', 'qwertyiop', 'asdfghjkl', 'zcvbnm', ',./;-=', '1234567890'];
+    const codeFor = ch => /[0-9]/.test(ch) ? 'Digit' + ch : ({ ',': 'Comma', '.': 'Period', '/': 'Slash', ';': 'Semicolon', '-': 'Minus', '=': 'Equal' })[ch] || 'Key' + ch.toUpperCase();
+    const types = [...document.querySelectorAll('.tower-btn[data-type]')].map(b => b.getAttribute('data-type'));
+    const list = [];
+    rows.forEach((row, ri) => {
+        for (const ch of row) {
+            if (list.length >= types.length) break;
+            const shift = ri === 5;
+            const label = (shift ? '\u21e7' : '') + (/[a-z]/.test(ch) ? ch.toUpperCase() : ch);
+            list.push({ type: types[list.length], code: codeFor(ch), shift, label });
+        }
+    });
+    return list;
+})();
+// relabel the shop chips so each card shows its actual key
+document.querySelectorAll('.tower-btn[data-type]').forEach((btn, i) => {
+    const chip = btn.querySelector('span.absolute.top-1');
+    if (chip && TOWER_HOTKEYS[i]) chip.textContent = `[${TOWER_HOTKEYS[i].label}]`;
+});
+window.addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.altKey || e.metaKey || e.repeat) return;
+    const el = document.activeElement;
+    if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)) return;
+    if (gameState !== 'PLAYING') return;
+    const b = TOWER_HOTKEYS.find(h => h.code === e.code && h.shift === e.shiftKey);
+    if (b) {
+        e.preventDefault();
+        const btn = document.querySelector(`.tower-btn[data-type="${b.type}"]`);
+        if (btn) btn.click();
+    }
+});
+
+// --- Run statistics, achievements, autosave + Continue, next-wave preview ---
+let stats = { roundsCleared: 0, balloonsPopped: 0, cashEarned: 0, towersBuilt: 0 };
+let unlockedAchievements = [];
+const ACHIEVEMENTS = [
+    { id: 'firstPop', name: 'First Pop', desc: 'Pop your first balloon' },
+    { id: 'builder10', name: 'Baboon Architect', desc: 'Build 10 towers' },
+    { id: 'cash100k', name: 'Monkey Business', desc: 'Earn $100,000 total' },
+    { id: 'millionaire', name: 'Monkey Millionaire', desc: 'Earn $1,000,000 total' },
+    { id: 'campaign', name: 'Campaign Cleared', desc: 'Clear round 100' },
+    { id: 'endless150', name: 'Endless Spirit', desc: 'Reach round 150 in Endless Mode' },
+    { id: 'nightOwl', name: 'Night Owl', desc: 'Clear a round in Night Mode' },
+    { id: 'route9', name: 'Route Master', desc: 'Buy all 9 path extensions' }
+];
+const SAVE_KEY = 'bbSaveV1';
+
+function getWavePlan(lv) { return { count: 10 + Math.floor(lv * 1.8), boss: lv % 10 === 0 }; }
+
+function fmtMoney(n) { return '$' + Math.floor(n).toLocaleString('en-US'); }
+
+function loadSave() {
+    try { const d = JSON.parse(bbStorage.get(SAVE_KEY)); return (d && typeof d.level === 'number') ? d : null; }
+    catch (e) { return null; }
+}
+
+// Checkpoints are only written between waves, so a restored game is always consistent.
+function saveGame() {
+    if (!storageOK || gameState !== 'PLAYING' || waveActive) return;
+    const data = {
+        v: 1, level, money, lives, trackExtensions, speedMultiplier,
+        endlessModeActive,
+        victoryPending: (!endlessModeActive && level === 100 && !document.getElementById('victoryScreen').classList.contains('hidden')),
+        towers: towers.map(t => ({ typeId: t.typeId, x: t.x, y: t.y, level: t.level, invested: t.invested, pops: t.pops })),
+        stats, ach: unlockedAchievements
+    };
+    try { bbStorage.set(SAVE_KEY, JSON.stringify(data)); } catch (e) {}
+}
+
+function clearSave() {
+    if (!storageOK) return;
+    try { bbStorage.remove(SAVE_KEY); } catch (e) {}
+}
+
+function persistAch() {
+    if (!storageOK) return;
+    try { bbStorage.set('bbAchV1', JSON.stringify(unlockedAchievements)); } catch (e) {}
+}
+
+function continueGame() {
+    const d = loadSave();
+    if (!d) return;
+    level = d.level; money = d.money; lives = d.lives;
+    trackExtensions = d.trackExtensions || 0;
+    if (typeof d.speedMultiplier === 'number' && d.speedMultiplier > 1) speedMultiplier = d.speedMultiplier;
+    endlessModeActive = !!d.endlessModeActive;
+    MAX_LEVEL = endlessModeActive ? Infinity : 100;
+    stats = Object.assign({ roundsCleared: 0, balloonsPopped: 0, cashEarned: 0, towersBuilt: 0 }, d.stats || {});
+    unlockedAchievements = Array.isArray(d.ach) ? d.ach.slice() : [];
+    if (storageOK) {
+        try {
+            const extra = JSON.parse(bbStorage.get('bbAchV1'));
+            if (Array.isArray(extra)) extra.forEach(id => { if (!unlockedAchievements.includes(id)) unlockedAchievements.push(id); });
+        } catch (e) {}
+    }
+    towers = (Array.isArray(d.towers) ? d.towers : []).filter(t => t && TOWER_TYPES[t.typeId]).map(t => {
+        const tw = new Tower(t.x, t.y, t.typeId, TOWER_TYPES[t.typeId]);
+        tw.level = t.level || 1;
+        tw.invested = t.invested || TOWER_TYPES[t.typeId].cost;
+        tw.pops = t.pops || 0;
+        return tw;
+    });
+    if (trackExtensions > 0) {
+        pathGridCoords = computeStagePath(trackExtensions);
+        waypoints = pathGridCoords.map(p => ({ x: p.x * TILE_SIZE + TILE_SIZE / 2, y: p.y * TILE_SIZE + TILE_SIZE / 2 }));
+        buildPathMap();
+    }
+    // Restore the extension shop phase (buyExtension(3) flips it during play).
+    if (trackExtensions >= 3) {
+        document.getElementById('extend-phase-1').classList.add('hidden');
+        document.getElementById('extend-phase-2').classList.remove('hidden');
+    }
+    gameState = 'PLAYING';
+    document.getElementById('startScreen').classList.add('hidden');
+    document.getElementById('maxLevelDisplay').textContent = endlessModeActive ? '/\u221e' : '/100';
+    if (d.victoryPending) document.getElementById('victoryScreen').classList.remove('hidden');
+    updateUI();
+    checkAchievements();
+}
+
+function onEnemyKilled(enemy) {
+    stats.balloonsPopped++;
+    stats.cashEarned += enemy.reward;
+    checkAchievements();
+}
+
+function checkAchievements() {
+    if (stats.balloonsPopped >= 1) unlockAchievement('firstPop');
+    if (stats.towersBuilt >= 10) unlockAchievement('builder10');
+    if (stats.cashEarned >= 100000) unlockAchievement('cash100k');
+    if (stats.cashEarned >= 1000000) unlockAchievement('millionaire');
+    if (stats.roundsCleared >= 100) unlockAchievement('campaign');
+    if (endlessModeActive && level >= 150) unlockAchievement('endless150');
+    if (trackExtensions >= 9) unlockAchievement('route9');
+}
+
+let achToastTimer = null;
+function showToast(msg) {
+    let el = document.getElementById('achToast');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'achToast';
+        document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.classList.add('show');
+    if (achToastTimer) clearTimeout(achToastTimer);
+    achToastTimer = setTimeout(() => el.classList.remove('show'), 3200);
+}
+
+function unlockAchievement(id) {
+    if (unlockedAchievements.includes(id)) return;
+    unlockedAchievements.push(id);
+    persistAch();
+    const a = ACHIEVEMENTS.find(x => x.id === id);
+    if (a) showToast('\ud83c\udfc6 Achievement unlocked: ' + a.name + ' \u2014 ' + a.desc);
+    refreshStatsPanel();
+}
+
+function refreshStatsPanel() {
+    const r = document.getElementById('ss-rounds');
+    if (!r) return;
+    r.textContent = stats.roundsCleared;
+    document.getElementById('ss-popped').textContent = stats.balloonsPopped;
+    document.getElementById('ss-cash').textContent = fmtMoney(stats.cashEarned);
+    document.getElementById('ss-built').textContent = stats.towersBuilt;
+    const list = document.getElementById('ach-list');
+    list.innerHTML = ACHIEVEMENTS.map(a => {
+        const got = unlockedAchievements.includes(a.id);
+        return '<div class="rounded-lg p-2 border ' + (got ? 'bg-purple-900/40 border-purple-500 text-white' : 'bg-black/20 border-gray-600 text-gray-400') + '">' +
+            '<p class="font-bold text-[11px]">' + (got ? '\ud83c\udfc6 ' : '\ud83d\udd12 ') + a.name + '</p>' +
+            '<p class="text-[10px]">' + a.desc + '</p></div>';
+    }).join('');
+}
+
+function switchTab(name) {
+    ['towers', 'extend', 'stats'].forEach(n => {
+        document.getElementById(n + '-panel').classList.toggle('hidden', n !== name);
+        const tab = document.getElementById('tab-' + n);
+        tab.classList.toggle('bg-[#8b5a2b]', n === name);
+        tab.classList.toggle('bg-[#6b4a2b]', n !== name);
+    });
+    if (name === 'stats') refreshStatsPanel();
+}
+document.getElementById('tab-towers').addEventListener('click', () => switchTab('towers'));
+document.getElementById('tab-extend').addEventListener('click', () => switchTab('extend'));
+document.getElementById('tab-stats').addEventListener('click', () => switchTab('stats'));
+
+// Continue button wiring (only shown when a valid checkpoint exists)
+(function initContinue() {
+    // Lifetime achievements load at startup regardless of PLAY NOW vs Continue,
+    // so a fresh run never erases unlocked achievements.
+    if (storageOK) {
+        try {
+            const extra = JSON.parse(bbStorage.get('bbAchV1'));
+            if (Array.isArray(extra)) extra.forEach(id => { if (!unlockedAchievements.includes(id)) unlockedAchievements.push(id); });
+        } catch (e) {}
+    }
+    const note = document.getElementById('saveNote');
+    if (!storageOK) {
+        if (note) note.textContent = 'Note: saving is unavailable in this environment, so progress won\u2019t persist.';
+        return;
+    }
+    const d = loadSave();
+    if (d) {
+        const cb = document.getElementById('continueBtn');
+        cb.classList.remove('hidden');
+        cb.textContent = 'CONTINUE \u2014 ROUND ' + d.level;
+        cb.addEventListener('click', () => { initAudio(); continueGame(); });
+    }
+})();
 
 function update() {
     if (gameState !== 'PLAYING') return;
@@ -1822,15 +2387,20 @@ function update() {
             waveActive = false;
             let bonus = 100 + level * 10;
             money += bonus;
+            stats.roundsCleared++;
+            stats.cashEarned += bonus;
+            if (nightMode) unlockAchievement('nightOwl');
             floatingTexts.push(new FloatingText(canvas.width/2, canvas.height/2, `Round ${level} Complete! +$${bonus}`, '#facc15'));
             
             towers.forEach(t => {
-                if (t.typeId === 'FARM' || t.typeId === 'GODLY_BABOON') {
+                if (t.getIncome() > 0) {
                     let farmIncome = t.getIncome();
                     money += farmIncome;
+                    stats.cashEarned += farmIncome;
                     floatingTexts.push(new FloatingText(t.x, t.y - 20, `+$${farmIncome}`, '#facc15'));
                 }
             });
+            checkAchievements();
 
             if (level === 100 && !endlessModeActive) {
                 document.getElementById('victoryScreen').classList.remove('hidden');
@@ -1842,6 +2412,8 @@ function update() {
                 updateUI();
                 if (autoStartEnabled) setTimeout(() => { if (!waveActive && gameState === 'PLAYING') startNextWave(); }, 600);
             }
+            saveGame();
+            checkAchievements();
         }
     }
 }
@@ -1999,7 +2571,7 @@ function draw() {
 
     // A faint glow under powerful towers and a subtle target/placement overlay.
     towers.forEach(t => {
-        if (['LASER','TESLA','PLASMA','SUN','QUANTUM','BLACK_HOLE','CELESTIAL','GODLY_BABOON','TITAN_MECH'].includes(t.typeId)) {
+        if (['LASER','TESLA','PLASMA','SUN','QUANTUM','BLACK_HOLE','CELESTIAL','GODLY_BABOON','TITAN_MECH','VOID','TSUNAMI','PSNIPER','TIME_LORD','ANNIHILATOR','STAR_FORGE','GALAXY','CHAOS_WIZ','DOOM_TITAN','OVERLORD','SINGULARITY','ULTIMATE'].includes(t.typeId)) {
             const rr = (t.typeInfo.radius || 16) * 2.4;
             const glow = ctx.createRadialGradient(t.x, t.y, 1, t.x, t.y, rr);
             glow.addColorStop(0, 'rgba(125,211,252,.20)'); glow.addColorStop(1, 'rgba(125,211,252,0)');
@@ -2043,5 +2615,445 @@ function gameLoop() {
 gameLoop();
 updateUI();
 </script>
-</body>
+<script data-pplx-inline-edit>
+(function () {
+  if (window === window.top) return;
+
+  const allowedParentOrigins = ["https://www.perplexity.ai","https://perplexity.ai","https://testing.perplexity.ai","https://staging.perplexity.ai","https://*.preview.i.perplexity.ai","http://perplexity.localhost","http://localhost:1420","http://127.0.0.1:1420","http://localhost:3000","http://127.0.0.1:3000","http://localhost:5173","http://127.0.0.1:5173"];
+  const MAX_FONT_BYTES = 500 * 1024;
+  const MAX_TOTAL_FONT_BYTES = 2 * 1024 * 1024;
+  const DEFAULT_LINE_HEIGHT = 16;
+  let scrollForwarding = false;
+  let scrollRaf = 0;
+  let trustedTopOrigin = null;
+
+  // Allow entries like "https://*.preview.i.perplexity.ai" — the wildcard
+  // matches a single DNS label (no dots), so "https://*.foo" cannot stretch
+  // across multiple labels.
+  function matchesAllowedOrigin(origin) {
+    if (!origin) return false;
+    for (const entry of allowedParentOrigins) {
+      if (!entry.includes("*")) {
+        if (entry === origin) return true;
+        continue;
+      }
+      const pattern = new RegExp(
+        "^" +
+          entry.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^.]+") +
+          "$",
+      );
+      if (pattern.test(origin)) return true;
+    }
+    return false;
+  }
+
+  // Trust decision: when the sender is same-origin-visible (event.origin is a
+  // real origin like https://www.perplexity.ai) we trust event.origin directly.
+  // When event.origin is "null" (opaque broker srcdoc), we fall back to the
+  // broker's stamped `parentOrigin` to identify the top window. The fallback
+  // is claim-only — we rely on the browser's native `targetOrigin` enforcement
+  // on the response path (see postToTrustedTop) to ensure replies can't be
+  // delivered to anyone but the actual top window of that claimed origin.
+  function getTrustedParentOrigin(event) {
+    const forwardedParentOrigin =
+      typeof event.data.parentOrigin === "string" ? event.data.parentOrigin : null;
+    const parentOrigin = event.origin === "null" ? forwardedParentOrigin : event.origin;
+    return matchesAllowedOrigin(parentOrigin) ? parentOrigin : null;
+  }
+
+  // All responses go to window.top with targetOrigin = the allowlisted origin.
+  // An attacker that iframes us inside their own null-origin broker can claim
+  // any parentOrigin they like, but the browser will drop the reply whenever
+  // the real top's origin doesn't match — so the screenshot never leaves.
+  function postToTrustedTop(message) {
+    if (!trustedTopOrigin) return;
+    try {
+      window.top.postMessage(message, trustedTopOrigin);
+    } catch (_error) {}
+  }
+
+  const PICK_CAPABILITIES = ["pick"];
+  const PICK_CHAIN_LENGTH = 4;
+  const PICK_MAX_TEXT_CHARS = 120;
+  const PICK_MAX_HTML_CHARS = 300;
+
+  function truncate(value, maxChars) {
+    return value.length > maxChars ? value.slice(0, maxChars - 1) + "…" : value;
+  }
+
+  function isPickableElement(element) {
+    return (
+      element instanceof Element &&
+      element !== document.documentElement &&
+      element !== document.body
+    );
+  }
+
+  function resolvePickTarget(x, y) {
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+    const element = document.elementFromPoint(x, y);
+    return isPickableElement(element) ? element.closest("svg") || element : null;
+  }
+
+  function pickLabel(element) {
+    if (element.id) return element.localName + "#" + element.id;
+    return [element.localName].concat(Array.from(element.classList).slice(0, 2)).join(".");
+  }
+
+  // Only attributes that help find the element in source. data-* values and URL
+  // query strings or fragments can carry tokens.
+  const PICK_ATTRIBUTES = new Set([
+    "id",
+    "class",
+    "name",
+    "type",
+    "role",
+    "alt",
+    "aria-label",
+    "href",
+    "src",
+  ]);
+
+  function pickAttributeValue(attribute) {
+    return attribute.name === "href" || attribute.name === "src"
+      ? attribute.value.split(/[?#]/)[0]
+      : attribute.value;
+  }
+
+  function describePickElement(element) {
+    const chain = [];
+    for (
+      let current = element;
+      isPickableElement(current) && chain.length < PICK_CHAIN_LENGTH;
+      current = current.parentElement
+    ) {
+      chain.unshift(current);
+    }
+    const attributes = Array.from(element.attributes)
+      .filter((attribute) => PICK_ATTRIBUTES.has(attribute.name))
+      .map((attribute) => ` ${attribute.name}="${pickAttributeValue(attribute).replace(/"/g, "&quot;")}"`)
+      .join("");
+    const text = (element.innerText || element.textContent || "").replace(/\s+/g, " ").trim();
+    return {
+      chain: chain.map(pickLabel),
+      html: truncate(`<${element.localName}${attributes}>`, PICK_MAX_HTML_CHARS),
+      text: text ? truncate(text, PICK_MAX_TEXT_CHARS) : undefined,
+    };
+  }
+
+  // Hover asks once per frame, and innerText on a large section forces layout,
+  // so only the rect is re-read while the pointer stays on the same element.
+  // Clicks ask for fresh details since the page may have changed the element.
+  let lastPick = null;
+
+  function describePickTarget(element, fresh) {
+    if (fresh || lastPick?.element !== element) {
+      lastPick = { element, details: describePickElement(element) };
+    }
+    const rect = element.getBoundingClientRect();
+    return {
+      rect: { x: rect.left, y: rect.top, width: rect.width, height: rect.height },
+      ...lastPick.details,
+    };
+  }
+
+  function inlineAll(original, clone) {
+    if (original.nodeType !== 1 || clone.nodeType !== 1) return;
+
+    try {
+      const computedStyle = getComputedStyle(original);
+      // cssText on a computed style is the serialized declaration in modern
+      // Chromium/Safari — a single read beats enumerating ~400 longhand
+      // properties. Firefox returns "" here, so we fall back on empty.
+      const serialized = computedStyle.cssText;
+      if (serialized) {
+        clone.style.cssText = serialized;
+      } else {
+        const parts = new Array(computedStyle.length);
+        for (let index = 0; index < computedStyle.length; index += 1) {
+          const property = computedStyle[index];
+          parts[index] = `${property}:${computedStyle.getPropertyValue(property)};`;
+        }
+        clone.style.cssText = parts.join("");
+      }
+    } catch (_error) {}
+
+    const originalChildren = original.children;
+    const clonedChildren = clone.children;
+    for (
+      let index = 0;
+      index < originalChildren.length && index < clonedChildren.length;
+      index += 1
+    ) {
+      inlineAll(originalChildren[index], clonedChildren[index]);
+    }
+  }
+
+  function extractFontUrl(srcValue) {
+    const matches = [
+      ...srcValue.matchAll(
+        /url\(["']?([^"')]+)["']?\)(?:\s*format\(["']?([^"')]+)["']?\))?/gi,
+      ),
+    ];
+    if (matches.length === 0) return null;
+    const woff2 = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff2"));
+    if (woff2) return woff2[1];
+    const woff = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff"));
+    if (woff) return woff[1];
+    return matches[0][1];
+  }
+
+  // Cache resolved font URL -> data URI across captures. Fonts on a page
+  // essentially never change, and a batch run emits multiple captures back to
+  // back — without this we'd refetch + re-base64 every time.
+  const fontDataUriCache = new Map();
+  const SRC_DECLARATION_RE = /src\s*:\s*[^;}]+/i;
+
+  async function fetchAsDataUri(url) {
+    if (fontDataUriCache.has(url)) return fontDataUriCache.get(url);
+    let dataUri = null;
+    try {
+      const response = await fetch(url, { mode: "cors", credentials: "omit" });
+      if (response.ok) {
+        const blob = await response.blob();
+        if (blob.size <= MAX_FONT_BYTES) {
+          dataUri = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () =>
+              resolve(typeof reader.result === "string" ? reader.result : null);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(blob);
+          });
+        }
+      }
+    } catch (_error) {
+      dataUri = null;
+    }
+    fontDataUriCache.set(url, dataUri);
+    return dataUri;
+  }
+
+  function collectFontFaceRuleTexts() {
+    const rules = [];
+    for (const sheet of document.styleSheets) {
+      let cssRules;
+      try {
+        cssRules = sheet.cssRules;
+      } catch (_error) {
+        continue;
+      }
+      if (!cssRules) continue;
+      for (const rule of cssRules) {
+        const cssText = rule.cssText || "";
+        if (cssText.startsWith("@font-face")) rules.push(cssText);
+      }
+    }
+    return rules;
+  }
+
+  async function buildInlinedFontCss() {
+    const ruleTexts = collectFontFaceRuleTexts();
+    if (ruleTexts.length === 0) return null;
+
+    const resolved = ruleTexts.map((cssText) => {
+      if (!SRC_DECLARATION_RE.test(cssText)) return null;
+      const srcMatch = cssText.match(/src\s*:\s*([^;}]+)[;}]/i);
+      if (!srcMatch) return null;
+      const url = extractFontUrl(srcMatch[1]);
+      if (!url) return null;
+      try {
+        return { cssText, url: new URL(url, document.baseURI).href };
+      } catch (_error) {
+        return null;
+      }
+    });
+
+    const dataUris = await Promise.all(
+      resolved.map((entry) => (entry ? fetchAsDataUri(entry.url) : Promise.resolve(null))),
+    );
+
+    const inlined = [];
+    let totalBytes = 0;
+    for (let index = 0; index < resolved.length; index += 1) {
+      const entry = resolved[index];
+      const dataUri = dataUris[index];
+      if (!entry || !dataUri) continue;
+      const approxBytes = dataUri.length * 0.75;
+      if (totalBytes + approxBytes > MAX_TOTAL_FONT_BYTES) break;
+      totalBytes += approxBytes;
+      inlined.push(entry.cssText.replace(SRC_DECLARATION_RE, `src: url("${dataUri}")`));
+    }
+    return inlined.length > 0 ? inlined.join("\n") : null;
+  }
+
+  function stripExternal(clone) {
+    const images = clone.querySelectorAll("img");
+    for (let index = 0; index < images.length; index += 1) {
+      const src = images[index].getAttribute("src");
+      if (src && !src.startsWith("data:")) images[index].removeAttribute("src");
+    }
+
+    const elements = clone.querySelectorAll("*");
+    for (let index = 0; index < elements.length; index += 1) {
+      const style = elements[index].style.cssText;
+      if (style && style.includes("url(")) {
+        elements[index].style.cssText = style.replace(
+          /url\(["']?(?!data:)[^)"']*["']?\)/gi,
+          "none",
+        );
+      }
+    }
+  }
+
+  function emitScroll() {
+    scrollRaf = 0;
+    if (!scrollForwarding) return;
+    postToTrustedTop({
+      type: "INLINE_EDIT_SCROLL",
+      scrollX: window.scrollX,
+      scrollY: window.scrollY,
+      capabilities: PICK_CAPABILITIES,
+    });
+  }
+
+  window.addEventListener(
+    "scroll",
+    function () {
+      if (!scrollForwarding || scrollRaf) return;
+      scrollRaf = requestAnimationFrame(emitScroll);
+    },
+    { passive: true, capture: true },
+  );
+
+  async function handleCaptureRequest(event) {
+    const requestId = event.data.requestId;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    function postResult(dataUrl) {
+      postToTrustedTop({
+        type: "INLINE_EDIT_SCREENSHOT_RESULT",
+        requestId,
+        dataUrl,
+        scrollX,
+        scrollY,
+      });
+    }
+
+    try {
+      // Wait for any pending web fonts to resolve so both inline metrics and
+      // the @font-face inlining below see the same loaded faces.
+      if (document.fonts && document.fonts.ready) {
+        try {
+          await document.fonts.ready;
+        } catch (_error) {}
+      }
+
+      const clone = document.documentElement.cloneNode(true);
+      inlineAll(document.documentElement, clone);
+
+      const removedNodes = clone.querySelectorAll("script,link[rel=\"stylesheet\"],style");
+      for (let index = 0; index < removedNodes.length; index += 1) {
+        removedNodes[index].remove();
+      }
+
+      stripExternal(clone);
+
+      // Re-embed web fonts as data-URI @font-face rules so the SVG rasterizer
+      // can resolve them — external font URLs aren't fetched during
+      // foreignObject rendering, which would otherwise force a fallback face
+      // and change text metrics.
+      const inlinedFontCss = await buildInlinedFontCss();
+      if (inlinedFontCss) {
+        const styleEl = document.createElement("style");
+        styleEl.textContent = inlinedFontCss;
+        const head = clone.querySelector("head");
+        if (head) head.appendChild(styleEl);
+        else clone.insertBefore(styleEl, clone.firstChild);
+      }
+
+      const html = new XMLSerializer().serializeToString(clone);
+      const svg =
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
+        '<foreignObject width="100%" height="100%">' +
+        `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${width}px;height:${height}px;overflow:hidden">` +
+        `<div style="position:relative;left:-${scrollX}px;top:-${scrollY}px">` +
+        html +
+        "</div></div></foreignObject></svg>";
+      const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(image, 0, 0);
+        postResult(canvas.toDataURL("image/png"));
+      };
+      image.onerror = function () {
+        postResult(null);
+      };
+      image.src = svgUrl;
+    } catch (_error) {
+      postResult(null);
+    }
+  }
+
+  window.addEventListener("message", function (event) {
+    if (!event.data) return;
+    // Only accept messages from the direct parent frame. Blocks sibling /
+    // unrelated-window postMessage senders that could otherwise reach us.
+    if (event.source !== window.parent) return;
+
+    const trustedParentOrigin = getTrustedParentOrigin(event);
+    if (!trustedParentOrigin) return;
+    trustedTopOrigin = trustedParentOrigin;
+
+    if (event.data.type === "INLINE_EDIT_PICK") {
+      const element = resolvePickTarget(event.data.x, event.data.y);
+      postToTrustedTop({
+        type: "INLINE_EDIT_PICK_RESULT",
+        seq: event.data.seq,
+        target: element ? describePickTarget(element, event.data.fresh === true) : null,
+      });
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_START") {
+      scrollForwarding = true;
+      emitScroll();
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_STOP") {
+      scrollForwarding = false;
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      scrollRaf = 0;
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_BY") {
+      const { deltaX, deltaY, deltaMode } = event.data;
+      if (!scrollForwarding || !Number.isFinite(deltaX) || !Number.isFinite(deltaY)) return;
+      if (deltaMode !== 0 && deltaMode !== 1 && deltaMode !== 2) return;
+      const lineHeight =
+        parseFloat(getComputedStyle(document.documentElement).lineHeight) || DEFAULT_LINE_HEIGHT;
+      const scaleX = deltaMode === 1 ? lineHeight : deltaMode === 2 ? window.innerWidth : 1;
+      const scaleY = deltaMode === 1 ? lineHeight : deltaMode === 2 ? window.innerHeight : 1;
+      // The selection overlay receives the wheel event instead of this iframe.
+      // Instant scrolling preserves trackpad deltas even on smooth-scroll sites.
+      window.scrollBy({ left: deltaX * scaleX, top: deltaY * scaleY, behavior: "instant" });
+      emitScroll();
+      return;
+    }
+
+    if (event.data.type !== "INLINE_EDIT_CAPTURE_REQUEST") return;
+
+    handleCaptureRequest(event);
+  });
+})();
+
+
+</script></body>
 </html>
